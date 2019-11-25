@@ -1,4 +1,4 @@
-package kroy.game.entities;
+package com.kroy.game.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

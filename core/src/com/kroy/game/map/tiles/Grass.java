@@ -1,9 +1,8 @@
-package kroy.game.map.tiles;
+package com.kroy.game.map.tiles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-
-import kroy.game.map.Tile;
+import com.kroy.game.map.Tile;
 
 public class Grass extends Tile
 {

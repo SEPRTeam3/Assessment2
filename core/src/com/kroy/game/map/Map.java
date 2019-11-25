@@ -1,8 +1,8 @@
-package kroy.game.map;
+package com.kroy.game.map;
 
-import kroy.game.entities.Entity;
-import kroy.game.entities.Firetruck;
-import kroy.game.map.tiles.Grass;
+import com.kroy.game.entities.Entity;
+import com.kroy.game.entities.Firetruck;
+import com.kroy.game.map.tiles.Grass;
 
 public class Map
 {

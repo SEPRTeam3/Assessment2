@@ -1,13 +1,13 @@
-package kroy.game.map;
+package com.kroy.game.map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
-public abstract class Tile
+public abstract class Obj
 {
 	protected Texture texture;
 	
-	public Tile(){}
+	public Obj(){}
 	
 	public Texture getTexture()
 	{

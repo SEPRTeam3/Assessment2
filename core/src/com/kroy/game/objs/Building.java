@@ -1,9 +1,8 @@
-package kroy.game.objs;
+package com.kroy.game.objs;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-
-import kroy.game.map.Obj;
+import com.kroy.game.map.Obj;
 
 public class Building extends Obj
 {
