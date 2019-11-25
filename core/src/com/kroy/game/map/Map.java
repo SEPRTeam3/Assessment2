@@ -1,6 +1,7 @@
 package com.kroy.game.map;
 
 import com.kroy.game.entities.Entity;
+import com.kroy.game.entities.Entity.entityID;
 import com.kroy.game.entities.Firetruck;
 import com.kroy.game.map.tiles.Grass;
 
@@ -37,13 +38,52 @@ public class Map
 	
 	public void moveEntity(int x1, int y1, int x2, int y2)
 	{
-		entityLayer[x2][y2] = entityLayer[x1][y1];
-		entityLayer[x1][y1] = null;
+		/* Moves entity from (x1, y1) to (x2, y2) if the move is legal to do so
+		 * 
+		 */
+		
+		if (entityLayer[x1][y1] == null)
+		{
+			return;
+		}
+		
+		Entity e = entityLayer[x1][y1];
+		
+		switch (e.id)
+		{
+		case FIRETRUCK:
+			Firetruck f = (Firetruck) e;
+			if (!f.hasMovedThisTurn())
+			{
+				f.setMovedThisTurn();
+				entityLayer[x2][y2] = f;
+				entityLayer[x1][y1] = null;
+			}
+			else
+			{
+				System.out.println("This firetruck has already been moved");
+			}
+		}
 	}
 	
 	public void debugMakeFiretruck(int x, int y)
 	{
 		entityLayer[x][y] = new Firetruck();
+	}
+	
+	public void resetTurn()
+	{
+		for (int i = 0; i < HEIGHT; i++)
+		{
+			for (int j = 0; j < WIDTH; j++)
+			{
+				if (entityLayer[i][j] != null && entityLayer[i][j].id == entityID.FIRETRUCK)
+				{
+					Firetruck f = (Firetruck) entityLayer[i][j];
+					f.resetTurn();
+				}
+			}
+		}
 	}
 	
 }

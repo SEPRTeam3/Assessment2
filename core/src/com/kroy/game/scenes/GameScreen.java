@@ -13,15 +13,25 @@ import com.kroy.game.map.Map;
 public class GameScreen implements Screen
 {
 	
+	public enum turnStates
+	{
+		PLAYER,
+		POST_PLAYER,
+		ET,
+		POST_ET
+	}
+	
 	final MyGdxGame game;
 	Map map;
 	Vector2 selected;
+	turnStates turnState;
 	
 	public GameScreen(final MyGdxGame game)
 	{
 		this.game = game;
 		this.map = new Map();
 		this.selected = null;
+		this.turnState = turnStates.PLAYER;
 	}
 
 	@Override
@@ -53,22 +63,53 @@ public class GameScreen implements Screen
 		game.batch.end();
 		
 		// Get player input
-		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
+		
+		switch(turnState)
 		{
-			int tileX = (int)Math.floor(Gdx.input.getX()/32);
-			int tileY = Map.HEIGHT - (int)Math.floor(Gdx.input.getY()/32) - 1;
-			System.out.println("x: " + tileX + " y: " + tileY);
-			if (map.getEntity(tileX, tileY) != null && map.getEntity(tileX, tileY).id == entityID.FIRETRUCK)
+		case PLAYER:
+			
+			// Left click handling
+			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
 			{
-				selected = new Vector2(tileX, tileY);
-				System.out.println("Selected: " + selected);
+				int tileX = (int)Math.floor(Gdx.input.getX()/32);
+				int tileY = Map.HEIGHT - (int)Math.floor(Gdx.input.getY()/32) - 1;
+				System.out.println("x: " + tileX + " y: " + tileY);
+				if (map.getEntity(tileX, tileY) != null && map.getEntity(tileX, tileY).id == entityID.FIRETRUCK)
+				{
+					selected = new Vector2(tileX, tileY);
+					System.out.println("Selected: " + selected);
+				}
+				else if (map.getEntity(tileX, tileY) == null && selected != null)
+				{
+					map.moveEntity((int)selected.x, (int)selected.y, tileX, tileY);
+				}
+				//map.debugMakeFiretruck(tileX, tileY);
 			}
-			else if (map.getEntity(tileX, tileY) == null && selected != null)
+			
+			// Space key handling
+			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
 			{
-				map.moveEntity((int)selected.x, (int)selected.y, tileX, tileY);
+				this.turnState = turnStates.POST_PLAYER;
 			}
-			//map.debugMakeFiretruck(tileX, tileY);
+			break;
+			
+		case POST_PLAYER:
+			this.turnState = turnStates.ET;
+			break;
+			
+		case ET:
+			System.out.println("ETs are taking their turn");
+			this.turnState = turnStates.POST_ET;
+			break;
+			
+		case POST_ET:
+			this.turnState = turnStates.PLAYER;
+			map.resetTurn();
+			break;
+			
 		}
+		
+		
 	}
 
 	@Override
