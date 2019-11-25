@@ -1,5 +1,6 @@
 package com.kroy.game.map;
 
+import com.kroy.game.blocks.Building;
 import com.kroy.game.entities.Entity;
 import com.kroy.game.entities.Entity.entityID;
 import com.kroy.game.entities.Firetruck;
@@ -12,6 +13,7 @@ public class Map
 	
 	private Tile backgroundLayer[][] = new Tile[WIDTH][HEIGHT];
 	private Entity entityLayer[][] = new Entity[WIDTH][HEIGHT];
+	private Block blockLayer[][] = new Block[WIDTH][HEIGHT];
 	
 	public Map()
 	{
@@ -21,6 +23,7 @@ public class Map
 			{
 				backgroundLayer[j][i] = new Grass();
 				entityLayer[i][j] = null;
+				blockLayer[i][j] = null;
 			}
 		}
 		entityLayer[2][3] = new Firetruck();
@@ -34,6 +37,11 @@ public class Map
 	public Entity getEntity(int x, int y)
 	{
 		return entityLayer[x][y];
+	}
+	
+	public Block getBlock(int x, int y)
+	{
+		return blockLayer[x][y];
 	}
 	
 	public void moveEntity(int x1, int y1, int x2, int y2)
@@ -55,9 +63,16 @@ public class Map
 			Firetruck f = (Firetruck) e;
 			if (!f.hasMovedThisTurn())
 			{
-				f.setMovedThisTurn();
-				entityLayer[x2][y2] = f;
-				entityLayer[x1][y1] = null;
+				if (entityLayer[x2][y2] == null && blockLayer[x2][y2] == null)
+				{
+					f.setMovedThisTurn();
+					entityLayer[x2][y2] = f;
+					entityLayer[x1][y1] = null;	
+				}
+				else
+				{
+					System.out.println("There's already something here");
+				}
 			}
 			else
 			{
@@ -69,6 +84,11 @@ public class Map
 	public void debugMakeFiretruck(int x, int y)
 	{
 		entityLayer[x][y] = new Firetruck();
+	}
+	
+	public void debugMakeBuilding(int x, int y)
+	{
+		blockLayer[x][y] = new Building();
 	}
 	
 	public void resetTurn()

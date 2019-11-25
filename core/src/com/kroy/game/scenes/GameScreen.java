@@ -32,6 +32,8 @@ public class GameScreen implements Screen
 		this.map = new Map();
 		this.selected = null;
 		this.turnState = turnStates.PLAYER;
+		
+		this.map.debugMakeBuilding(5, 5);
 	}
 
 	@Override
@@ -58,12 +60,15 @@ public class GameScreen implements Screen
 				{
 					game.batch.draw(map.getEntity(i, j).getTexture(), i*32, j*32, 32, 32);
 				}
+				if (map.getBlock(i, j) != null)
+				{
+					game.batch.draw(map.getBlock(i, j).getTexture(), i*32, j*32, 32, 32);
+				}
 			}
 		}
 		game.batch.end();
 		
 		// Get player input
-		
 		switch(turnState)
 		{
 		case PLAYER:
