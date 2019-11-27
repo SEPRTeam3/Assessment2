@@ -11,9 +11,13 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kroy.game.MyGdxGame;
 import com.kroy.game.entities.Entity.entityID;
 import com.kroy.game.map.Map;
+import com.kroy.game.map.MapDrawer;
 
 public class GameScreen implements Screen
 {
@@ -27,11 +31,11 @@ public class GameScreen implements Screen
 	}
 	
 	final MyGdxGame game;
-	Map map;
 	
-	private OrthogonalTiledMapRenderer ter;
+	private Map map;
 	private TiledMap tileMap;
-	private OrthographicCamera camera;
+	private MapDrawer mapDrawer;
+	
 	Vector2 selected;
 	turnStates turnState;
 
@@ -40,15 +44,12 @@ public class GameScreen implements Screen
 	{
 		
 		this.game = game;
-		this.map = new Map();
-		this.selected = null;
-		this.turnState = turnStates.PLAYER;
+		selected = null;
+		turnState = turnStates.PLAYER;
 		
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 512, 512);
-		tileMap = new TmxMapLoader().load("tilemap.tmx");
-		ter = new OrthogonalTiledMapRenderer(tileMap);
-		
+		map = new Map();
+		tileMap = new TmxMapLoader().load("test.tmx");
+		mapDrawer = new MapDrawer(game, map, tileMap);
 		
 		this.map.debugMakeBuilding(5, 5);
 	}
@@ -62,11 +63,13 @@ public class GameScreen implements Screen
 	public void render(float delta)
 	{
 		// Render
+		
+		mapDrawer.render();
+
+		/*
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClearColor(1, 0, 1, 1);
 		
-		ter.setView(camera);
-		ter.render();
 		
 		game.batch.begin();
 		
@@ -88,7 +91,8 @@ public class GameScreen implements Screen
 			}
 		}
 		game.batch.end();
-		
+		*/
+
 		// Get player input
 		switch(turnState)
 		{
@@ -164,7 +168,6 @@ public class GameScreen implements Screen
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		ter.dispose();
 		this.tileMap.dispose();
 	}
 }
