@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -83,6 +84,18 @@ public class MapDrawer
 			}
 		}
 		game.batch.end();
+	}
+
+	public int getTilePixelWidth()
+	{
+		/*
+		Returns the length of a tile in terms of screen pixels
+		 */
+		int maxDimension = (int) Math.min(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		float tileHeight = (float) Math.sqrt(0.5f) * (int) backmap.getProperties().get("tileheight");
+		float scaling = maxDimension / tileHeight;
+		return (int) scaling;
+
 	}
 
 }

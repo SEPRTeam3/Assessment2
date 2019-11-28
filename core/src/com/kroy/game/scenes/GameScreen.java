@@ -52,6 +52,7 @@ public class GameScreen implements Screen
 		mapDrawer = new MapDrawer(game, map, tileMap);
 		
 		this.map.debugMakeBuilding(5, 5);
+		System.out.println("Tile width: " + mapDrawer.getTilePixelWidth());
 	}
 
 	@Override
@@ -63,35 +64,7 @@ public class GameScreen implements Screen
 	public void render(float delta)
 	{
 		// Render
-		
 		mapDrawer.render();
-
-		/*
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Gdx.gl.glClearColor(1, 0, 1, 1);
-		
-		
-		game.batch.begin();
-		
-		for (int i = 0; i < Map.WIDTH; i++)
-		{
-			for (int j = 0; j < Map.HEIGHT; j++)
-			{
-				// Render background
-				//game.batch.draw(map.getBackground(i, j).getTexture(), i*32, j*32, 32, 32);
-				// Render entities
-				if (map.getEntity(i, j) != null)
-				{
-					game.batch.draw(map.getEntity(i, j).getTexture(), i*32, j*32, 32, 32);
-				}
-				if (map.getBlock(i, j) != null)
-				{
-					game.batch.draw(map.getBlock(i, j).getTexture(), i*32, j*32, 32, 32);
-				}
-			}
-		}
-		game.batch.end();
-		*/
 
 		// Get player input
 		switch(turnState)
@@ -101,6 +74,17 @@ public class GameScreen implements Screen
 			// Left click handling
 			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
 			{
+
+				Vector2 clicked = new Vector2(Gdx.input.getX()-Gdx.graphics.getWidth()/2, Gdx.input.getY()-Gdx.graphics.getHeight()/2);
+				clicked = clicked.rotate(45f);
+				clicked = new Vector2(clicked.x / mapDrawer.getTilePixelWidth(), clicked.y / mapDrawer.getTilePixelWidth());
+				clicked.scl(1.79104478f);
+				clicked.x = (float) Math.floor(clicked.x);
+				clicked.y = (float) Math.floor(clicked.y);
+				System.out.println("x: " + clicked.x + " y: " + clicked.y);
+				System.out.println("x: " + Gdx.input.getX() + " y: " + Gdx.input.getY());
+
+				/*
 				int tileX = (int)Math.floor(Gdx.input.getX()/32);
 				int tileY = Map.HEIGHT - (int)Math.floor(Gdx.input.getY()/32) - 1;
 				System.out.println("x: " + tileX + " y: " + tileY);
@@ -113,6 +97,7 @@ public class GameScreen implements Screen
 				{
 					map.moveEntity((int)selected.x, (int)selected.y, tileX, tileY);
 				}
+				 */
 			}
 			
 			// Space key handling
@@ -144,6 +129,7 @@ public class GameScreen implements Screen
 	@Override
 	public void resize(int width, int height)
 	{
+		System.out.println("Tile width: " + mapDrawer.getTilePixelWidth());
 		mapDrawer.resize(width, height);
 	}
 
