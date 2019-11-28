@@ -48,7 +48,7 @@ public class GameScreen implements Screen
 		turnState = turnStates.PLAYER;
 		
 		map = new Map();
-		tileMap = new TmxMapLoader().load("test.tmx");
+		tileMap = new TmxMapLoader().load("test2.tmx");
 		mapDrawer = new MapDrawer(game, map, tileMap);
 		
 		this.map.debugMakeBuilding(5, 5);
