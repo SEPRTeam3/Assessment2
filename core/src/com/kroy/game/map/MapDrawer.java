@@ -40,7 +40,7 @@ public class MapDrawer
 		viewport.setCamera(camera);
 		//viewport.setScreenSize(10, 10);
 		viewport.getCamera().update();
-		camera.zoom = 80f;
+		camera.zoom = 85f;
 		camera.update();
 
 
