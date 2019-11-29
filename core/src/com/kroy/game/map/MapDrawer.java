@@ -23,16 +23,26 @@ public class MapDrawer
 	
 	private MyGdxGame game;
 	private Map frontmap;
+
+	private Vector2 mapScreenOrigin;
+	private float screenScalingCoefficient;
+
 	private TiledMap backmap;
 	private Viewport viewport;
 	private IsometricTiledMapRenderer backmapRenderer;
 	private OrthographicCamera camera;
-	
+
 	public MapDrawer(MyGdxGame g, Map m, TiledMap t)
 	{
 		this.game = g;
 		this.frontmap = m;
 		this.backmap = t;
+
+		screenScalingCoefficient = (float) Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth()) / 512f;
+		int adjustedHeight = (Gdx.graphics.getHeight() - Gdx.graphics.getWidth()) / 2;
+		mapScreenOrigin = new Vector2(Gdx.graphics.getWidth() / 2,
+				(Gdx.graphics.getHeight() - adjustedHeight) * 0.025f
+		);
 
 		viewport = new FitViewport(10, 10); //(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera = new OrthographicCamera();
@@ -46,7 +56,7 @@ public class MapDrawer
 
 
 		SpriteBatch spriteBatch = new SpriteBatch();
-		
+
 		backmapRenderer = new IsometricTiledMapRenderer(backmap, 1);
 
 	}
@@ -57,6 +67,11 @@ public class MapDrawer
 		//camera.position.set(0, 0, 0);//(camera.viewportWidth/2,camera.viewportHeight/2,0);
 		//camera.translate(camera.viewportWidth/2,camera.viewportHeight/2,0);
 		viewport.getCamera().update();
+		screenScalingCoefficient = (float) Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth()) / 512f;
+		int adjustedHeight = (Gdx.graphics.getHeight() - Gdx.graphics.getWidth()) / 2;
+		mapScreenOrigin = new Vector2(Gdx.graphics.getWidth() / 2,
+				(Gdx.graphics.getHeight() - adjustedHeight) * 0.025f
+		);
 	}
 
 	public void render()
@@ -72,17 +87,56 @@ public class MapDrawer
 			for (int j = 0; j < Map.HEIGHT; j++)
 			{
 				// Render entities
+				Vector2 mapOriginFromTopRight = new Vector2(getMapScreenOrigin().x, Gdx.graphics.getHeight() - getMapScreenOrigin().y);	// I think my code has violated the Geneva Convention at this point.
+				System.out.println(getMapUpVector());
+				//System.out.println(i*getMapRightVector().x);
+				Vector2 drawLocation = new Vector2
+						(
+							getMapScreenOrigin().x + j*getMapUpVector().x + i*getMapRightVector().x,
+							getMapScreenOrigin().y + j*getMapUpVector().y + i*getMapRightVector().y
+						);
 				if (frontmap.getEntity(i, j) != null)
 				{
-					game.batch.draw(frontmap.getEntity(i, j).getTexture(), i*32, j*32, 32, 32);
+					//System.out.println("Drawing entity at " + drawLocation.x + ", " + drawLocation.y);
+					//game.batch.draw(frontmap.getEntity(i, j).getTexture(), (int)drawLocation.x, -(int)drawLocation.y, 32, 32);
+					game.batch.draw(frontmap.getEntity(i, j).getTexture(), (int)mapOriginFromTopRight.x, (int)mapOriginFromTopRight.y, 32, 32);
 				}
 				// Render blocks
 				if (frontmap.getBlock(i, j) != null)
 				{
-					game.batch.draw(frontmap.getBlock(i, j).getTexture(), i*32, j*32, 32, 32);
+					game.batch.draw(frontmap.getBlock(i, j).getTexture(), (int)drawLocation.x, -(int)drawLocation.y, 32, 32);
 				}
 			}
 		}
 		game.batch.end();
+	}
+
+	public Vector2 getMapScreenOrigin()
+	{
+		return mapScreenOrigin;
+	}
+
+	public Vector2 getMapUpVector()
+	{
+		/*
+		The up vector of the map is a vector that points in the direction of the up axis of the isometric map
+		The up axis is taken to be south-east
+		The length of this vector is the length of an edge of an isometric tile.
+		 */
+		return new Vector2(10f*getScreenScalingCoefficient(), 0).rotate(-45f);
+	}
+
+	public Vector2 getMapRightVector()
+	{
+		// The right vector of the drawn map is the up vector rotated 90 degrees clockwise
+		return getMapUpVector().rotate90(1);
+	}
+
+	public float getScreenScalingCoefficient() {
+		return screenScalingCoefficient;
+	}
+
+	public void setScreenScalingCoefficient(float screenScalingCoefficient) {
+		this.screenScalingCoefficient = screenScalingCoefficient;
 	}
 }
