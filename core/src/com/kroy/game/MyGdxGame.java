@@ -37,7 +37,7 @@ public class MyGdxGame extends Game
 	@Override
 	public void render () 
 	{
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(255, 255, 255, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		// Render all the things that are on screen
 		super.render();

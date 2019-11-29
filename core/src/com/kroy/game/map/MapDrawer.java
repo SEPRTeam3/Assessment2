@@ -48,6 +48,7 @@ public class MapDrawer
 		SpriteBatch spriteBatch = new SpriteBatch();
 		
 		backmapRenderer = new IsometricTiledMapRenderer(backmap, 1);
+
 	}
 
 	public void resize(int width, int height)
@@ -56,7 +57,6 @@ public class MapDrawer
 		//camera.position.set(0, 0, 0);//(camera.viewportWidth/2,camera.viewportHeight/2,0);
 		//camera.translate(camera.viewportWidth/2,camera.viewportHeight/2,0);
 		viewport.getCamera().update();
-
 	}
 
 	public void render()
@@ -85,17 +85,4 @@ public class MapDrawer
 		}
 		game.batch.end();
 	}
-
-	public int getTilePixelWidth()
-	{
-		/*
-		Returns the length of a tile in terms of screen pixels
-		 */
-		int maxDimension = (int) Math.min(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		float tileHeight = (float) Math.sqrt(0.5f) * (int) backmap.getProperties().get("tileheight");
-		float scaling = maxDimension / tileHeight;
-		return (int) scaling;
-
-	}
-
 }

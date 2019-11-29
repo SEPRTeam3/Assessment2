@@ -52,7 +52,6 @@ public class GameScreen implements Screen
 		mapDrawer = new MapDrawer(game, map, tileMap);
 		
 		this.map.debugMakeBuilding(5, 5);
-		System.out.println("Tile width: " + mapDrawer.getTilePixelWidth());
 	}
 
 	@Override
@@ -67,6 +66,8 @@ public class GameScreen implements Screen
 		mapDrawer.render();
 
 		// Get player input
+
+
 		switch(turnState)
 		{
 		case PLAYER:
@@ -75,29 +76,57 @@ public class GameScreen implements Screen
 			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
 			{
 
-				Vector2 clicked = new Vector2(Gdx.input.getX()-Gdx.graphics.getWidth()/2, Gdx.input.getY()-Gdx.graphics.getHeight()/2);
-				clicked = clicked.rotate(45f);
-				clicked = new Vector2(clicked.x / mapDrawer.getTilePixelWidth(), clicked.y / mapDrawer.getTilePixelWidth());
-				clicked.scl(1.79104478f);
+				// Scale click to isometric grid
+				// TODO: Bad unmodular code! Redo without arbirary constants!
+				Vector2 clicked;
+				// Move origin to top of iso diamond
+				if (Gdx.graphics.getHeight() > Gdx.graphics.getWidth())		// Size of grid is bounded by shortest axis
+				{
+					int adjustedHeight = (Gdx.graphics.getHeight() - Gdx.graphics.getWidth()) / 2;
+					clicked = new Vector2(Gdx.input.getX() - Gdx.graphics.getWidth() / 2, Gdx.input.getY() - (Gdx.graphics.getHeight() - adjustedHeight) * 0.02f);
+				}
+				else
+				{
+					clicked = new Vector2(Gdx.input.getX() - Gdx.graphics.getWidth() / 2, Gdx.input.getY() - Gdx.graphics.getHeight() * 0.025f);
+				}
+				clicked = clicked.rotate(-45f);	// Rotate
+				float scalingCoefficient= (float) Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth()) / 512f;	// Amount the map has grown in size
 				clicked.x = (float) Math.floor(clicked.x);
 				clicked.y = (float) Math.floor(clicked.y);
-				System.out.println("x: " + clicked.x + " y: " + clicked.y);
-				System.out.println("x: " + Gdx.input.getX() + " y: " + Gdx.input.getY());
+				if (Gdx.graphics.getHeight() > Gdx.graphics.getWidth())
+				{
+					int extra = Gdx.graphics.getHeight() - Gdx.graphics.getWidth();
+					int distanceIn = Gdx.input.getY() - extra / 2;
+					float ratio =  (float) distanceIn / (float) Gdx.graphics.getWidth();
+					//System.out.println("Ratio down screen: " + ratio);
+				}
+				else
+				{
+					float ratio =  (float) Gdx.input.getY() / (float) Gdx.graphics.getWidth();
+					//System.out.println("Ratio down screen: " + ratio);
+				}
+				// Scale to grid
+				clicked.scl(1f/(scalingCoefficient));	// Is relative to the scaling coefficient
+				clicked.scl(24f/328f);	// Divide max (328 for some reason) by 24 to get appropriately sized tiles
+				clicked.x = (float) Math.floor(clicked.x);	// Floor values
+				clicked.y = (float) Math.floor(clicked.y);
 
-				/*
-				int tileX = (int)Math.floor(Gdx.input.getX()/32);
-				int tileY = Map.HEIGHT - (int)Math.floor(Gdx.input.getY()/32) - 1;
-				System.out.println("x: " + tileX + " y: " + tileY);
-				if (map.getEntity(tileX, tileY) != null && map.getEntity(tileX, tileY).id == entityID.FIRETRUCK)
+				System.out.println("Clicked.x: " + clicked.x + " Clicked.y: " + clicked.y);
+				if (clicked.x > 0f && clicked.x < 24f && clicked.y > 0f && clicked.y < 24f)
 				{
-					selected = new Vector2(tileX, tileY);
-					System.out.println("Selected: " + selected);
+					int tileX = (int) clicked.x;
+					int tileY = (int) clicked.y;
+					if (map.getEntity(tileX, tileY) != null && map.getEntity(tileX, tileY).id == entityID.FIRETRUCK)
+					{
+						selected = new Vector2(tileX, tileY);
+						System.out.println("Selected: " + selected);
+					}
+					else if (map.getEntity(tileX, tileY) == null && selected != null)
+					{
+						map.moveEntity((int)selected.x, (int)selected.y, tileX, tileY);
+					}
+
 				}
-				else if (map.getEntity(tileX, tileY) == null && selected != null)
-				{
-					map.moveEntity((int)selected.x, (int)selected.y, tileX, tileY);
-				}
-				 */
 			}
 			
 			// Space key handling
@@ -129,7 +158,6 @@ public class GameScreen implements Screen
 	@Override
 	public void resize(int width, int height)
 	{
-		System.out.println("Tile width: " + mapDrawer.getTilePixelWidth());
 		mapDrawer.resize(width, height);
 	}
 
