@@ -3,6 +3,7 @@ package com.kroy.game.map;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
@@ -25,12 +26,15 @@ public class MapDrawer
 	private Map frontmap;
 
 	private Vector2 mapScreenOrigin;
+	private Vector2 mapViewportOrigin;
 	private float screenScalingCoefficient;
 
 	private TiledMap backmap;
 	private Viewport viewport;
 	private IsometricTiledMapRenderer backmapRenderer;
 	private OrthographicCamera camera;
+
+	private Texture debugTexture;
 
 	public MapDrawer(MyGdxGame g, Map m, TiledMap t)
 	{
@@ -54,7 +58,11 @@ public class MapDrawer
 		camera.zoom = 85f;
 		camera.update();
 
+		mapViewportOrigin = new Vector2(viewport.getScreenWidth() / 2,
+				viewport.getScreenHeight() / 2
+		);
 
+		debugTexture = new Texture(Gdx.files.internal("Firetruck2.png"));
 		SpriteBatch spriteBatch = new SpriteBatch();
 
 		backmapRenderer = new IsometricTiledMapRenderer(backmap, 1);
@@ -72,6 +80,9 @@ public class MapDrawer
 		mapScreenOrigin = new Vector2(Gdx.graphics.getWidth() / 2,
 				(Gdx.graphics.getHeight() - adjustedHeight) * 0.025f
 		);
+		mapViewportOrigin = new Vector2(viewport.getScreenWidth() / 2,
+				viewport.getScreenHeight() / 2
+		);
 	}
 
 	public void render()
@@ -82,19 +93,27 @@ public class MapDrawer
 		//game.batch.setProjectionMatrix(camera.combined);
 
 		game.batch.begin();
+		game.batch.draw(debugTexture, getMapViewportOrigin().x, getMapViewportOrigin().y);
 		for (int i = 0; i < Map.WIDTH; i++)
 		{
 			for (int j = 0; j < Map.HEIGHT; j++)
 			{
 				// Render entities
-				Vector2 mapOriginFromTopRight = new Vector2(getMapScreenOrigin().x, Gdx.graphics.getHeight() - getMapScreenOrigin().y);	// I think my code has violated the Geneva Convention at this point.
-				System.out.println(getMapUpVector());
+
+
+
+				//Vector2 mapOriginFromTopRight = new Vector2(getMapScreenOrigin().x, Gdx.graphics.getHeight() - getMapScreenOrigin().y);	// I think my code has violated the Geneva Convention at this point.
+				//System.out.println(getMapUpVector());
 				//System.out.println(i*getMapRightVector().x);
+
+				/*
 				Vector2 drawLocation = new Vector2
 						(
 							getMapScreenOrigin().x + j*getMapUpVector().x + i*getMapRightVector().x,
 							getMapScreenOrigin().y + j*getMapUpVector().y + i*getMapRightVector().y
 						);
+
+
 				if (frontmap.getEntity(i, j) != null)
 				{
 					//System.out.println("Drawing entity at " + drawLocation.x + ", " + drawLocation.y);
@@ -106,6 +125,8 @@ public class MapDrawer
 				{
 					game.batch.draw(frontmap.getBlock(i, j).getTexture(), (int)drawLocation.x, -(int)drawLocation.y, 32, 32);
 				}
+
+				 */
 			}
 		}
 		game.batch.end();
@@ -113,7 +134,19 @@ public class MapDrawer
 
 	public Vector2 getMapScreenOrigin()
 	{
+		/*
+		Returns the location of the top point of the map as a 2d vector with reference to the whole screen.
+		 */
 		return mapScreenOrigin;
+	}
+
+	public Vector2 getMapViewportOrigin()
+	{
+		/*
+		Returns the location of the top point of the map as a 2d vector with reference to the viewpoint, which is a
+		subset of the screen, as it does not include the white bars.
+		 */
+		return mapViewportOrigin;
 	}
 
 	public Vector2 getMapUpVector()

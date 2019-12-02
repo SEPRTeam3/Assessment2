@@ -48,7 +48,7 @@ public class GameScreen implements Screen
 		turnState = turnStates.PLAYER;
 		
 		map = new Map();
-		tileMap = new TmxMapLoader().load("test2.tmx");
+		tileMap = new TmxMapLoader().load("MapTestF.tmx");
 		mapDrawer = new MapDrawer(game, map, tileMap);
 		
 		this.map.debugMakeBuilding(5, 5);
@@ -114,11 +114,13 @@ public class GameScreen implements Screen
 				clicked.y = (float) Math.floor(clicked.y);
 
 				System.out.println("Clicked.x: " + clicked.x + " Clicked.y: " + clicked.y);
-				System.out.println("Map up vector is " + mapDrawer.getMapUpVector().x + " " + mapDrawer.getMapUpVector().y);
+				System.out.println("map origin is " + mapDrawer.getMapScreenOrigin().x + " " + mapDrawer.getMapScreenOrigin().y);
 				if (clicked.x > 0f && clicked.x < 24f && clicked.y > 0f && clicked.y < 24f)
 				{
+					/*
 					int tileX = (int) clicked.x;
 					int tileY = (int) clicked.y;
+					System.out.println("clicked at (" + tileX + ", " + tileY + ")");
 					if (map.getEntity(tileX, tileY) != null && map.getEntity(tileX, tileY).id == entityID.FIRETRUCK)
 					{
 						selected = new Vector2(tileX, tileY);
@@ -128,7 +130,7 @@ public class GameScreen implements Screen
 					{
 						map.moveEntity((int)selected.x, (int)selected.y, tileX, tileY);
 					}
-
+					*/
 				}
 			}
 			

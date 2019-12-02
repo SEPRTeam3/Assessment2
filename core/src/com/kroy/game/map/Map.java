@@ -8,8 +8,8 @@ import com.kroy.game.map.tiles.Grass;
 
 public class Map
 {
-	public final static int HEIGHT = 16;
-	public final static int WIDTH = 16;
+	public final static int HEIGHT = 24;
+	public final static int WIDTH = 24;
 	
 	private Tile backgroundLayer[][] = new Tile[WIDTH][HEIGHT];
 	private Entity entityLayer[][] = new Entity[WIDTH][HEIGHT];
