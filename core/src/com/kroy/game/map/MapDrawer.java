@@ -29,7 +29,7 @@ public class MapDrawer
 	private Vector2 mapViewportOrigin;
 	private float screenScalingCoefficient;
 	private final float TILE_WIDTH = 9.6f;
-	private final Vector2 TILE_OFFSET = new Vector2(-7.5f,-14 );
+	private final Vector2 TILE_OFFSET = new Vector2(-7.5f,-15 );
 
 	private TiledMap backmap;
 	private Viewport viewport;
