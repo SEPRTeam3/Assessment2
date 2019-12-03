@@ -51,7 +51,8 @@ public class GameScreen implements Screen
 		tileMap = new TmxMapLoader().load("MapTestF.tmx");
 		mapDrawer = new MapDrawer(game, map, tileMap);
 		
-		this.map.debugMakeBuilding(5, 5);
+		this.map.debugMakeBuilding(23, 23);
+		this.map.debugMakeFiretruck(1, 1);
 	}
 
 	@Override
@@ -77,7 +78,7 @@ public class GameScreen implements Screen
 			{
 
 				// Scale click to isometric grid
-				// TODO: Bad unmodular code! Redo without arbirary constants!
+				// TODO: Bad unmodular code! Redo without arbitrary constants!
 				Vector2 clicked;
 				// Move origin to top of iso diamond
 				if (Gdx.graphics.getHeight() > Gdx.graphics.getWidth())		// Size of grid is bounded by shortest axis
@@ -115,9 +116,8 @@ public class GameScreen implements Screen
 
 				System.out.println("Clicked.x: " + clicked.x + " Clicked.y: " + clicked.y);
 				System.out.println("map origin is " + mapDrawer.getMapScreenOrigin().x + " " + mapDrawer.getMapScreenOrigin().y);
-				if (clicked.x > 0f && clicked.x < 24f && clicked.y > 0f && clicked.y < 24f)
+				if (clicked.x >= 0f && clicked.x < 24f && clicked.y >= 0f && clicked.y < 24f)
 				{
-					/*
 					int tileX = (int) clicked.x;
 					int tileY = (int) clicked.y;
 					System.out.println("clicked at (" + tileX + ", " + tileY + ")");
@@ -130,7 +130,6 @@ public class GameScreen implements Screen
 					{
 						map.moveEntity((int)selected.x, (int)selected.y, tileX, tileY);
 					}
-					*/
 				}
 			}
 			

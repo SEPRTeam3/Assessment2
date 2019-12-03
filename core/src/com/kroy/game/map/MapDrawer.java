@@ -28,6 +28,8 @@ public class MapDrawer
 	private Vector2 mapScreenOrigin;
 	private Vector2 mapViewportOrigin;
 	private float screenScalingCoefficient;
+	private final float TILE_WIDTH = 9.6f;
+	private final Vector2 TILE_OFFSET = new Vector2(-7.5f,-14 );
 
 	private TiledMap backmap;
 	private Viewport viewport;
@@ -58,9 +60,7 @@ public class MapDrawer
 		camera.zoom = 85f;
 		camera.update();
 
-		mapViewportOrigin = new Vector2(viewport.getScreenWidth() / 2,
-				viewport.getScreenHeight() / 2
-		);
+		mapViewportOrigin = new Vector2(256, 492);
 
 		debugTexture = new Texture(Gdx.files.internal("Firetruck2.png"));
 		SpriteBatch spriteBatch = new SpriteBatch();
@@ -80,9 +80,8 @@ public class MapDrawer
 		mapScreenOrigin = new Vector2(Gdx.graphics.getWidth() / 2,
 				(Gdx.graphics.getHeight() - adjustedHeight) * 0.025f
 		);
-		mapViewportOrigin = new Vector2(viewport.getScreenWidth() / 2,
-				viewport.getScreenHeight() / 2
-		);
+		System.out.println("Viewport dimensions: " + viewport.getScreenWidth() + ", " + viewport.getScreenHeight());
+		System.out.println("Viewpoint origin at: " + getMapViewportOrigin().x + ", " + getMapViewportOrigin().y);
 	}
 
 	public void render()
@@ -93,7 +92,8 @@ public class MapDrawer
 		//game.batch.setProjectionMatrix(camera.combined);
 
 		game.batch.begin();
-		game.batch.draw(debugTexture, getMapViewportOrigin().x, getMapViewportOrigin().y);
+		game.batch.draw(debugTexture, 256, 492);
+//		game.batch.draw(debugTexture, 0, 0);
 		for (int i = 0; i < Map.WIDTH; i++)
 		{
 			for (int j = 0; j < Map.HEIGHT; j++)
@@ -106,27 +106,23 @@ public class MapDrawer
 				//System.out.println(getMapUpVector());
 				//System.out.println(i*getMapRightVector().x);
 
-				/*
 				Vector2 drawLocation = new Vector2
 						(
-							getMapScreenOrigin().x + j*getMapUpVector().x + i*getMapRightVector().x,
-							getMapScreenOrigin().y + j*getMapUpVector().y + i*getMapRightVector().y
+							getMapViewportOrigin().x + j*(getMapRightVector().x) + i*(getMapUpVector().x) + TILE_OFFSET.x,
+							getMapViewportOrigin().y + j*(getMapRightVector().y) + i*(getMapUpVector().y) + TILE_OFFSET.y
 						);
-
 
 				if (frontmap.getEntity(i, j) != null)
 				{
 					//System.out.println("Drawing entity at " + drawLocation.x + ", " + drawLocation.y);
 					//game.batch.draw(frontmap.getEntity(i, j).getTexture(), (int)drawLocation.x, -(int)drawLocation.y, 32, 32);
-					game.batch.draw(frontmap.getEntity(i, j).getTexture(), (int)mapOriginFromTopRight.x, (int)mapOriginFromTopRight.y, 32, 32);
+					game.batch.draw(frontmap.getEntity(i, j).getTexture(), drawLocation.x, drawLocation.y, 16, 16);
 				}
 				// Render blocks
 				if (frontmap.getBlock(i, j) != null)
 				{
-					game.batch.draw(frontmap.getBlock(i, j).getTexture(), (int)drawLocation.x, -(int)drawLocation.y, 32, 32);
+					game.batch.draw(frontmap.getBlock(i, j).getTexture(), drawLocation.x, drawLocation.y, 16, 16);
 				}
-
-				 */
 			}
 		}
 		game.batch.end();
@@ -156,13 +152,14 @@ public class MapDrawer
 		The up axis is taken to be south-east
 		The length of this vector is the length of an edge of an isometric tile.
 		 */
-		return new Vector2(10f*getScreenScalingCoefficient(), 0).rotate(-45f);
+		//return new Vector2(10f*getScreenScalingCoefficient(), 0).rotate(-45f);
+		return new Vector2(TILE_WIDTH, -TILE_WIDTH);
 	}
 
 	public Vector2 getMapRightVector()
 	{
 		// The right vector of the drawn map is the up vector rotated 90 degrees clockwise
-		return getMapUpVector().rotate90(1);
+		return new Vector2(-TILE_WIDTH, -TILE_WIDTH);
 	}
 
 	public float getScreenScalingCoefficient() {

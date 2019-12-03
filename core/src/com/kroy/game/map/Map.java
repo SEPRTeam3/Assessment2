@@ -26,7 +26,6 @@ public class Map
 				blockLayer[i][j] = null;
 			}
 		}
-		entityLayer[2][3] = new Firetruck();
 	}
 	
 	public Tile getBackground(int x, int y)
