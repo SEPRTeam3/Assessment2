@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class Firetruck extends Entity
 {
 	private boolean movedThisTurn;
+	private int movementDistance = 5;
 	
 	public Firetruck()
 	{
@@ -28,4 +29,6 @@ public class Firetruck extends Entity
 	{
 		this.movedThisTurn = false;
 	}
+
+	public int getMovementDistance() { return this.movementDistance; }
 }
