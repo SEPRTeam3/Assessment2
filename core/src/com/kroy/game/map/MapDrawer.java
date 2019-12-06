@@ -36,6 +36,8 @@ public class MapDrawer
 	private IsometricTiledMapRenderer backmapRenderer;
 	private OrthographicCamera camera;
 
+	private Vector2 mouseHoverCoords = null;
+
 	private Texture debugTexture;
 
 	public MapDrawer(MyGdxGame g, Map m, TiledMap t)
@@ -168,5 +170,14 @@ public class MapDrawer
 
 	public void setScreenScalingCoefficient(float screenScalingCoefficient) {
 		this.screenScalingCoefficient = screenScalingCoefficient;
+	}
+
+	public void setMouseHoverCoords(int x, int y)
+	{
+		/*
+		Sets the coordinates of the tile the mouse is hovering over.
+		If the mouse is not within the tile grid should not set
+		 */
+		mouseHoverCoords = new Vector2(x, y);
 	}
 }

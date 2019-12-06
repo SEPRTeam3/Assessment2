@@ -64,7 +64,8 @@ public class Map
 			if (!f.hasMovedThisTurn())
 			{
 				// Check if the destination is within the truck's movement radius
-				if (getShortestPaths(x1, y1, f.getMovementDistance())[x2][y2])
+				System.out.println(getShortestPaths(x1, y1, f.getMovementDistance())[y2][x2]);
+				if (getShortestPaths(x1, y1, f.getMovementDistance())[y2][x2])
 				{
 					// Check the space is free
 					if (entityLayer[x2][y2] == null && blockLayer[x2][y2] == null)
@@ -121,13 +122,23 @@ public class Map
 		Given a location on the map and a movement radius, returns a map of all reachable locations in the form of a 2d
 		array of booleans where 'true' indicates that the position is reachable, 'false' indicates that it is not.
 		 */
+
+		System.out.println("Getting shortest path from " + x + ", " + y);
+
 		boolean[][] reachable = new boolean[HEIGHT][WIDTH];
 
 		for (int i = 0; i < HEIGHT; i++)
 		{
 			for (int j = 0; j < WIDTH; j++)
 			{
-				reachable[i][j] = true;
+				if (distance >= Math.sqrt(Math.pow(j - x, 2) + Math.pow(i - y, 2)))
+				{
+					reachable[i][j] = true;
+				}
+				else
+				{
+					reachable[i][j] = false;
+				}
 			}
 		}
 		//radius >= Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
