@@ -180,4 +180,9 @@ public class MapDrawer
 		 */
 		mouseHoverCoords = new Vector2(x, y);
 	}
+
+	public void displayMovementRadius(int x, int y)
+	{
+
+	}
 }

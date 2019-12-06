@@ -43,15 +43,17 @@ public class Map
 		return blockLayer[x][y];
 	}
 	
-	public void moveEntity(int x1, int y1, int x2, int y2)
+	public boolean moveEntity(int x1, int y1, int x2, int y2)
 	{
-		/* Moves entity from (x1, y1) to (x2, y2) if the move is legal to do so
-		 * 
+		/*
+		Moves entity from (x1, y1) to (x2, y2) if the move is legal
+		Returns true if the move was completed
+		Returns false if the move was not completed
 		 */
 		
 		if (entityLayer[x1][y1] == null)
 		{
-			return;
+			return false;
 		}
 		
 		Entity e = entityLayer[x1][y1];
@@ -73,22 +75,27 @@ public class Map
 						f.setMovedThisTurn();
 						entityLayer[x2][y2] = f;
 						entityLayer[x1][y1] = null;
+						return true;
 					}
 					else
 					{
 						System.out.println("There's already something here");
+						return false;
 					}
 				}
 				else
 				{
 					System.out.println("This firetruck can't move this far");
+					return false;
 				}
 			}
 			else
 			{
 				System.out.println("This firetruck has already been moved");
+				return false;
 			}
 		}
+		return false;
 	}
 	
 	public void debugMakeFiretruck(int x, int y)

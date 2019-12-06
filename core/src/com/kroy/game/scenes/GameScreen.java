@@ -72,7 +72,8 @@ public class GameScreen implements Screen
 		switch(turnState)
 		{
 		case PLAYER:
-			
+
+
 			// Left click handling
 			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
 			{
@@ -129,6 +130,7 @@ public class GameScreen implements Screen
 					else if (map.getEntity(tileX, tileY) == null && selected != null)
 					{
 						map.moveEntity((int)selected.x, (int)selected.y, tileX, tileY);
+						selected = null;
 					}
 				}
 			}
