@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kroy.game.MyGdxGame;
 import com.kroy.game.entities.Entity.entityID;
+import com.kroy.game.entities.Firetruck;
 import com.kroy.game.map.Map;
 import com.kroy.game.map.MapDrawer;
 
@@ -118,6 +119,7 @@ public class GameScreen implements Screen
 				System.out.println("map origin is " + mapDrawer.getMapScreenOrigin().x + " " + mapDrawer.getMapScreenOrigin().y);
 				if (clicked.x >= 0f && clicked.x < 24f && clicked.y >= 0f && clicked.y < 24f)
 				{
+					// Clicked inside map
 					int tileX = (int) clicked.x;
 					int tileY = (int) clicked.y;
 					System.out.println("clicked at (" + tileX + ", " + tileY + ")");
@@ -125,14 +127,36 @@ public class GameScreen implements Screen
 					{
 						selected = new Vector2(tileX, tileY);
 						System.out.println("Selected: " + selected);
+
+
 					}
 					else if (map.getEntity(tileX, tileY) == null && selected != null)
 					{
 						map.moveEntity((int)selected.x, (int)selected.y, tileX, tileY);
+						selected = null;
+					}
+					else
+					{
+						selected = null;
 					}
 				}
+				else
+				{
+					// Clicked outside of map
+					selected = null;
+				}
 			}
-			
+			// Draw movement radius around fire engine
+			if (selected != null && map.getEntity((int)selected.x, (int)selected.y) != null)
+			{
+				if (map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK)
+				{
+					Firetruck f = (Firetruck) map.getEntity((int)selected.x, (int)selected.y);
+					boolean[][] b = map.getShortestPaths((int)selected.x, (int)selected.y, f.getMovementDistance());
+					mapDrawer.highlightBlocks(b);
+				}
+			}
+
 			// Space key handling
 			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
 			{

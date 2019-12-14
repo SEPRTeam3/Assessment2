@@ -123,7 +123,7 @@ public class Map
 		array of booleans where 'true' indicates that the position is reachable, 'false' indicates that it is not.
 		 */
 
-		System.out.println("Getting shortest path from " + x + ", " + y);
+		//System.out.println("Getting shortest path from " + x + ", " + y);
 
 		boolean[][] reachable = new boolean[HEIGHT][WIDTH];
 
