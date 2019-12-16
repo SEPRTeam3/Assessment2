@@ -118,8 +118,22 @@ public class MapDrawer
 						);
 
 				// Render highlights
-				Color c = game.batch.getColor();
-				game.batch.setColor(c.r, c.g, c.b, .3f);
+				Color c = new Color(game.batch.getColor());
+				switch(highlightColours[j][i])
+				{
+					// Set the colour of the sprite batch based on the highlight colour of the current tile
+					case RED:
+						game.batch.setColor(.5f, 0f, 0f, 0.5f);
+						break;
+					case GREY:
+						game.batch.setColor(0.2f, 0.2f, 0.2f, 0.5f);
+						break;
+					case GREEN:
+						game.batch.setColor(0f, .5f, 0f, 0.5f);
+						break;
+					case NONE:
+						break;
+				}
 				if (highlightColours[j][i] != HighlightColours.NONE)
 				{
 					game.batch.draw
@@ -131,7 +145,7 @@ public class MapDrawer
 					);
 					highlightColours[j][i] = HighlightColours.NONE;
 				}
-				game.batch.setColor(c.r, c.g, c.b, 1f);
+				game.batch.setColor(c);
 
 				// Render entities
 				if (frontmap.getEntity(i, j) != null)
@@ -200,7 +214,7 @@ public class MapDrawer
 			{
 				if (blocks[j][i])
 				{
-				highlightColours[j][i] = HighlightColours.GREEN;
+				highlightColours[j][i] = HighlightColours.RED;
 				}
 			}
 		}

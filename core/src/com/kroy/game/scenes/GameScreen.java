@@ -85,13 +85,9 @@ public class GameScreen implements Screen
 					// Clicked inside map
 					int tileX = (int) tileClicked.x;
 					int tileY = (int) tileClicked.y;
-					System.out.println("clicked at (" + tileX + ", " + tileY + ")");
 					if (map.getEntity(tileX, tileY) != null && map.getEntity(tileX, tileY).id == entityID.FIRETRUCK)
 					{
 						selected = new Vector2(tileX, tileY);
-						System.out.println("Selected: " + selected);
-
-
 					}
 					else if (map.getEntity(tileX, tileY) == null && selected != null)
 					{
