@@ -219,4 +219,68 @@ public class MapDrawer
 			}
 		}
 	}
+
+	public Vector2 toMapSpace(Vector2 click)
+	{
+		/*
+		Maps a coordinate as a vector from screenspace to isometric map space.
+		Precondition:
+			Origin is screen bottom left
+			Up vector is screen up
+			Right vector is screen right
+			Scale is the window resolution
+		Postcondition:
+			Origin is the top point of the isometric diamond
+			Up vector is south-east
+			Right vector is south-west
+			Scale is such that one map tile is one unit
+		 */
+		Vector2 clicked;
+
+		if (Gdx.graphics.getHeight() > Gdx.graphics.getWidth())		// Size of grid is bounded by shortest axis
+		{
+			clicked = new Vector2
+			(
+					click.x - getMapScreenOrigin().x,
+					click.y - getMapScreenOrigin().y
+			);
+		}
+		else
+		{
+			clicked = new Vector2
+			(
+					click.x - Gdx.graphics.getWidth() / 2,
+					Gdx.input.getY() - Gdx.graphics.getHeight() * 0.025f
+			);
+		}
+		clicked = clicked.rotate(-45f);	// Rotate
+
+		clicked.x = (float) Math.floor(clicked.x);
+		clicked.y = (float) Math.floor(clicked.y);
+		if (Gdx.graphics.getHeight() > Gdx.graphics.getWidth())
+		{
+			int extra = Gdx.graphics.getHeight() - Gdx.graphics.getWidth();
+			int distanceIn = Gdx.input.getY() - extra / 2;
+			float ratio =  (float) distanceIn / (float) Gdx.graphics.getWidth();
+		}
+		else
+		{
+			float ratio =  (float) Gdx.input.getY() / (float) Gdx.graphics.getWidth();
+		}
+
+		// Scale to grid
+		clicked.scl(1f/(getScreenScalingCoefficient()));	// Is relative to the scaling coefficient
+		clicked.scl(24f/328f);	// Divide max (328 for some reason) by 24 to get appropriately sized tiles
+		clicked.x = (float) Math.floor(clicked.x);	// Floor values
+		clicked.y = (float) Math.floor(clicked.y);
+
+		if (clicked.x >= 0f && clicked.x < Map.WIDTH && clicked.y >= 0f && clicked.y < Map.HEIGHT)
+		{
+			return clicked;
+		}
+		else
+		{
+			return null;
+		}
+	}
 }

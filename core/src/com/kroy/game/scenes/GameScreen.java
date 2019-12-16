@@ -78,50 +78,13 @@ public class GameScreen implements Screen
 			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
 			{
 
-				// Scale click to isometric grid
-				// TODO: Bad unmodular code! Redo without arbitrary constants!
-				Vector2 clicked;
-				// Move origin to top of iso diamond
-				if (Gdx.graphics.getHeight() > Gdx.graphics.getWidth())		// Size of grid is bounded by shortest axis
-				{
-					clicked = new Vector2(
-										  Gdx.input.getX() - mapDrawer.getMapScreenOrigin().x,
-							              Gdx.input.getY() - mapDrawer.getMapScreenOrigin().y
-										 );
-				}
-				else
-				{
-					clicked = new Vector2(Gdx.input.getX() - Gdx.graphics.getWidth() / 2, Gdx.input.getY() - Gdx.graphics.getHeight() * 0.025f);
-				}
-				clicked = clicked.rotate(-45f);	// Rotate
+				Vector2 tileClicked = mapDrawer.toMapSpace(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
-				clicked.x = (float) Math.floor(clicked.x);
-				clicked.y = (float) Math.floor(clicked.y);
-				if (Gdx.graphics.getHeight() > Gdx.graphics.getWidth())
-				{
-					int extra = Gdx.graphics.getHeight() - Gdx.graphics.getWidth();
-					int distanceIn = Gdx.input.getY() - extra / 2;
-					float ratio =  (float) distanceIn / (float) Gdx.graphics.getWidth();
-					//System.out.println("Ratio down screen: " + ratio);
-				}
-				else
-				{
-					float ratio =  (float) Gdx.input.getY() / (float) Gdx.graphics.getWidth();
-					//System.out.println("Ratio down screen: " + ratio);
-				}
-				// Scale to grid
-				clicked.scl(1f/(mapDrawer.getScreenScalingCoefficient()));	// Is relative to the scaling coefficient
-				clicked.scl(24f/328f);	// Divide max (328 for some reason) by 24 to get appropriately sized tiles
-				clicked.x = (float) Math.floor(clicked.x);	// Floor values
-				clicked.y = (float) Math.floor(clicked.y);
-
-				System.out.println("Clicked.x: " + clicked.x + " Clicked.y: " + clicked.y);
-				System.out.println("map origin is " + mapDrawer.getMapScreenOrigin().x + " " + mapDrawer.getMapScreenOrigin().y);
-				if (clicked.x >= 0f && clicked.x < 24f && clicked.y >= 0f && clicked.y < 24f)
+				if (tileClicked != null)
 				{
 					// Clicked inside map
-					int tileX = (int) clicked.x;
-					int tileY = (int) clicked.y;
+					int tileX = (int) tileClicked.x;
+					int tileY = (int) tileClicked.y;
 					System.out.println("clicked at (" + tileX + ", " + tileY + ")");
 					if (map.getEntity(tileX, tileY) != null && map.getEntity(tileX, tileY).id == entityID.FIRETRUCK)
 					{
