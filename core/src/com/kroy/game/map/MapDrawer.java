@@ -32,6 +32,7 @@ public class MapDrawer
 	private float screenScalingCoefficient;
 	private final float TILE_WIDTH = 9.6f;
 	private final Vector2 TILE_OFFSET = new Vector2(-7.5f,-15 );
+	private final Vector2 HIGHLIGHT_OFFSET = new Vector2(0, -2);
 
 	private TiledMap backmap;
 	private Viewport viewport;
@@ -121,7 +122,13 @@ public class MapDrawer
 				game.batch.setColor(c.r, c.g, c.b, .3f);
 				if (highlightColours[j][i] != HighlightColours.NONE)
 				{
-					game.batch.draw(highlightTexture, drawLocation.x, drawLocation.y, 16, 16);
+					game.batch.draw
+					(
+							highlightTexture,
+							drawLocation.x + HIGHLIGHT_OFFSET.x,
+							drawLocation.y + HIGHLIGHT_OFFSET.y,
+							16, 16
+					);
 					highlightColours[j][i] = HighlightColours.NONE;
 				}
 				game.batch.setColor(c.r, c.g, c.b, 1f);
@@ -168,7 +175,6 @@ public class MapDrawer
 		The up axis is taken to be south-east
 		The length of this vector is the length of an edge of an isometric tile.
 		 */
-		//return new Vector2(10f*getScreenScalingCoefficient(), 0).rotate(-45f);
 		return new Vector2(TILE_WIDTH, -TILE_WIDTH);
 	}
 
