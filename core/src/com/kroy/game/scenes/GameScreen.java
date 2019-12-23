@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kroy.game.MyGdxGame;
 import com.kroy.game.entities.Entity.entityID;
 import com.kroy.game.entities.Firetruck;
+import com.kroy.game.map.HighlightColours;
 import com.kroy.game.map.Map;
 import com.kroy.game.map.MapDrawer;
 
@@ -30,6 +31,13 @@ public class GameScreen implements Screen
 		ET,
 		POST_ET
 	}
+
+	public enum selectedMode
+	{
+		NONE,
+		MOVE,
+		ATTACK
+	}
 	
 	final MyGdxGame game;
 	
@@ -39,6 +47,7 @@ public class GameScreen implements Screen
 	
 	Vector2 selected;
 	turnStates turnState;
+	selectedMode selectAction = selectedMode.NONE;
 
 	
 	public GameScreen(final MyGdxGame game)
@@ -73,7 +82,7 @@ public class GameScreen implements Screen
 		switch(turnState)
 		{
 		case PLAYER:
-			
+
 			// Left click handling
 			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
 			{
@@ -87,15 +96,24 @@ public class GameScreen implements Screen
 					int tileY = (int) tileClicked.y;
 					if (map.getEntity(tileX, tileY) != null && map.getEntity(tileX, tileY).id == entityID.FIRETRUCK)
 					{
+						// Player clicked firetruck with nothing selected, select firetruck
 						selected = new Vector2(tileX, tileY);
 					}
-					else if (map.getEntity(tileX, tileY) == null && selected != null)
+					else if (map.getEntity(tileX, tileY) == null && selected != null && selectAction == selectedMode.MOVE)
 					{
+						// Player clicked an empty space with move selected, so move to that area
 						map.moveEntity((int)selected.x, (int)selected.y, tileX, tileY);
+						selectAction = selectedMode.NONE;
 						selected = null;
+					}
+					else if (selectAction == selectedMode.ATTACK)
+					{
+						// Player clicked with attack selected, so attack that area
+						map.attackEntity((int)selected.x, (int)selected.y, tileX, tileY);
 					}
 					else
 					{
+						selectAction = selectedMode.NONE;
 						selected = null;
 					}
 				}
@@ -105,14 +123,48 @@ public class GameScreen implements Screen
 					selected = null;
 				}
 			}
-			// Draw movement radius around fire engine
+
+			// Handling for M key for move action
+			if (Gdx.input.isKeyJustPressed(Input.Keys.M))
+			{
+				if
+				(
+					map.getEntity((int)selected.x, (int)selected.y) != null
+					&&
+					map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK
+				)
+				{
+					selectAction = selectedMode.MOVE;
+				}
+			}
+
+			// Handling for N key for attack action
+			if (Gdx.input.isKeyJustPressed(Input.Keys.N))
+			{
+				if
+				(
+					map.getEntity((int)selected.x, (int)selected.y) != null
+					&&
+					map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK
+				)
+				{
+					selectAction = selectedMode.ATTACK;
+				}
+			}
+
+			// Draw highlights around fire engine
 			if (selected != null && map.getEntity((int)selected.x, (int)selected.y) != null)
 			{
-				if (map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK)
+				if (selectAction == selectedMode.MOVE && map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK)
 				{
 					Firetruck f = (Firetruck) map.getEntity((int)selected.x, (int)selected.y);
 					boolean[][] b = map.getShortestPaths((int)selected.x, (int)selected.y, f.getMovementDistance());
-					mapDrawer.highlightBlocks(b);
+					mapDrawer.highlightBlocks(b, HighlightColours.GREEN);
+				}
+				else if (selectAction == selectedMode.ATTACK && map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK)
+				{
+					boolean[][] b = map.getAttackPattern((int)selected.x, (int)selected.y);
+					mapDrawer.highlightBlocks(b, HighlightColours.RED);
 				}
 			}
 

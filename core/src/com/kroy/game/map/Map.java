@@ -90,6 +90,23 @@ public class Map
 			}
 		}
 	}
+
+	public void attackEntity(int x1, int y1, int x2, int y2)
+	{
+		/*
+		The entity at (x1, y1) attacks at (x2, y2) if it is possible to do so
+		 */
+		boolean[][] b = getAttackPattern(x1, y1);
+		if (b[x2][y2])
+		{
+			System.out.println("Attaching (" + x2 + ", " + y2 + ")");
+		}
+		else
+		{
+			System.out.println("Can't attack there");
+		}
+
+	}
 	
 	public void debugMakeFiretruck(int x, int y)
 	{
@@ -142,6 +159,27 @@ public class Map
 			}
 		}
 		//radius >= Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
+		return reachable;
+	}
+
+	public boolean[][] getAttackPattern(int x, int y)
+	{
+		boolean[][] reachable = new boolean[HEIGHT][WIDTH];
+
+		for (int i = 0; i < HEIGHT; i++)
+		{
+			for (int j = 0; j < WIDTH; j++)
+			{
+				if (i == y || j == x)
+				{
+					reachable[i][j] = true;
+				}
+				else
+				{
+					reachable[i][j] = false;
+				}
+			}
+		}
 		return reachable;
 	}
 	
