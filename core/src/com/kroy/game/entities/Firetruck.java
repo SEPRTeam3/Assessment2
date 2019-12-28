@@ -2,11 +2,18 @@ package com.kroy.game.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.kroy.game.map.Map;
 
-public class Firetruck extends Entity
+import static com.kroy.game.map.Map.HEIGHT;
+import static com.kroy.game.map.Map.WIDTH;
+
+public class Firetruck extends Entity implements WarlikeEntity
 {
 	private boolean movedThisTurn;
 	private int movementDistance = 5;
+	private int attackStrength = 1;
+	private int maxHealth = 5;
+	private int health = 5;
 	
 	public Firetruck()
 	{
@@ -31,4 +38,44 @@ public class Firetruck extends Entity
 	}
 
 	public int getMovementDistance() { return this.movementDistance; }
+
+	public boolean[][] getAttackPattern(int x, int y, Map map)
+	{
+		boolean[][] reachable = new boolean[map.HEIGHT][map.WIDTH];
+
+		for (int i = 0; i < map.HEIGHT; i++)
+		{
+			for (int j = 0; j < map.WIDTH; j++)
+			{
+				if (i == y || j == x)
+				{
+					reachable[i][j] = true;
+				}
+				else
+				{
+					reachable[i][j] = false;
+				}
+			}
+		}
+		return reachable;
+	}
+
+	public void attack(int targetX, int targetY, Map map)
+	{
+		Entity e = map.getEntity(targetX, targetY);
+		if (e != null && e instanceof WarlikeEntity)
+		{
+			System.out.println("Dealing damage to the enemy");
+			((WarlikeEntity) e).takeDamage(attackStrength);
+		}
+		else
+		{
+			System.out.println("There's nothing for me to attack");
+		}
+	}
+
+	public void takeDamage(int i)
+	{
+		this.health -= i;
+	}
 }

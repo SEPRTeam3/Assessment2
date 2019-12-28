@@ -45,7 +45,7 @@ public class GameScreen implements Screen
 	private TiledMap tileMap;
 	private MapDrawer mapDrawer;
 	
-	Vector2 selected;
+	Vector2 selected = null;
 	turnStates turnState;
 	selectedMode selectAction = selectedMode.NONE;
 
@@ -106,10 +106,11 @@ public class GameScreen implements Screen
 						selectAction = selectedMode.NONE;
 						selected = null;
 					}
-					else if (selectAction == selectedMode.ATTACK)
+					else if (selected != null && selectAction == selectedMode.ATTACK)
 					{
 						// Player clicked with attack selected, so attack that area
 						map.attackEntity((int)selected.x, (int)selected.y, tileX, tileY);
+						selected = null;
 					}
 					else
 					{
@@ -129,6 +130,8 @@ public class GameScreen implements Screen
 			{
 				if
 				(
+					selected != null
+					&&
 					map.getEntity((int)selected.x, (int)selected.y) != null
 					&&
 					map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK
@@ -143,6 +146,8 @@ public class GameScreen implements Screen
 			{
 				if
 				(
+					selected != null
+							&&
 					map.getEntity((int)selected.x, (int)selected.y) != null
 					&&
 					map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK
@@ -163,7 +168,8 @@ public class GameScreen implements Screen
 				}
 				else if (selectAction == selectedMode.ATTACK && map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK)
 				{
-					boolean[][] b = map.getAttackPattern((int)selected.x, (int)selected.y);
+					Firetruck f = (Firetruck) map.getEntity((int)selected.x, (int)selected.y);
+					boolean[][] b = f.getAttackPattern((int)selected.x, (int)selected.y, map);
 					mapDrawer.highlightBlocks(b, HighlightColours.RED);
 				}
 			}

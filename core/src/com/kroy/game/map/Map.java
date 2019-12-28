@@ -4,6 +4,7 @@ import com.kroy.game.blocks.Building;
 import com.kroy.game.entities.Entity;
 import com.kroy.game.entities.Entity.entityID;
 import com.kroy.game.entities.Firetruck;
+import com.kroy.game.entities.WarlikeEntity;
 import com.kroy.game.map.tiles.Grass;
 
 public class Map
@@ -96,14 +97,13 @@ public class Map
 		/*
 		The entity at (x1, y1) attacks at (x2, y2) if it is possible to do so
 		 */
-		boolean[][] b = getAttackPattern(x1, y1);
-		if (b[x2][y2])
+		if (entityLayer[x1][y1] != null && entityLayer[x1][y1] instanceof WarlikeEntity)
 		{
-			System.out.println("Attaching (" + x2 + ", " + y2 + ")");
+			((WarlikeEntity) entityLayer[x1][y1]).attack(x2, y2, this);
 		}
 		else
 		{
-			System.out.println("Can't attack there");
+			System.out.println("There was no entity there to do the attacking");
 		}
 
 	}
@@ -159,27 +159,6 @@ public class Map
 			}
 		}
 		//radius >= Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
-		return reachable;
-	}
-
-	public boolean[][] getAttackPattern(int x, int y)
-	{
-		boolean[][] reachable = new boolean[HEIGHT][WIDTH];
-
-		for (int i = 0; i < HEIGHT; i++)
-		{
-			for (int j = 0; j < WIDTH; j++)
-			{
-				if (i == y || j == x)
-				{
-					reachable[i][j] = true;
-				}
-				else
-				{
-					reachable[i][j] = false;
-				}
-			}
-		}
 		return reachable;
 	}
 	
