@@ -41,7 +41,6 @@ public class MapDrawer
 
 	private HighlightColours[][] highlightColours;
 
-	private Texture debugTexture;
 	private Texture highlightTexture;
 
 	public MapDrawer(MyGdxGame g, Map m, TiledMap t)
@@ -68,7 +67,6 @@ public class MapDrawer
 
 		mapViewportOrigin = new Vector2(256, 492);
 
-		debugTexture = new Texture(Gdx.files.internal("Firetruck2.png"));
 		highlightTexture = new Texture(Gdx.files.internal("selectTile.png"));
 		SpriteBatch spriteBatch = new SpriteBatch();
 
