@@ -1,10 +1,10 @@
 package com.kroy.game.map;
 
 import com.kroy.game.blocks.Building;
+import com.kroy.game.entities.DamageableEntity;
 import com.kroy.game.entities.Entity;
 import com.kroy.game.entities.Entity.entityID;
 import com.kroy.game.entities.Firetruck;
-import com.kroy.game.entities.WarlikeEntity;
 import com.kroy.game.map.tiles.Grass;
 
 public class Map
@@ -46,7 +46,7 @@ public class Map
 	
 	public void moveEntity(int x1, int y1, int x2, int y2)
 	{
-		/* Moves entity from (x1, y1) to (x2, y2) if the move is legal to do so
+		/* Moves entity from (x1, y1) to (x2, y2) if the move is legal
 		 * 
 		 */
 		
@@ -65,8 +65,7 @@ public class Map
 			if (!f.hasMovedThisTurn())
 			{
 				// Check if the destination is within the truck's movement radius
-				System.out.println(getShortestPaths(x1, y1, f.getMovementDistance())[y2][x2]);
-				if (getShortestPaths(x1, y1, f.getMovementDistance())[y2][x2])
+				if (f.isMovementPossible(x1, y1, x2, y2))
 				{
 					// Check the space is free
 					if (entityLayer[x2][y2] == null && blockLayer[x2][y2] == null)
@@ -97,15 +96,44 @@ public class Map
 		/*
 		The entity at (x1, y1) attacks at (x2, y2) if it is possible to do so
 		 */
-		if (entityLayer[x1][y1] != null && entityLayer[x1][y1] instanceof WarlikeEntity)
+		// Add pre-check that locations are within map
+		if (entityLayer[x1][y1] != null)
 		{
-			((WarlikeEntity) entityLayer[x1][y1]).attack(x2, y2, this);
+			if (entityLayer[x1][y1].id == entityID.FIRETRUCK)
+			{
+				Firetruck f = (Firetruck) entityLayer[x1][y1];
+				damageLocation(f.getAttackStrength(), x2, y2);
+			}
+			else
+			{
+				System.out.println("The entity there wasn't capable of attacking");
+			}
 		}
 		else
 		{
 			System.out.println("There was no entity there to do the attacking");
 		}
 
+	}
+
+	public void damageLocation(int amount, int x, int y)
+	{
+		if ((x >= 0 && x < WIDTH) && (y >= 0 && y < HEIGHT))
+		{
+			if (entityLayer[x][y] != null && entityLayer[x][y] instanceof DamageableEntity)
+			{
+				DamageableEntity d = (DamageableEntity) entityLayer[x][y];
+				d.takeDamage(amount);
+			}
+			else
+			{
+				System.out.println("There's nothing here to damage");
+			}
+		}
+		else
+		{
+			System.out.println("Damage location was out of the map");
+		}
 	}
 	
 	public void debugMakeFiretruck(int x, int y)
@@ -132,34 +160,4 @@ public class Map
 			}
 		}
 	}
-
-	public boolean[][] getShortestPaths(int x, int y, int distance)
-	{
-		/*
-		Given a location on the map and a movement radius, returns a map of all reachable locations in the form of a 2d
-		array of booleans where 'true' indicates that the position is reachable, 'false' indicates that it is not.
-		 */
-
-		//System.out.println("Getting shortest path from " + x + ", " + y);
-
-		boolean[][] reachable = new boolean[HEIGHT][WIDTH];
-
-		for (int i = 0; i < HEIGHT; i++)
-		{
-			for (int j = 0; j < WIDTH; j++)
-			{
-				if (distance >= Math.sqrt(Math.pow(j - x, 2) + Math.pow(i - y, 2)))
-				{
-					reachable[i][j] = true;
-				}
-				else
-				{
-					reachable[i][j] = false;
-				}
-			}
-		}
-		//radius >= Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
-		return reachable;
-	}
-	
 }

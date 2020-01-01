@@ -163,13 +163,23 @@ public class GameScreen implements Screen
 				if (selectAction == selectedMode.MOVE && map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK)
 				{
 					Firetruck f = (Firetruck) map.getEntity((int)selected.x, (int)selected.y);
-					boolean[][] b = map.getShortestPaths((int)selected.x, (int)selected.y, f.getMovementDistance());
+					boolean[][] b = new boolean[map.HEIGHT][map.WIDTH];
+					for (int i = 0; i < map.HEIGHT; i++) {
+						for (int j = 0; j < map.WIDTH; j++) {
+							b[i][j] = f.isMovementPossible((int) selected.x, (int) selected.y, j, i);
+						}
+					}
 					mapDrawer.highlightBlocks(b, HighlightColours.GREEN);
 				}
 				else if (selectAction == selectedMode.ATTACK && map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK)
 				{
 					Firetruck f = (Firetruck) map.getEntity((int)selected.x, (int)selected.y);
-					boolean[][] b = f.getAttackPattern((int)selected.x, (int)selected.y, map);
+					boolean[][] b = new boolean[map.HEIGHT][map.WIDTH];
+					for (int i = 0; i < map.HEIGHT; i++) {
+						for (int j = 0; j < map.WIDTH; j++) {
+							b[i][j] = f.isAttackPossible((int) selected.x, (int) selected.y, j, i);
+						}
+					}
 					mapDrawer.highlightBlocks(b, HighlightColours.RED);
 				}
 			}
