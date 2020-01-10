@@ -16,6 +16,8 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kroy.game.MyGdxGame;
 import com.kroy.game.entities.Entity.entityID;
+import com.kroy.game.entities.Firetruck;
+import com.kroy.game.map.HighlightColours;
 import com.kroy.game.map.Map;
 import com.kroy.game.map.MapDrawer;
 
@@ -29,6 +31,13 @@ public class GameScreen implements Screen
 		ET,
 		POST_ET
 	}
+
+	public enum selectedMode
+	{
+		NONE,
+		MOVE,
+		ATTACK
+	}
 	
 	final MyGdxGame game;
 	
@@ -36,8 +45,9 @@ public class GameScreen implements Screen
 	private TiledMap tileMap;
 	private MapDrawer mapDrawer;
 	
-	Vector2 selected;
+	Vector2 selected = null;
 	turnStates turnState;
+	selectedMode selectAction = selectedMode.NONE;
 
 	
 	public GameScreen(final MyGdxGame game)
@@ -73,68 +83,107 @@ public class GameScreen implements Screen
 		{
 		case PLAYER:
 
-
 			// Left click handling
 			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
 			{
 
-				// Scale click to isometric grid
-				// TODO: Bad unmodular code! Redo without arbitrary constants!
-				Vector2 clicked;
-				// Move origin to top of iso diamond
-				if (Gdx.graphics.getHeight() > Gdx.graphics.getWidth())		// Size of grid is bounded by shortest axis
-				{
-					clicked = new Vector2(
-										  Gdx.input.getX() - mapDrawer.getMapScreenOrigin().x,
-							              Gdx.input.getY() - mapDrawer.getMapScreenOrigin().y
-										 );
-				}
-				else
-				{
-					clicked = new Vector2(Gdx.input.getX() - Gdx.graphics.getWidth() / 2, Gdx.input.getY() - Gdx.graphics.getHeight() * 0.025f);
-				}
-				clicked = clicked.rotate(-45f);	// Rotate
+				Vector2 tileClicked = mapDrawer.toMapSpace(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
-				clicked.x = (float) Math.floor(clicked.x);
-				clicked.y = (float) Math.floor(clicked.y);
-				if (Gdx.graphics.getHeight() > Gdx.graphics.getWidth())
+				if (tileClicked != null)
 				{
-					int extra = Gdx.graphics.getHeight() - Gdx.graphics.getWidth();
-					int distanceIn = Gdx.input.getY() - extra / 2;
-					float ratio =  (float) distanceIn / (float) Gdx.graphics.getWidth();
-					//System.out.println("Ratio down screen: " + ratio);
-				}
-				else
-				{
-					float ratio =  (float) Gdx.input.getY() / (float) Gdx.graphics.getWidth();
-					//System.out.println("Ratio down screen: " + ratio);
-				}
-				// Scale to grid
-				clicked.scl(1f/(mapDrawer.getScreenScalingCoefficient()));	// Is relative to the scaling coefficient
-				clicked.scl(24f/328f);	// Divide max (328 for some reason) by 24 to get appropriately sized tiles
-				clicked.x = (float) Math.floor(clicked.x);	// Floor values
-				clicked.y = (float) Math.floor(clicked.y);
-
-				System.out.println("Clicked.x: " + clicked.x + " Clicked.y: " + clicked.y);
-				System.out.println("map origin is " + mapDrawer.getMapScreenOrigin().x + " " + mapDrawer.getMapScreenOrigin().y);
-				if (clicked.x >= 0f && clicked.x < 24f && clicked.y >= 0f && clicked.y < 24f)
-				{
-					int tileX = (int) clicked.x;
-					int tileY = (int) clicked.y;
-					System.out.println("clicked at (" + tileX + ", " + tileY + ")");
+					// Clicked inside map
+					int tileX = (int) tileClicked.x;
+					int tileY = (int) tileClicked.y;
 					if (map.getEntity(tileX, tileY) != null && map.getEntity(tileX, tileY).id == entityID.FIRETRUCK)
 					{
+						// Player clicked firetruck with nothing selected, select firetruck
 						selected = new Vector2(tileX, tileY);
-						System.out.println("Selected: " + selected);
 					}
-					else if (map.getEntity(tileX, tileY) == null && selected != null)
+					else if (map.getEntity(tileX, tileY) == null && selected != null && selectAction == selectedMode.MOVE)
 					{
+						// Player clicked an empty space with move selected, so move to that area
 						map.moveEntity((int)selected.x, (int)selected.y, tileX, tileY);
+						selectAction = selectedMode.NONE;
+						selected = null;
+					}
+					else if (selected != null && selectAction == selectedMode.ATTACK)
+					{
+						// Player clicked with attack selected, so attack that area
+						map.attackEntity((int)selected.x, (int)selected.y, tileX, tileY);
+						selected = null;
+					}
+					else
+					{
+						selectAction = selectedMode.NONE;
 						selected = null;
 					}
 				}
+				else
+				{
+					// Clicked outside of map
+					selected = null;
+				}
 			}
-			
+
+			// Handling for M key for move action
+			if (Gdx.input.isKeyJustPressed(Input.Keys.M))
+			{
+				if
+				(
+					selected != null
+					&&
+					map.getEntity((int)selected.x, (int)selected.y) != null
+					&&
+					map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK
+				)
+				{
+					selectAction = selectedMode.MOVE;
+				}
+			}
+
+			// Handling for N key for attack action
+			if (Gdx.input.isKeyJustPressed(Input.Keys.N))
+			{
+				if
+				(
+					selected != null
+							&&
+					map.getEntity((int)selected.x, (int)selected.y) != null
+					&&
+					map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK
+				)
+				{
+					selectAction = selectedMode.ATTACK;
+				}
+			}
+
+			// Draw highlights around fire engine
+			if (selected != null && map.getEntity((int)selected.x, (int)selected.y) != null)
+			{
+				if (selectAction == selectedMode.MOVE && map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK)
+				{
+					Firetruck f = (Firetruck) map.getEntity((int)selected.x, (int)selected.y);
+					boolean[][] b = new boolean[map.HEIGHT][map.WIDTH];
+					for (int i = 0; i < map.HEIGHT; i++) {
+						for (int j = 0; j < map.WIDTH; j++) {
+							b[i][j] = f.isMovementPossible((int) selected.x, (int) selected.y, j, i);
+						}
+					}
+					mapDrawer.highlightBlocks(b, HighlightColours.GREEN);
+				}
+				else if (selectAction == selectedMode.ATTACK && map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK)
+				{
+					Firetruck f = (Firetruck) map.getEntity((int)selected.x, (int)selected.y);
+					boolean[][] b = new boolean[map.HEIGHT][map.WIDTH];
+					for (int i = 0; i < map.HEIGHT; i++) {
+						for (int j = 0; j < map.WIDTH; j++) {
+							b[i][j] = f.isAttackPossible((int) selected.x, (int) selected.y, j, i);
+						}
+					}
+					mapDrawer.highlightBlocks(b, HighlightColours.RED);
+				}
+			}
+
 			// Space key handling
 			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
 			{

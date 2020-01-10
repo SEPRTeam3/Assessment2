@@ -2,6 +2,7 @@ package com.kroy.game.map;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -30,15 +32,17 @@ public class MapDrawer
 	private float screenScalingCoefficient;
 	private final float TILE_WIDTH = 9.6f;
 	private final Vector2 TILE_OFFSET = new Vector2(-7.5f,-15 );
+	private final Vector2 HIGHLIGHT_OFFSET = new Vector2(0, -2);
 
 	private TiledMap backmap;
 	private Viewport viewport;
 	private IsometricTiledMapRenderer backmapRenderer;
 	private OrthographicCamera camera;
 
-	private Vector2 mouseHoverCoords = null;
+	private HighlightColours[][] highlightColours;
 
 	private Texture debugTexture;
+	private Texture highlightTexture;
 
 	public MapDrawer(MyGdxGame g, Map m, TiledMap t)
 	{
@@ -65,9 +69,19 @@ public class MapDrawer
 		mapViewportOrigin = new Vector2(256, 492);
 
 		debugTexture = new Texture(Gdx.files.internal("Firetruck2.png"));
+		highlightTexture = new Texture(Gdx.files.internal("selectTile.png"));
 		SpriteBatch spriteBatch = new SpriteBatch();
 
 		backmapRenderer = new IsometricTiledMapRenderer(backmap, 1);
+
+		highlightColours = new HighlightColours[Map.HEIGHT][Map.WIDTH];
+		for (int i = 0; i < Map.WIDTH; i++)
+		{
+			for (int j = 0; j < Map.HEIGHT; j++)
+			{
+				highlightColours[i][j] = HighlightColours.NONE;
+			}
+		}
 
 	}
 
@@ -91,22 +105,11 @@ public class MapDrawer
 		backmapRenderer.setView(camera);
 		backmapRenderer.render();
 
-		//game.batch.setProjectionMatrix(camera.combined);
-
 		game.batch.begin();
-		game.batch.draw(debugTexture, 256, 492);
-//		game.batch.draw(debugTexture, 0, 0);
 		for (int i = 0; i < Map.WIDTH; i++)
 		{
 			for (int j = 0; j < Map.HEIGHT; j++)
 			{
-				// Render entities
-
-
-
-				//Vector2 mapOriginFromTopRight = new Vector2(getMapScreenOrigin().x, Gdx.graphics.getHeight() - getMapScreenOrigin().y);	// I think my code has violated the Geneva Convention at this point.
-				//System.out.println(getMapUpVector());
-				//System.out.println(i*getMapRightVector().x);
 
 				Vector2 drawLocation = new Vector2
 						(
@@ -114,12 +117,44 @@ public class MapDrawer
 							getMapViewportOrigin().y + j*(getMapRightVector().y) + i*(getMapUpVector().y) + TILE_OFFSET.y
 						);
 
+				// Render highlights
+				Color c = new Color(game.batch.getColor());
+				switch(highlightColours[j][i])
+				{
+					// Set the colour of the sprite batch based on the highlight colour of the current tile
+					case RED:
+						game.batch.setColor(.5f, 0f, 0f, 0.5f);
+						break;
+					case GREY:
+						game.batch.setColor(0.2f, 0.2f, 0.2f, 0.5f);
+						break;
+					case GREEN:
+						game.batch.setColor(0f, .5f, 0f, 0.5f);
+						break;
+					case NONE:
+						break;
+				}
+				if (highlightColours[j][i] != HighlightColours.NONE)
+				{
+					game.batch.draw
+					(
+							highlightTexture,
+							drawLocation.x + HIGHLIGHT_OFFSET.x,
+							drawLocation.y + HIGHLIGHT_OFFSET.y,
+							16, 16
+					);
+					highlightColours[j][i] = HighlightColours.NONE;
+				}
+				game.batch.setColor(c);
+
+				// Render entities
 				if (frontmap.getEntity(i, j) != null)
 				{
 					//System.out.println("Drawing entity at " + drawLocation.x + ", " + drawLocation.y);
 					//game.batch.draw(frontmap.getEntity(i, j).getTexture(), (int)drawLocation.x, -(int)drawLocation.y, 32, 32);
 					game.batch.draw(frontmap.getEntity(i, j).getTexture(), drawLocation.x, drawLocation.y, 16, 16);
 				}
+
 				// Render blocks
 				if (frontmap.getBlock(i, j) != null)
 				{
@@ -154,7 +189,6 @@ public class MapDrawer
 		The up axis is taken to be south-east
 		The length of this vector is the length of an edge of an isometric tile.
 		 */
-		//return new Vector2(10f*getScreenScalingCoefficient(), 0).rotate(-45f);
 		return new Vector2(TILE_WIDTH, -TILE_WIDTH);
 	}
 
@@ -172,13 +206,96 @@ public class MapDrawer
 		this.screenScalingCoefficient = screenScalingCoefficient;
 	}
 
-	public void setMouseHoverCoords(int x, int y)
+	public void highlightBlocks(boolean[][] blocks)
+	{
+		for (int i = 0; i < Map.WIDTH; i++)
+		{
+			for (int j = 0; j < Map.HEIGHT; j++)
+			{
+				if (blocks[j][i])
+				{
+				highlightColours[j][i] = HighlightColours.RED;
+				}
+			}
+		}
+	}
+
+	public void highlightBlocks(boolean[][] blocks, HighlightColours colour)
+	{
+		for (int i = 0; i < Map.WIDTH; i++)
+		{
+			for (int j = 0; j < Map.HEIGHT; j++)
+			{
+				if (blocks[j][i] == true)
+				{
+					highlightColours[j][i] = colour;
+				}
+			}
+		}
+	}
+
+	public Vector2 toMapSpace(Vector2 click)
 	{
 		/*
-		Sets the coordinates of the tile the mouse is hovering over.
-		If the mouse is not within the tile grid should not set
+		Maps a coordinate as a vector from screenspace to isometric map space.
+		Precondition:
+			Origin is screen bottom left
+			Up vector is screen up
+			Right vector is screen right
+			Scale is the window resolution
+		Postcondition:
+			Origin is the top point of the isometric diamond
+			Up vector is south-east
+			Right vector is south-west
+			Scale is such that one map tile is one unit
 		 */
-		mouseHoverCoords = new Vector2(x, y);
+		Vector2 clicked;
+
+		if (Gdx.graphics.getHeight() > Gdx.graphics.getWidth())		// Size of grid is bounded by shortest axis
+		{
+			clicked = new Vector2
+			(
+					click.x - getMapScreenOrigin().x,
+					click.y - getMapScreenOrigin().y
+			);
+		}
+		else
+		{
+			clicked = new Vector2
+			(
+					click.x - Gdx.graphics.getWidth() / 2,
+					Gdx.input.getY() - Gdx.graphics.getHeight() * 0.025f
+			);
+		}
+		clicked = clicked.rotate(-45f);	// Rotate
+
+		clicked.x = (float) Math.floor(clicked.x);
+		clicked.y = (float) Math.floor(clicked.y);
+		if (Gdx.graphics.getHeight() > Gdx.graphics.getWidth())
+		{
+			int extra = Gdx.graphics.getHeight() - Gdx.graphics.getWidth();
+			int distanceIn = Gdx.input.getY() - extra / 2;
+			float ratio =  (float) distanceIn / (float) Gdx.graphics.getWidth();
+		}
+		else
+		{
+			float ratio =  (float) Gdx.input.getY() / (float) Gdx.graphics.getWidth();
+		}
+
+		// Scale to grid
+		clicked.scl(1f/(getScreenScalingCoefficient()));	// Is relative to the scaling coefficient
+		clicked.scl(24f/328f);	// Divide max (328 for some reason) by 24 to get appropriately sized tiles
+		clicked.x = (float) Math.floor(clicked.x);	// Floor values
+		clicked.y = (float) Math.floor(clicked.y);
+
+		if (clicked.x >= 0f && clicked.x < Map.WIDTH && clicked.y >= 0f && clicked.y < Map.HEIGHT)
+		{
+			return clicked;
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	public void displayMovementRadius(int x, int y)

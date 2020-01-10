@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public abstract class Entity
 {
+
 	public enum entityID
 	{
 		FIRETRUCK
@@ -11,7 +12,7 @@ public abstract class Entity
 	
 	protected Texture texture;
 	public entityID id;
-	
+
 	public Entity() {}
 	
 	public Texture getTexture()
