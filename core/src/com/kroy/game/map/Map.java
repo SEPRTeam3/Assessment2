@@ -103,7 +103,15 @@ public class Map
 			if (entityLayer[x1][y1].id == entityID.FIRETRUCK)
 			{
 				Firetruck f = (Firetruck) entityLayer[x1][y1];
-				damageLocation(f.getAttackStrength(), x2, y2);
+				if (!f.hasAttackedThisTurn())
+				{
+					damageLocation(f.getAttackStrength(), x2, y2);
+					f.setAttackedThisTurn();
+				}
+				else
+				{
+					System.out.println("The firetruck has already attacked this turn");
+				}
 			}
 			else
 			{
@@ -124,7 +132,12 @@ public class Map
 			if (entityLayer[x][y] != null && entityLayer[x][y] instanceof DamageableEntity)
 			{
 				DamageableEntity d = (DamageableEntity) entityLayer[x][y];
-				d.takeDamage(amount);
+				boolean destroyed = d.takeDamage(amount);
+				if (destroyed)
+				{
+					entityLayer[x][y] = null;
+					System.out.println("You killed a thing.");
+				}
 			}
 			else
 			{

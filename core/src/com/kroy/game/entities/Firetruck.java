@@ -10,6 +10,7 @@ import static com.kroy.game.map.Map.WIDTH;
 public class Firetruck extends Entity implements DamageableEntity
 {
 	private boolean movedThisTurn;
+	private boolean attackedThisTurn;
 	private int movementDistance = 5;
 	private int attackStrength = 1;
 	private int maxHealth = 5;
@@ -20,6 +21,7 @@ public class Firetruck extends Entity implements DamageableEntity
 		this.texture = new Texture(Gdx.files.internal("firetruck3.png"));
 		this.id = entityID.FIRETRUCK;
 		this.movedThisTurn = false;
+		this.attackedThisTurn = false;
 	}
 	
 	public boolean hasMovedThisTurn()
@@ -31,10 +33,15 @@ public class Firetruck extends Entity implements DamageableEntity
 	{
 		this.movedThisTurn = true;
 	}
+
+	public boolean hasAttackedThisTurn() { return this.attackedThisTurn; }
+
+	public void setAttackedThisTurn() { this.attackedThisTurn = true; }
 	
 	public void resetTurn()
 	{
 		this.movedThisTurn = false;
+		this.attackedThisTurn = false;
 	}
 
 	public int getMovementDistance() { return this.movementDistance; }
