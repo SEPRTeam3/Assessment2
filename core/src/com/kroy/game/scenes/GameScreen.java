@@ -141,6 +141,7 @@ public class GameScreen implements Screen
 					{
 						// Player clicked with attack selected, so attack that area
 						map.attackEntity((int)selected.x, (int)selected.y, tileX, tileY);
+						selectAction = selectedMode.NONE;
 						selected = null;
 					}
 					else

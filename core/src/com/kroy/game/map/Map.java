@@ -1,5 +1,6 @@
 package com.kroy.game.map;
 
+import com.badlogic.gdx.math.Vector2;
 import com.kroy.game.blocks.Building;
 import com.kroy.game.entities.DamageableEntity;
 import com.kroy.game.entities.Entity;
@@ -7,6 +8,8 @@ import com.kroy.game.entities.Entity.entityID;
 import com.kroy.game.entities.Firetruck;
 import com.kroy.game.entities.Fortress;
 import com.kroy.game.map.tiles.Grass;
+
+import java.util.*;
 
 public class Map
 {
@@ -16,6 +19,8 @@ public class Map
 	private Tile backgroundLayer[][] = new Tile[WIDTH][HEIGHT];
 	private Entity entityLayer[][] = new Entity[WIDTH][HEIGHT];
 	private Block blockLayer[][] = new Block[WIDTH][HEIGHT];
+
+	private ShortestPathfinder pathfinder = new ShortestPathfinder(this);
 	
 	public Map()
 	{
@@ -24,8 +29,8 @@ public class Map
 			for (int j = 0; j < WIDTH; j++)
 			{
 				backgroundLayer[j][i] = new Grass();
-				entityLayer[i][j] = null;
-				blockLayer[i][j] = null;
+				entityLayer[j][i] = null;
+				blockLayer[j][i] = null;
 			}
 		}
 	}
@@ -148,6 +153,14 @@ public class Map
 		{
 			System.out.println("Damage location was out of the map");
 		}
+	}
+
+	boolean isSpaceEmpty(int x, int y)
+	{
+		/*
+		If there is a block or entity in that location, return false, else return true
+		 */
+		return entityLayer[x][y] == null && blockLayer[x][y] == null;
 	}
 	
 	public void debugMakeFiretruck(int x, int y)
