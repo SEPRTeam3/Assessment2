@@ -84,10 +84,11 @@ public class GameScreen implements Screen
 		{
 			for (int y = 0; y < tileLayer.getHeight(); y++)
 			{
+				System.out.println("(" + x + ", " + (tileLayer.getHeight()-y-1) + ")");
 				TiledMapTileLayer.Cell cell =  tileLayer.getCell(x, y);
 				if (cell != null)
 				{
-					map.debugMakeBuilding(x, tileLayer.getHeight()-y);
+					map.debugMakeBuilding(x, tileLayer.getHeight()-y-1);
 				}
 			}
 		}
