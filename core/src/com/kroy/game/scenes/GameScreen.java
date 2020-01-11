@@ -92,6 +92,7 @@ public class GameScreen implements Screen
 				}
 			}
 		}
+		map.spawnFortress(5, 5);
 		mapDrawer = new MapDrawer(game, map, tileMap);
 	}
 

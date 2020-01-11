@@ -5,6 +5,7 @@ import com.kroy.game.entities.DamageableEntity;
 import com.kroy.game.entities.Entity;
 import com.kroy.game.entities.Entity.entityID;
 import com.kroy.game.entities.Firetruck;
+import com.kroy.game.entities.Fortress;
 import com.kroy.game.map.tiles.Grass;
 
 public class Map
@@ -144,6 +145,11 @@ public class Map
 	public void debugMakeBuilding(int x, int y)
 	{
 		blockLayer[x][y] = new Building();
+	}
+
+	public void spawnFortress(int x, int y)
+	{
+		entityLayer[x][y] = new Fortress();
 	}
 	
 	public void resetTurn()
