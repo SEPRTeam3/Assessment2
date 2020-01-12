@@ -74,7 +74,10 @@ public class Map
 				if (f.isMovementPossible(x1, y1, x2, y2))
 				{
 					// Check the space is free
-					if (entityLayer[x2][y2] == null && blockLayer[x2][y2] == null)
+
+					ArrayList<Vector2> path = pathfinder.shortestPath(x1, y1, x2, y2);
+
+					if (path != null && path.size() <= f.getMovementDistance())
 					{
 						f.setMovedThisTurn();
 						entityLayer[x2][y2] = f;
@@ -82,7 +85,7 @@ public class Map
 					}
 					else
 					{
-						System.out.println("There's already something here");
+						System.out.println("Pathfinder can't get us there");
 					}
 				}
 				else
