@@ -27,10 +27,8 @@ public class MapDrawer
 	private MyGdxGame game;
 	private Map frontmap;
 
-	private Vector2 mapScreenOrigin;
-	private Vector2 mapViewportOrigin;
 	private float screenScalingCoefficient;
-	private final float TILE_WIDTH = 9.6f;
+	private final float TILE_WIDTH = 9.64f;
 	private final Vector2 TILE_OFFSET = new Vector2(-7.5f,-15 );
 	private final Vector2 HIGHLIGHT_OFFSET = new Vector2(0, -2);
 
@@ -41,7 +39,6 @@ public class MapDrawer
 
 	private HighlightColours[][] highlightColours;
 
-	private Texture debugTexture;
 	private Texture highlightTexture;
 
 	public MapDrawer(MyGdxGame g, Map m, TiledMap t)
@@ -52,9 +49,7 @@ public class MapDrawer
 
 		screenScalingCoefficient = (float) Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth()) / 512f;
 		int adjustedHeight = (Gdx.graphics.getHeight() - Gdx.graphics.getWidth()) / 2;
-		mapScreenOrigin = new Vector2(Gdx.graphics.getWidth() / 2,
-				(Gdx.graphics.getHeight() - adjustedHeight) * 0.025f
-		);
+
 
 		viewport = new FitViewport(10, 10); //(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera = new OrthographicCamera();
@@ -66,9 +61,6 @@ public class MapDrawer
 		camera.zoom = 85f;
 		camera.update();
 
-		mapViewportOrigin = new Vector2(256, 492);
-
-		debugTexture = new Texture(Gdx.files.internal("Firetruck2.png"));
 		highlightTexture = new Texture(Gdx.files.internal("selectTile.png"));
 		SpriteBatch spriteBatch = new SpriteBatch();
 
@@ -83,6 +75,8 @@ public class MapDrawer
 			}
 		}
 
+		System.out.println("UnitScale: " + backmapRenderer.getUnitScale());
+		System.out.println("Viewbounds: " + backmapRenderer.getViewBounds());
 	}
 
 	public void resize(int width, int height)
@@ -92,10 +86,6 @@ public class MapDrawer
 		//camera.translate(camera.viewportWidth/2,camera.viewportHeight/2,0);
 		viewport.getCamera().update();
 		screenScalingCoefficient = (float) Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth()) / 512f;
-		int adjustedHeight = (Gdx.graphics.getHeight() - Gdx.graphics.getWidth()) / 2;
-		mapScreenOrigin = new Vector2(Gdx.graphics.getWidth() / 2,
-				(Gdx.graphics.getHeight() - adjustedHeight) * 0.025f
-		);
 		System.out.println("Viewport dimensions: " + viewport.getScreenWidth() + ", " + viewport.getScreenHeight());
 		System.out.println("Viewpoint origin at: " + getMapViewportOrigin().x + ", " + getMapViewportOrigin().y);
 	}
@@ -170,7 +160,10 @@ public class MapDrawer
 		/*
 		Returns the location of the top point of the map as a 2d vector with reference to the whole screen.
 		 */
-		return mapScreenOrigin;
+		int adjustedHeight = (Gdx.graphics.getHeight() - Gdx.graphics.getWidth()) / 2;
+		return new Vector2(Gdx.graphics.getWidth() / 2,
+				(Gdx.graphics.getHeight() - adjustedHeight) * 0.025f
+		);
 	}
 
 	public Vector2 getMapViewportOrigin()
@@ -179,7 +172,8 @@ public class MapDrawer
 		Returns the location of the top point of the map as a 2d vector with reference to the viewpoint, which is a
 		subset of the screen, as it does not include the white bars.
 		 */
-		return mapViewportOrigin;
+
+		return new Vector2(255.5f, 496.5f);
 	}
 
 	public Vector2 getMapUpVector()

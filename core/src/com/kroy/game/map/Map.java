@@ -1,11 +1,15 @@
 package com.kroy.game.map;
 
+import com.badlogic.gdx.math.Vector2;
 import com.kroy.game.blocks.Building;
 import com.kroy.game.entities.DamageableEntity;
 import com.kroy.game.entities.Entity;
 import com.kroy.game.entities.Entity.entityID;
 import com.kroy.game.entities.Firetruck;
+import com.kroy.game.entities.Fortress;
 import com.kroy.game.map.tiles.Grass;
+
+import java.util.*;
 
 public class Map
 {
@@ -15,6 +19,8 @@ public class Map
 	private Tile backgroundLayer[][] = new Tile[WIDTH][HEIGHT];
 	private Entity entityLayer[][] = new Entity[WIDTH][HEIGHT];
 	private Block blockLayer[][] = new Block[WIDTH][HEIGHT];
+
+	private ShortestPathfinder pathfinder = new ShortestPathfinder(this);
 	
 	public Map()
 	{
@@ -23,8 +29,8 @@ public class Map
 			for (int j = 0; j < WIDTH; j++)
 			{
 				backgroundLayer[j][i] = new Grass();
-				entityLayer[i][j] = null;
-				blockLayer[i][j] = null;
+				entityLayer[j][i] = null;
+				blockLayer[j][i] = null;
 			}
 		}
 	}
@@ -68,7 +74,10 @@ public class Map
 				if (f.isMovementPossible(x1, y1, x2, y2))
 				{
 					// Check the space is free
-					if (entityLayer[x2][y2] == null && blockLayer[x2][y2] == null)
+
+					ArrayList<Vector2> path = pathfinder.shortestPath(x1, y1, x2, y2);
+
+					if (path != null && path.size() <= f.getMovementDistance())
 					{
 						f.setMovedThisTurn();
 						entityLayer[x2][y2] = f;
@@ -76,7 +85,7 @@ public class Map
 					}
 					else
 					{
-						System.out.println("There's already something here");
+						System.out.println("Pathfinder can't get us there");
 					}
 				}
 				else
@@ -102,7 +111,15 @@ public class Map
 			if (entityLayer[x1][y1].id == entityID.FIRETRUCK)
 			{
 				Firetruck f = (Firetruck) entityLayer[x1][y1];
-				damageLocation(f.getAttackStrength(), x2, y2);
+				if (!f.hasAttackedThisTurn())
+				{
+					damageLocation(f.getAttackStrength(), x2, y2);
+					f.setAttackedThisTurn();
+				}
+				else
+				{
+					System.out.println("The firetruck has already attacked this turn");
+				}
 			}
 			else
 			{
@@ -123,7 +140,12 @@ public class Map
 			if (entityLayer[x][y] != null && entityLayer[x][y] instanceof DamageableEntity)
 			{
 				DamageableEntity d = (DamageableEntity) entityLayer[x][y];
-				d.takeDamage(amount);
+				boolean destroyed = d.takeDamage(amount);
+				if (destroyed)
+				{
+					entityLayer[x][y] = null;
+					System.out.println("You killed a thing.");
+				}
 			}
 			else
 			{
@@ -135,6 +157,14 @@ public class Map
 			System.out.println("Damage location was out of the map");
 		}
 	}
+
+	boolean isSpaceEmpty(int x, int y)
+	{
+		/*
+		If there is a block or entity in that location, return false, else return true
+		 */
+		return entityLayer[x][y] == null && blockLayer[x][y] == null;
+	}
 	
 	public void debugMakeFiretruck(int x, int y)
 	{
@@ -144,6 +174,11 @@ public class Map
 	public void debugMakeBuilding(int x, int y)
 	{
 		blockLayer[x][y] = new Building();
+	}
+
+	public void spawnFortress(int x, int y)
+	{
+		entityLayer[x][y] = new Fortress();
 	}
 	
 	public void resetTurn()
