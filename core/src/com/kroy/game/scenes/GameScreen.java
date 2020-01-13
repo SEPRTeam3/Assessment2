@@ -196,9 +196,10 @@ public class GameScreen implements Screen
 				{
 					Firetruck f = (Firetruck) map.getEntity((int)selected.x, (int)selected.y);
 					boolean[][] b = new boolean[map.HEIGHT][map.WIDTH];
+					int[][] distanceMatrix = map.pathfinder.getDistanceMatrix((int)selected.x, (int)selected.y);
 					for (int i = 0; i < map.HEIGHT; i++) {
 						for (int j = 0; j < map.WIDTH; j++) {
-							b[i][j] = f.isMovementPossible((int) selected.x, (int) selected.y, j, i);
+							b[i][j] = (distanceMatrix[j][i] <= f.getMovementDistance()) && distanceMatrix[j][i] != -1;
 						}
 					}
 					mapDrawer.highlightBlocks(b, HighlightColours.GREEN);
