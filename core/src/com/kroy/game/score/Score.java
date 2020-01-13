@@ -5,7 +5,7 @@ public class Score {
     private String name;
     private Integer value;
 
-    public Score(String name, Integer value){
+    public Score(String name, Integer value) {
         this.name = name;
         this.value = value;
     }
@@ -14,10 +14,12 @@ public class Score {
         this.value = 0;
         this.name = "Undefined_User";
     }
-    public String getName(){
+
+    public String getName() {
         return this.name;
     }
-    public Integer getValue(){
+
+    public Integer getValue() {
         return this.value;
     }
     public void addScore(int value){
