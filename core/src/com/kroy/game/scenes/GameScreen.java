@@ -106,7 +106,6 @@ public class GameScreen implements Screen
 	{
 		// Render
 		mapDrawer.render();
-
 		// Get player input
 
 
@@ -126,6 +125,7 @@ public class GameScreen implements Screen
 					int tileX = (int) tileClicked.x;
 					int tileY = (int) tileClicked.y;
 					if (map.getEntity(tileX, tileY) != null && map.getEntity(tileX, tileY).id == entityID.FIRETRUCK)
+
 					{
 						// Player clicked firetruck with nothing selected, select firetruck
 						selected = new Vector2(tileX, tileY);

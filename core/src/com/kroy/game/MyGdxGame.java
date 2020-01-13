@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kroy.game.scenes.GameScreen;
 import com.kroy.game.scenes.ScoreScreen;
 import com.kroy.game.scenes.TitleScreen;;
@@ -16,6 +17,7 @@ public class MyGdxGame extends Game
 {	
 	public SpriteBatch batch;
 	public BitmapFont font;
+	public Skin skin;
 	
 	public enum eScreen
 	{
@@ -30,6 +32,7 @@ public class MyGdxGame extends Game
 		// Register all resources that are being used
 		batch = new SpriteBatch();
 		font = new BitmapFont();
+		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		// Initialise screens
 		this.setScreen(new TitleScreen(this));
 	}
