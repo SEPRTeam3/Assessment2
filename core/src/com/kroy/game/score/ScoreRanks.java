@@ -109,7 +109,7 @@
 //        return this.scoreMap.get(ID);
 //    }
 //}
-
+/*
 import com.kroy.game.MyGdxGame;
 import java.util.List;
 import java.util.Map;
@@ -189,11 +189,11 @@ public class ScoreRanks {
     }
 
     private List SelectScores(String scoreTypes){
-		/* score types: "TopTen", "TopAndNew", "AllInst"
+		 score types: "TopTen", "TopAndNew", "AllInst"
 		TopTen - Top ten overall scores,
 		TopAndNew - Top 8 eight scores + new newest added score + next score above newest score
 		AllInst** - Top 10 scores for a given name, not implemented
-		 */
+
         List<String> outputIDs = new ArrayList<String>(10);
         if (scoreTypes == "TopTen"){
             for (int i = 0; i < 10; i++){
@@ -218,3 +218,4 @@ public class ScoreRanks {
         return this.scoreMap.get(ID);
     }
 }
+*/
