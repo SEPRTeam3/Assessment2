@@ -20,7 +20,7 @@ public class Map
 	private Entity entityLayer[][] = new Entity[WIDTH][HEIGHT];
 	private Block blockLayer[][] = new Block[WIDTH][HEIGHT];
 
-	private ShortestPathfinder pathfinder = new ShortestPathfinder(this);
+	public ShortestPathfinder pathfinder = new ShortestPathfinder(this);
 	
 	public Map()
 	{
@@ -70,27 +70,17 @@ public class Map
 			// Check if the firetruck has moved this turn
 			if (!f.hasMovedThisTurn())
 			{
-				// Check if the destination is within the truck's movement radius
-				if (f.isMovementPossible(x1, y1, x2, y2))
+				ArrayList<Vector2> path = pathfinder.shortestPath(x1, y1, x2, y2);
+
+				if (path != null && path.size() <= f.getMovementDistance())
 				{
-					// Check the space is free
-
-					ArrayList<Vector2> path = pathfinder.shortestPath(x1, y1, x2, y2);
-
-					if (path != null && path.size() <= f.getMovementDistance())
-					{
-						f.setMovedThisTurn();
-						entityLayer[x2][y2] = f;
-						entityLayer[x1][y1] = null;
-					}
-					else
-					{
-						System.out.println("Pathfinder can't get us there");
-					}
+					f.setMovedThisTurn();
+					entityLayer[x2][y2] = f;
+					entityLayer[x1][y1] = null;
 				}
 				else
 				{
-					System.out.println("This firetruck can't move this far");
+					System.out.println("Pathfinder can't get us there");
 				}
 			}
 			else

@@ -56,17 +56,6 @@ public class Firetruck extends Entity implements DamageableEntity
 		return (x1 == x2) || (y1 == y2);
 	}
 
-	public boolean isMovementPossible(int x1, int y1, int x2, int y2)
-	{
-		/*
-		Returns true if the movement is possible within the firetruck's movement pattern
-		Returns false if not
-		Does not consider map dimensions or obstructions!
-		 */
-		double distance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-		return this.getMovementDistance() > distance;
-	}
-
 //	public void attack(int targetX, int targetY, Map map)
 //	{
 //		Entity e = map.getEntity(targetX, targetY);
