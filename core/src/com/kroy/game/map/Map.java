@@ -98,7 +98,7 @@ public class Map
 		// Add pre-check that locations are within map
 		if (entityLayer[x1][y1] != null)
 		{
-			if (entityLayer[x1][y1].id == entityID.FIRETRUCK)
+			if (entityLayer[x1][y1] instanceof Firetruck)
 			{
 				Firetruck f = (Firetruck) entityLayer[x1][y1];
 				if (!f.hasAttackedThisTurn())
@@ -110,6 +110,12 @@ public class Map
 				{
 					System.out.println("The firetruck has already attacked this turn");
 				}
+			}
+			else if (entityLayer[x1][y1] instanceof Fortress)
+			{
+				Fortress f = (Fortress) entityLayer[x1][y1];
+				damageLocation(f.getAttackStrength(), x2, y2);
+				System.out.println("A fortress got angry at " + x2 + ", " + y2);
 			}
 			else
 			{

@@ -15,7 +15,7 @@ public class Firetruck extends Entity implements DamageableEntity
 	private int attackStrength = 1;
 	private int maxHealth = 5;
 	private int health = 5;
-	
+
 	public Firetruck()
 	{
 		this.texture = new Texture(Gdx.files.internal("firetruck3.png"));

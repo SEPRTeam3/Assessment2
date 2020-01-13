@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.kroy.game.ETMastermind;
 import com.kroy.game.MyGdxGame;
 import com.kroy.game.entities.Entity.entityID;
 import com.kroy.game.entities.Firetruck;
@@ -54,6 +55,7 @@ public class GameScreen implements Screen
 	turnStates turnState;
 	selectedMode selectAction = selectedMode.NONE;
 
+	private ETMastermind enemyAI;
 	
 	public GameScreen(final MyGdxGame game)
 	{
@@ -94,6 +96,7 @@ public class GameScreen implements Screen
 		}
 		map.spawnFortress(5, 5);
 		mapDrawer = new MapDrawer(game, map, tileMap);
+		enemyAI = new ETMastermind(this.map);
 	}
 
 	@Override
@@ -230,6 +233,7 @@ public class GameScreen implements Screen
 			
 		case ET:
 			System.out.println("ETs are taking their turn");
+			enemyAI.takeTurn();
 			this.turnState = turnStates.POST_ET;
 			break;
 			
