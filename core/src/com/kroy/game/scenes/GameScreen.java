@@ -16,6 +16,8 @@ import com.kroy.game.map.Map;
 import com.kroy.game.map.MapDrawer;
 import com.kroy.game.map.MapParser;
 
+import java.util.ArrayList;
+
 public class GameScreen implements Screen
 {
 	
@@ -97,6 +99,7 @@ public class GameScreen implements Screen
 					{
 						// Player clicked firetruck with nothing selected, select firetruck
 						selected = new Vector2(tileX, tileY);
+						selectAction = selectedMode.NONE;
 					}
 					else if (map.getEntity(tileX, tileY) == null && selected != null && selectAction == selectedMode.MOVE)
 					{
@@ -171,6 +174,24 @@ public class GameScreen implements Screen
 						}
 					}
 					mapDrawer.highlightBlocks(b, HighlightColours.GREEN);
+					// Draw arrows for shortest path to hovered over location
+					Vector2 tileHovered = mapDrawer.toMapSpace(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+					if
+					(
+							tileHovered != null
+							&&
+							(0<tileHovered.x && tileHovered.x<Map.WIDTH && 0<tileHovered.y && tileHovered.y<Map.HEIGHT)
+							&&
+							b[(int) tileHovered.x][(int) tileHovered.y]
+					)
+					{
+						ArrayList<Vector2> path = map.pathfinder.shortestPath
+						(
+								(int) selected.x, (int) selected.y,
+								(int) tileHovered.x, (int) tileHovered.y
+						);
+						//mapDrawer.drawArrowToPath(path);
+					}
 				}
 				else if (selectAction == selectedMode.ATTACK && map.getEntity((int)selected.x, (int)selected.y) instanceof Firetruck)
 				{
@@ -184,6 +205,7 @@ public class GameScreen implements Screen
 					mapDrawer.highlightBlocks(b, HighlightColours.RED);
 				}
 			}
+
 
 			// Space key handling
 			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))

@@ -19,6 +19,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kroy.game.MyGdxGame;
 import com.kroy.game.blocks.Obstacle;
 
+import java.util.ArrayList;
+
 public class MapDrawer
 {
 	/*
@@ -39,7 +41,10 @@ public class MapDrawer
 	private OrthographicCamera camera;
 
 	private HighlightColours[][] highlightColours;
+	private int[][] arrowMatrix;
 
+
+	private Texture[] arrowTextures;
 	private Texture highlightTexture;
 
 	public MapDrawer(MyGdxGame g, Map m, TiledMap t)
@@ -62,10 +67,11 @@ public class MapDrawer
 		camera.zoom = 85f;
 		camera.update();
 
-		highlightTexture = new Texture(Gdx.files.internal("selectTile.png"));
-		SpriteBatch spriteBatch = new SpriteBatch();
 
 		backmapRenderer = new IsometricTiledMapRenderer(backmap, 1);
+
+		// Highlight init
+		highlightTexture = new Texture(Gdx.files.internal("selectTile.png"));
 
 		highlightColours = new HighlightColours[Map.HEIGHT][Map.WIDTH];
 		for (int i = 0; i < Map.WIDTH; i++)
@@ -73,6 +79,34 @@ public class MapDrawer
 			for (int j = 0; j < Map.HEIGHT; j++)
 			{
 				highlightColours[i][j] = HighlightColours.NONE;
+			}
+		}
+
+		// Arrow init
+		arrowTextures = new Texture[]
+		{
+			new Texture(Gdx.files.internal("Arrows/Arrow_00.png")),
+			new Texture(Gdx.files.internal("Arrows/Arrow_01.png")),
+			new Texture(Gdx.files.internal("Arrows/Arrow_02.png")),
+			new Texture(Gdx.files.internal("Arrows/Arrow_03.png")),
+			new Texture(Gdx.files.internal("Arrows/Arrow_04.png")),
+			new Texture(Gdx.files.internal("Arrows/Arrow_05.png")),
+			new Texture(Gdx.files.internal("Arrows/Arrow_06.png")),
+			new Texture(Gdx.files.internal("Arrows/Arrow_07.png")),
+			new Texture(Gdx.files.internal("Arrows/Arrow_08.png")),
+			new Texture(Gdx.files.internal("Arrows/Arrow_09.png")),
+			new Texture(Gdx.files.internal("Arrows/Arrow_10.png")),
+			new Texture(Gdx.files.internal("Arrows/Arrow_11.png")),
+			new Texture(Gdx.files.internal("Arrows/Arrow_12.png")),
+			new Texture(Gdx.files.internal("Arrows/Arrow_13.png")),
+		};
+
+		arrowMatrix = new int[Map.HEIGHT][Map.WIDTH];
+		for (int i = 0; i < Map.WIDTH; i++)
+		{
+			for (int j = 0; j < Map.HEIGHT; j++)
+			{
+				arrowMatrix[i][j] = -1;
 			}
 		}
 
@@ -137,6 +171,20 @@ public class MapDrawer
 					highlightColours[j][i] = HighlightColours.NONE;
 				}
 				game.batch.setColor(c);
+
+				// Render arrows
+
+				if (arrowMatrix[j][i] != -1)
+				{
+					game.batch.draw
+					(
+							arrowTextures[arrowMatrix[j][i]],
+							drawLocation.x + HIGHLIGHT_OFFSET.x,
+							drawLocation.y + HIGHLIGHT_OFFSET.y,
+							16, 16
+					);
+					arrowMatrix[j][i] = -1;
+				}
 
 				// Render entities
 				if (frontmap.getEntity(i, j) != null)
@@ -293,8 +341,27 @@ public class MapDrawer
 		}
 	}
 
-	public void displayMovementRadius(int x, int y)
+	public void drawArrowToPath(ArrayList<Vector2> path)
 	{
-
+		/*
+		Draws an arrow following the coordinates given in 'path'
+		 */
+		System.out.println("Path to here is: ");
+		for (Vector2 v : path)
+		{
+			if (v == path.get(0))
+			{
+				// This was the first one, draw the tail
+				arrowMatrix[(int) v.x][(int) v.y] = 0;
+			}
+			else if (v == path.get((path.size()-1)))
+			{
+				// This was the last one, draw the head
+			}
+			else
+			{
+				// This was a middle one, poll forward and backward
+			}
+		}
 	}
 }
