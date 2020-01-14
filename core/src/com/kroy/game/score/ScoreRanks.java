@@ -87,13 +87,13 @@ public class ScoreRanks {
         }
     }
 
-    private List SelectScores(String scoreTypes){
+    public ArrayList SelectScores(String scoreTypes){
 		/* score types: "TopTen", "TopAndNew", "AllInst"
 		TopTen - Top ten overall scores,
 		TopAndNew - Top 8 eight scores + new newest added score + next score above newest score
 		AllInst** - Top 10 scores for a given name, not implemented
 		 */
-        List<Score> outputScore = new ArrayList<>(10);
+        ArrayList<Score> outputScore = new ArrayList<>(10);
         if (scoreTypes == "TopTen"){
             for (int i = 0; i < 10; i++){
                 outputScore.add(i, this.ScoresList.get(i));
