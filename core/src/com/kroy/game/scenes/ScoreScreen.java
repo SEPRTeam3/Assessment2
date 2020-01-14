@@ -1,6 +1,7 @@
 package com.kroy.game.scenes;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kroy.game.MyGdxGame;
@@ -10,9 +11,14 @@ import java.util.List;
 public class ScoreScreen implements Screen
 {
 	final MyGdxGame game;
+	BitmapFont font;
+	String[] nameList;
+	Integer[] valueList;
+	String outputString;
 	
 	public ScoreScreen(final MyGdxGame game) {
 		this.game = game;
+		font = new BitmapFont();
 	}
 
 	private void DisplayScoreScreen(){
@@ -24,6 +30,18 @@ public class ScoreScreen implements Screen
 			scoreTable.add();
 			 */
 		}
+	}
+
+	private void getString(){
+		this.outputString = "Scores:\n";
+		for (int i = 0; i < 10; i++){
+			this.outputString += nameList[i] + ": "
+					+ valueList[i].toString() + "\n";
+		}
+	}
+
+	private void getOutputs(String scoreTypes){
+		;
 	}
 
 	@Override

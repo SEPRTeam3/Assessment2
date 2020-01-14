@@ -73,12 +73,12 @@ public class ScoreRanks {
     }
 
     private void InsertScore(String newName, Integer newScore){
-        if (this.ScoresList.size() == 1){
+        if (this.ScoresList.size() == 1) {
             this.newestScore = new Score(newName, newScore, 1);
             this.ScoresList.add(0, this.newestScore);
         } else {
             int numScores = this.ScoresList.size();
-            for (int i = 0; i < numScores; i++){
+            for (int i = 0; i < numScores; i++) {
                 if (this.ScoresList.get(i).getValue() < newScore) {
                     this.newestScore = new Score(newName, newScore, numScores++);
                     this.ScoresList.add(i, this.newestScore);
@@ -99,19 +99,19 @@ public class ScoreRanks {
                 outputScore.add(i, this.ScoresList.get(i));
             } return outputScore;
         } else if(scoreTypes == "TopAndNew"){
-            if (GetRank(this.newestScore.getIDint()) < 11){
+            if (GetRank(this.newestScore) < 11){
                 return SelectScores("TopTen");
             }
             for (int i = 0; i < 8; i++){
                 outputScore.add(i, this.ScoresList.get(i));
-            } int rank = GetRank(this.newestScore.getIDint());
+            } int rank = GetRank(this.newestScore);
             outputScore.add(this.ScoresList.get(rank-1));
             outputScore.add(this.ScoresList.get(rank));
             return outputScore;
         }
         return outputScore;
     }
-    private Integer GetRank(Integer ID){
-        return this.ScoresList.indexOf(ID);
+    private Integer GetRank(Score ScoreToFind){
+        return this.ScoresList.indexOf(ScoreToFind);
     }
 }
