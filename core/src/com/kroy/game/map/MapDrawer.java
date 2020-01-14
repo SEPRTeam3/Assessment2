@@ -291,4 +291,9 @@ public class MapDrawer
 			return null;
 		}
 	}
+
+	public void displayMovementRadius(int x, int y)
+	{
+
+	}
 }

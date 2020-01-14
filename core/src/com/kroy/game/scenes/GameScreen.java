@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.kroy.game.ETMastermind;
 import com.kroy.game.MyGdxGame;
 import com.kroy.game.entities.Entity.entityID;
 import com.kroy.game.entities.Firetruck;
@@ -54,6 +55,7 @@ public class GameScreen implements Screen
 	turnStates turnState;
 	selectedMode selectAction = selectedMode.NONE;
 
+	private ETMastermind enemyAI;
 	
 	public GameScreen(final MyGdxGame game)
 	{
@@ -94,6 +96,7 @@ public class GameScreen implements Screen
 		}
 		map.spawnFortress(5, 5);
 		mapDrawer = new MapDrawer(game, map, tileMap);
+		enemyAI = new ETMastermind(this.map);
 	}
 
 	@Override
@@ -106,7 +109,6 @@ public class GameScreen implements Screen
 	{
 		// Render
 		mapDrawer.render();
-
 		// Get player input
 
 
@@ -126,6 +128,7 @@ public class GameScreen implements Screen
 					int tileX = (int) tileClicked.x;
 					int tileY = (int) tileClicked.y;
 					if (map.getEntity(tileX, tileY) != null && map.getEntity(tileX, tileY).id == entityID.FIRETRUCK)
+
 					{
 						// Player clicked firetruck with nothing selected, select firetruck
 						selected = new Vector2(tileX, tileY);
@@ -196,9 +199,10 @@ public class GameScreen implements Screen
 				{
 					Firetruck f = (Firetruck) map.getEntity((int)selected.x, (int)selected.y);
 					boolean[][] b = new boolean[map.HEIGHT][map.WIDTH];
+					int[][] distanceMatrix = map.pathfinder.getDistanceMatrix((int)selected.x, (int)selected.y);
 					for (int i = 0; i < map.HEIGHT; i++) {
 						for (int j = 0; j < map.WIDTH; j++) {
-							b[i][j] = f.isMovementPossible((int) selected.x, (int) selected.y, j, i);
+							b[i][j] = (distanceMatrix[j][i] <= f.getMovementDistance()) && distanceMatrix[j][i] != -1;
 						}
 					}
 					mapDrawer.highlightBlocks(b, HighlightColours.GREEN);
@@ -229,6 +233,7 @@ public class GameScreen implements Screen
 			
 		case ET:
 			System.out.println("ETs are taking their turn");
+			enemyAI.takeTurn();
 			this.turnState = turnStates.POST_ET;
 			break;
 			

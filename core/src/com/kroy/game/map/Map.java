@@ -20,7 +20,7 @@ public class Map
 	private Entity entityLayer[][] = new Entity[WIDTH][HEIGHT];
 	private Block blockLayer[][] = new Block[WIDTH][HEIGHT];
 
-	private ShortestPathfinder pathfinder = new ShortestPathfinder(this);
+	public ShortestPathfinder pathfinder = new ShortestPathfinder(this);
 	
 	public Map()
 	{
@@ -70,27 +70,17 @@ public class Map
 			// Check if the firetruck has moved this turn
 			if (!f.hasMovedThisTurn())
 			{
-				// Check if the destination is within the truck's movement radius
-				if (f.isMovementPossible(x1, y1, x2, y2))
+				ArrayList<Vector2> path = pathfinder.shortestPath(x1, y1, x2, y2);
+
+				if (path != null && path.size() <= f.getMovementDistance())
 				{
-					// Check the space is free
-
-					ArrayList<Vector2> path = pathfinder.shortestPath(x1, y1, x2, y2);
-
-					if (path != null && path.size() <= f.getMovementDistance())
-					{
-						f.setMovedThisTurn();
-						entityLayer[x2][y2] = f;
-						entityLayer[x1][y1] = null;
-					}
-					else
-					{
-						System.out.println("Pathfinder can't get us there");
-					}
+					f.setMovedThisTurn();
+					entityLayer[x2][y2] = f;
+					entityLayer[x1][y1] = null;
 				}
 				else
 				{
-					System.out.println("This firetruck can't move this far");
+					System.out.println("Pathfinder can't get us there");
 				}
 			}
 			else
@@ -108,7 +98,7 @@ public class Map
 		// Add pre-check that locations are within map
 		if (entityLayer[x1][y1] != null)
 		{
-			if (entityLayer[x1][y1].id == entityID.FIRETRUCK)
+			if (entityLayer[x1][y1] instanceof Firetruck)
 			{
 				Firetruck f = (Firetruck) entityLayer[x1][y1];
 				if (!f.hasAttackedThisTurn())
@@ -120,6 +110,12 @@ public class Map
 				{
 					System.out.println("The firetruck has already attacked this turn");
 				}
+			}
+			else if (entityLayer[x1][y1] instanceof Fortress)
+			{
+				Fortress f = (Fortress) entityLayer[x1][y1];
+				damageLocation(f.getAttackStrength(), x2, y2);
+				System.out.println("A fortress got angry at " + x2 + ", " + y2);
 			}
 			else
 			{

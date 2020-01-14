@@ -1,6 +1,7 @@
 package com.kroy.game.map;
 
 import com.badlogic.gdx.math.Vector2;
+import com.kroy.game.DebugClass;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -30,26 +31,20 @@ public class ShortestPathfinder
         }
     }
 
-    public ArrayList<Vector2> shortestPath(int x1, int y1, int x2, int y2)
+    private ArrayList<Vector2>[][] getPathMap(int fromX, int fromY)
     {
-		/*
-		Finds the shortest path from (x1, y1) to (x2, y2) or returns null if the journey is impossible.
-		The output is the series of tiles that must be passed over as vector coordinates.
-		eg from (0, 0) to (3, 3) the result might be [(0, 1), (1, 1), (1, 2), (2, 2), (2, 3), (3, 3)]
-		 */
-		this.buildOcclusionMap();
+        this.buildOcclusionMap();
 
-		ArrayList<Vector2>[][] pathArray = new ArrayList[map.WIDTH][map.HEIGHT];
-		pathArray[x1][y1] = new ArrayList<Vector2>();
-		ArrayDeque<Vector2> queue = new ArrayDeque<>();
-		Vector2 start = new Vector2(x1, y1);
-		Vector2 goal = new Vector2(x2, y2);
-		queue.add(start);
+        ArrayList<Vector2>[][] pathArray = new ArrayList[map.WIDTH][map.HEIGHT];
+        pathArray[fromX][fromY] = new ArrayList<Vector2>();
+        ArrayDeque<Vector2> queue = new ArrayDeque<>();
+        Vector2 start = new Vector2(fromX, fromY);
+        queue.add(start);
 
-		while (!queue.isEmpty())
+        while (!queue.isEmpty())
         {
             Vector2 v = queue.pop();
-            System.out.println("Looking for moves from" + v);
+
             // Check each side for valid moves
 
             if (v.x+1<occlusionMap.length && occlusionMap[(int) v.x+1][(int) v.y])
@@ -61,7 +56,6 @@ public class ShortestPathfinder
                     pathArray[(int) v.x+1][(int) v.y] = p;
                     queue.add(new Vector2(v.x+1, v.y));
 
-                    System.out.println("Move to right takes " + p);
                 }
                 else
                 {
@@ -72,12 +66,11 @@ public class ShortestPathfinder
                         pathArray[(int) v.x+1][(int) v.y] = p;
                         queue.add(new Vector2(v.x+1, v.y));
 
-                        System.out.println("Move to right takes " + p);
                     }
                 }
             }
 
-            if (v.x-1>0 && occlusionMap[(int) v.x-1][(int) v.y])
+            if (v.x-1>=0 && occlusionMap[(int) v.x-1][(int) v.y])
             {
                 if (pathArray[(int) v.x-1][(int) v.y] == null)
                 {
@@ -86,7 +79,6 @@ public class ShortestPathfinder
                     pathArray[(int) v.x-1][(int) v.y] = p;
                     queue.add(new Vector2(v.x-1, v.y));
 
-                    System.out.println("Move to left takes " + p);
                 }
                 else
                 {
@@ -97,7 +89,6 @@ public class ShortestPathfinder
                         pathArray[(int) v.x-1][(int) v.y] = p;
                         queue.add(new Vector2(v.x-1, v.y));
 
-                        System.out.println("Move to left takes " + p);
                     }
                 }
             }
@@ -111,7 +102,6 @@ public class ShortestPathfinder
                     pathArray[(int) v.x][(int) v.y+1] = p;
                     queue.add(new Vector2(v.x, v.y+1));
 
-                    System.out.println("Move to up takes " + p);
                 }
                 else
                 {
@@ -122,12 +112,11 @@ public class ShortestPathfinder
                         pathArray[(int) v.x][(int) v.y+1] = p;
                         queue.add(new Vector2(v.x, v.y+1));
 
-                        System.out.println("Move to up takes " + p);
                     }
                 }
             }
 
-            if (v.y-1>0 && occlusionMap[(int) v.x][(int) v.y-1])
+            if (v.y-1>=0 && occlusionMap[(int) v.x][(int) v.y-1])
             {
                 if (pathArray[(int) v.x][(int) v.y-1] == null)
                 {
@@ -136,7 +125,6 @@ public class ShortestPathfinder
                     pathArray[(int) v.x][(int) v.y-1] = p;
                     queue.add(new Vector2(v.x, v.y-1));
 
-                    System.out.println("Move to down takes " + p);
                 }
                 else
                 {
@@ -147,12 +135,44 @@ public class ShortestPathfinder
                         pathArray[(int) v.x][(int) v.y-1] = p;
                         queue.add(new Vector2(v.x, v.y-1));
 
-                        System.out.println("Move to down takes " + p);
                     }
                 }
             }
         }
+        return pathArray;
+    }
 
-		return pathArray[x2][y2];
+    public ArrayList<Vector2> shortestPath(int x1, int y1, int x2, int y2)
+    {
+		/*
+		Finds the shortest path from (x1, y1) to (x2, y2) or returns null if the journey is impossible.
+		The output is the series of tiles that must be passed over as vector coordinates.
+		eg from (0, 0) to (3, 3) the result might be [(0, 1), (1, 1), (1, 2), (2, 2), (2, 3), (3, 3)]
+		 */
+
+
+		return this.getPathMap(x1, y1)[x2][y2];
+    }
+
+    public int[][] getDistanceMatrix(int fromX, int fromY)
+    {
+        ArrayList<Vector2>[][] pathMap = this.getPathMap(fromX, fromY);
+        int[][] distanceMap = new int[map.WIDTH][map.HEIGHT];
+        for (int i = 0; i < map.HEIGHT; i++)
+        {
+            for (int j = 0; j < map.WIDTH; j++)
+            {
+                if (pathMap[j][i] == null)
+                {
+                    distanceMap[j][i] = -1;
+                }
+                else
+                {
+                    distanceMap[j][i] = pathMap[j][i].size();
+                }
+            }
+        }
+        //System.out.println(DebugClass.get2DIntArrayPrint(distanceMap));
+        return distanceMap;
     }
 }
