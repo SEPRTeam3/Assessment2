@@ -19,7 +19,6 @@ public class Firetruck extends Entity implements DamageableEntity
 	public Firetruck()
 	{
 		this.texture = new Texture(Gdx.files.internal("firetruck3.png"));
-		this.id = entityID.FIRETRUCK;
 		this.movedThisTurn = false;
 		this.attackedThisTurn = false;
 	}

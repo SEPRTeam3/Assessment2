@@ -10,7 +10,6 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.kroy.game.ETMastermind;
 import com.kroy.game.MyGdxGame;
-import com.kroy.game.entities.Entity.entityID;
 import com.kroy.game.entities.Firetruck;
 import com.kroy.game.map.HighlightColours;
 import com.kroy.game.map.Map;
@@ -93,7 +92,7 @@ public class GameScreen implements Screen
 					// Clicked inside map
 					int tileX = (int) tileClicked.x;
 					int tileY = (int) tileClicked.y;
-					if (map.getEntity(tileX, tileY) != null && map.getEntity(tileX, tileY).id == entityID.FIRETRUCK)
+					if (map.getEntity(tileX, tileY) != null && map.getEntity(tileX, tileY) instanceof Firetruck)
 
 					{
 						// Player clicked firetruck with nothing selected, select firetruck
@@ -135,7 +134,7 @@ public class GameScreen implements Screen
 					&&
 					map.getEntity((int)selected.x, (int)selected.y) != null
 					&&
-					map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK
+					map.getEntity((int)selected.x, (int)selected.y) instanceof Firetruck
 				)
 				{
 					selectAction = selectedMode.MOVE;
@@ -151,7 +150,7 @@ public class GameScreen implements Screen
 							&&
 					map.getEntity((int)selected.x, (int)selected.y) != null
 					&&
-					map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK
+					map.getEntity((int)selected.x, (int)selected.y) instanceof Firetruck
 				)
 				{
 					selectAction = selectedMode.ATTACK;
@@ -161,7 +160,7 @@ public class GameScreen implements Screen
 			// Draw highlights around fire engine
 			if (selected != null && map.getEntity((int)selected.x, (int)selected.y) != null)
 			{
-				if (selectAction == selectedMode.MOVE && map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK)
+				if (selectAction == selectedMode.MOVE && map.getEntity((int)selected.x, (int)selected.y) instanceof Firetruck)
 				{
 					Firetruck f = (Firetruck) map.getEntity((int)selected.x, (int)selected.y);
 					boolean[][] b = new boolean[map.HEIGHT][map.WIDTH];
@@ -173,7 +172,7 @@ public class GameScreen implements Screen
 					}
 					mapDrawer.highlightBlocks(b, HighlightColours.GREEN);
 				}
-				else if (selectAction == selectedMode.ATTACK && map.getEntity((int)selected.x, (int)selected.y).id == entityID.FIRETRUCK)
+				else if (selectAction == selectedMode.ATTACK && map.getEntity((int)selected.x, (int)selected.y) instanceof Firetruck)
 				{
 					Firetruck f = (Firetruck) map.getEntity((int)selected.x, (int)selected.y);
 					boolean[][] b = new boolean[map.HEIGHT][map.WIDTH];
