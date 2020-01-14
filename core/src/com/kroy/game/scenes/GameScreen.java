@@ -3,20 +3,11 @@ package com.kroy.game.scenes;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kroy.game.ETMastermind;
 import com.kroy.game.MyGdxGame;
 import com.kroy.game.entities.Entity.entityID;
@@ -24,8 +15,7 @@ import com.kroy.game.entities.Firetruck;
 import com.kroy.game.map.HighlightColours;
 import com.kroy.game.map.Map;
 import com.kroy.game.map.MapDrawer;
-
-import java.util.Iterator;
+import com.kroy.game.map.MapParser;
 
 public class GameScreen implements Screen
 {
@@ -66,34 +56,10 @@ public class GameScreen implements Screen
 		
 		map = new Map();
 		tileMap = new TmxMapLoader().load("MapTestF.tmx");
-		MapLayer objLayer = tileMap.getLayers().get("Trucks");
 
 		// Gets truck locations from tilemap
-		TiledMapTileLayer tileLayer = (TiledMapTileLayer) tileMap.getLayers().get("TrucksTiles");
-		for (int x = 0; x < tileLayer.getWidth(); x++)
-		{
-			for (int y = 0; y < tileLayer.getHeight(); y++)
-			{
-				TiledMapTileLayer.Cell cell =  tileLayer.getCell(x, y);
-				if (cell != null)
-				{
-					map.debugMakeFiretruck(x, tileLayer.getHeight()-y);
-				}
-			}
-		}
-		tileLayer = (TiledMapTileLayer) tileMap.getLayers().get("Obstacles");
-		for (int x = 0; x < tileLayer.getWidth(); x++)
-		{
-			for (int y = 0; y < tileLayer.getHeight(); y++)
-			{
-				System.out.println("(" + x + ", " + (tileLayer.getHeight()-y-1) + ")");
-				TiledMapTileLayer.Cell cell =  tileLayer.getCell(x, y);
-				if (cell != null)
-				{
-					map.debugMakeBuilding(x, tileLayer.getHeight()-y-1);
-				}
-			}
-		}
+		MapParser parser = new MapParser();
+		parser.addAll(map, tileMap);
 		map.spawnFortress(5, 5);
 		mapDrawer = new MapDrawer(game, map, tileMap);
 		enemyAI = new ETMastermind(this.map);

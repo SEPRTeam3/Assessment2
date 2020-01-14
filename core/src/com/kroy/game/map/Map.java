@@ -2,11 +2,9 @@ package com.kroy.game.map;
 
 import com.badlogic.gdx.math.Vector2;
 import com.kroy.game.blocks.Building;
-import com.kroy.game.entities.DamageableEntity;
-import com.kroy.game.entities.Entity;
+import com.kroy.game.blocks.Obstacle;
+import com.kroy.game.entities.*;
 import com.kroy.game.entities.Entity.entityID;
-import com.kroy.game.entities.Firetruck;
-import com.kroy.game.entities.Fortress;
 import com.kroy.game.map.tiles.Grass;
 
 import java.util.*;
@@ -162,20 +160,18 @@ public class Map
 		return entityLayer[x][y] == null && blockLayer[x][y] == null;
 	}
 	
-	public void debugMakeFiretruck(int x, int y)
-	{
-		entityLayer[x][y] = new Firetruck();
-	}
+	public void spawnFiretruck(int x, int y) { entityLayer[x][y] = new Firetruck(); }
 	
-	public void debugMakeBuilding(int x, int y)
-	{
-		blockLayer[x][y] = new Building();
-	}
+	public void spawnBuilding(int x, int y) { blockLayer[x][y] = new Building(); }
 
 	public void spawnFortress(int x, int y)
 	{
 		entityLayer[x][y] = new Fortress();
 	}
+
+	public void spawnFirestation(int x, int y) { entityLayer[x][y] = new Firestation(); }
+
+	public void spawnObstacle(int x, int y) { blockLayer[x][y] = new Obstacle(); }
 	
 	public void resetTurn()
 	{

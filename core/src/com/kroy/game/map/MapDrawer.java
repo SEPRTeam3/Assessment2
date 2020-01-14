@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kroy.game.MyGdxGame;
+import com.kroy.game.blocks.Obstacle;
 
 public class MapDrawer
 {
@@ -146,7 +147,7 @@ public class MapDrawer
 				}
 
 				// Render blocks
-				if (frontmap.getBlock(i, j) != null)
+				if (frontmap.getBlock(i, j) != null && !(frontmap.getBlock(i, j) instanceof Obstacle))
 				{
 					game.batch.draw(frontmap.getBlock(i, j).getTexture(), drawLocation.x, drawLocation.y, 16, 16);
 				}

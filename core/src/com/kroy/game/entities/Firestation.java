@@ -7,6 +7,11 @@ public class Firestation extends Entity implements DamageableEntity
 {
     public Firestation()
     {
-        this.texture = new Texture(Gdx.files.internal("firestation"));
+        this.texture = new Texture(Gdx.files.internal("firestation.png"));
+    }
+
+    @Override
+    public boolean takeDamage(int amount) {
+        return false;
     }
 }
