@@ -30,6 +30,18 @@ public class Firetruck extends Entity implements DamageableEntity
 
 	public void setHealth(int health){this.health=health; }
 
+
+	public Firetruck(Texture texture, int maxMove, int maxHealth, int maxWater)
+	{
+		System.out.println("Alt init is used");
+		this.texture = texture;
+		this.movementDistance = maxMove;
+		this.maxHealth = maxHealth;
+		this.maxWater = maxWater;
+		this.movedThisTurn = false;
+		this.attackedThisTurn = false;
+	}
+
 	public boolean hasMovedThisTurn()
 	{
 		return this.movedThisTurn;

@@ -1,5 +1,6 @@
 package com.kroy.game.map;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.kroy.game.blocks.Building;
 import com.kroy.game.blocks.Obstacle;
@@ -25,6 +26,7 @@ public class Map
 		{
 			for (int j = 0; j < WIDTH; j++)
 			{
+				backgroundLayer[j][i] = new Grass();
 				backgroundLayer[j][i] = new Grass();
 				entityLayer[j][i] = null;
 				blockLayer[j][i] = null;
@@ -162,18 +164,41 @@ public class Map
 		return entityLayer[x][y] == null && blockLayer[x][y] == null;
 	}
 	
-	public void spawnFiretruck(int x, int y) { entityLayer[x][y] = new Firetruck(); }
-	
-	public void spawnBuilding(int x, int y) { blockLayer[x][y] = new Building(); }
-
-	public void spawnFortress(int x, int y)
+	public Firetruck spawnFiretruck(int x, int y)
 	{
-		entityLayer[x][y] = new Fortress();
+		entityLayer[x][y] = new Firetruck();
+		return (Firetruck) entityLayer[x][y];
 	}
 
-	public void spawnFirestation(int x, int y) { entityLayer[x][y] = new Firestation(); }
+	public Firetruck spawnFiretruck(int x, int y, Texture texture, int maxMove, int maxHealth, int maxWater)
+	{
+		entityLayer[x][y] = new Firetruck(texture, maxMove, maxHealth, maxWater);
+		return (Firetruck) entityLayer[x][y];
+	}
+	
+	public Building spawnBuilding(int x, int y)
+	{
+		blockLayer[x][y] = new Building();
+		return (Building) blockLayer[x][y];
+	}
 
-	public void spawnObstacle(int x, int y) { blockLayer[x][y] = new Obstacle(); }
+	public Fortress spawnFortress(int x, int y)
+	{
+		entityLayer[x][y] = new Fortress();
+		return (Fortress) entityLayer[x][y];
+	}
+
+	public Firestation spawnFirestation(int x, int y)
+	{
+		entityLayer[x][y] = new Firestation();
+		return (Firestation) entityLayer[x][y];
+	}
+
+	public Obstacle spawnObstacle(int x, int y)
+	{
+		blockLayer[x][y] = new Obstacle();
+		return (Obstacle) blockLayer[x][y];
+	}
 	
 	public void resetTurn()
 	{
