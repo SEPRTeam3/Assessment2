@@ -104,4 +104,21 @@ public class MapParser
             }
         }
     }
+
+    public static TiledMapTileLayer.Cell getCorruption(TiledMap tilemap)
+    {
+        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tilemap.getLayers().get("FireStation");
+        for (int x = 0; x < tileLayer.getWidth(); x++)
+        {
+            for (int y = 0; y < tileLayer.getHeight(); y++)
+            {
+                TiledMapTileLayer.Cell cell =  tileLayer.getCell(x, y);
+                if (cell != null)
+                {
+                    return cell;
+                }
+            }
+        }
+        return null;
+    }
 }

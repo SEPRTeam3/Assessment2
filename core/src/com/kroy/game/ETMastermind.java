@@ -4,18 +4,22 @@ import com.badlogic.gdx.math.Vector2;
 import com.kroy.game.entities.Firetruck;
 import com.kroy.game.entities.Fortress;
 import com.kroy.game.map.Map;
+import com.kroy.game.map.MapDrawer;
 
 import java.util.ArrayList;
 
 public class ETMastermind
 {
     private Map map;
+    private MapDrawer mapDrawer;
 
     public final int LEVEL_UP_FREQUENCY = 3;   // The number of turns that must elapse before fortresses become stronger
 
-    public ETMastermind(Map map)
+    public ETMastermind(Map map, MapDrawer mapDrawer)
     {
         this.map = map;
+        this.mapDrawer = mapDrawer;
+        drawCorruption();
     }
 
     public int getFortressNumber()
@@ -63,6 +67,32 @@ public class ETMastermind
                 {
                     Fortress f = (Fortress) map.getEntity(j, i);
                     f.levelUp();
+                }
+            }
+        }
+        drawCorruption();
+    }
+
+    public void drawCorruption()
+    {
+        for (int i = 0; i < map.HEIGHT; i++)
+        {
+            for (int j = 0; j < map.WIDTH; j++)
+            {
+                if (map.getEntity(j, i) != null && map.getEntity(j, i) instanceof Fortress)
+                {
+                    Fortress f = (Fortress) map.getEntity(j, i);
+                    // Draw corruption to show ET fire range
+                    for (int n = 0; n < map.HEIGHT; n++)
+                    {
+                        for (int m = 0; m < map.WIDTH; m++)
+                        {
+                            if (new Vector2(j, i).sub(m, n).len() <= f.getAttackRadius() + 1)
+                            {
+                                mapDrawer.setCorruption(m, n);
+                            }
+                        }
+                    }
                 }
             }
         }

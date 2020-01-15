@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -288,8 +289,9 @@ public class MapDrawer
 		}
 	}
 
-	public void displayMovementRadius(int x, int y)
+	public void setCorruption(int x, int y)
 	{
-
+		TiledMapTileLayer tileLayer = (TiledMapTileLayer) backmap.getLayers().get("Corruption");
+		tileLayer.setCell(x, tileLayer.getHeight()-y-1, MapParser.getCorruption(backmap));
 	}
 }

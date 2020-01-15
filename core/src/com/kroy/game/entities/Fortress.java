@@ -10,7 +10,7 @@ public class Fortress extends Entity implements DamageableEntity
     private int targetsPerTurn = 1;
     private int health;
     private int attackStrength = 1;
-    private int attackRadius = 2;
+    private int attackRadius = 1;
 
     public Fortress()
     {

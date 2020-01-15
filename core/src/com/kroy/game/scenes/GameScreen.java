@@ -57,7 +57,7 @@ public class GameScreen implements Screen
 		
 		this.game = game;
 		selected = null;
-		turnState = turnStates.PLAYER;
+ 		turnState = turnStates.PLAYER;
 
 		hud = new GameHud(game.batch, game.skin);
 		map = new Map();
@@ -68,7 +68,7 @@ public class GameScreen implements Screen
 		parser.addAll(map, tileMap);
 		map.spawnFortress(5, 5);
 		mapDrawer = new MapDrawer(game, map, tileMap);
-		enemyAI = new ETMastermind(this.map);
+		enemyAI = new ETMastermind(this.map, this.mapDrawer);
 	}
 
 	@Override
