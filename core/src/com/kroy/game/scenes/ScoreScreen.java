@@ -42,6 +42,8 @@ public class ScoreScreen implements Screen
 
 	private void getOutputs(String scoreTypes){
 		ArrayList<Score> outputScores = this.ScoreRanking.SelectScores(scoreTypes);
+		this.nameList = new String[10];
+		this.valueList = new String[10];
 		for (int i = 0; i < 10; i++){
 			this.nameList[i] = outputScores.get(i).getName();
 			this.valueList[i] = outputScores.get(i).getValuestr();

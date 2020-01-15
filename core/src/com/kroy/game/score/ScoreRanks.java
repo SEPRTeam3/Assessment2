@@ -20,19 +20,13 @@ public class ScoreRanks {
 
     }
     private void ReadFile(String csvFileName){
-        TestScores(csvFileName);
         try {
-            //FileReader fileCsv = new FileReader(csvFileName);
-            //int lineNumber = FileLength(fileCsv);
             BufferedReader bufferedCsv = new BufferedReader(new FileReader(csvFileName));
             String row;
-            row = bufferedCsv.readLine();
             while ((row = bufferedCsv.readLine()) != null) {
                 String[] lineData = row.split(",");
-                String score = lineData[1]; // Removed 'strip'. Was this important?
-                Integer scoreInt = Integer.parseInt(score);
-                System.out.println(scoreInt);
-                InsertScore(lineData[0], scoreInt);
+                Integer scoreInt = Integer.parseInt(lineData[1]);
+                InsertScore(lineData[0], scoreInt, true);
             }
             bufferedCsv.close();
         } catch(FileNotFoundException e) {
@@ -83,18 +77,24 @@ public class ScoreRanks {
         WriteFile(csvFileName);
     }
 
-    private void InsertScore(String newName, Integer newScore){
-        if (this.ScoresList.size() == 1) {
-            this.newestScore = new Score(newName, newScore, 1);
-            this.ScoresList.add(0, this.newestScore);
-        } else {
-            int numScores = this.ScoresList.size();
-            for (int i = 0; i < numScores; i++) {
-                if (this.ScoresList.get(i).getValue() < newScore) {
-                    this.newestScore = new Score(newName, newScore, numScores++);
-                    this.ScoresList.add(i, this.newestScore);
+    private void InsertScore(String newName, Integer newScore, Boolean fromFile){
+        if (fromFile == false) {
+            if (this.ScoresList.size() == 0) {
+                this.newestScore = new Score(newName, newScore, 1);
+                this.ScoresList.add(0, this.newestScore);
+            } else {
+                int numScores = this.ScoresList.size();
+                for (int i = 0; i < numScores; i++) {
+                    if (this.ScoresList.get(i).getValue() < newScore) {
+                        this.newestScore = new Score(newName, newScore, numScores + 1);
+                        this.ScoresList.add(i, this.newestScore);
+                    }
                 }
             }
+        } else {
+            int numScores = this.ScoresList.size();
+            this.newestScore = new Score(newName, newScore, numScores + 1);
+            this.ScoresList.add(numScores, this.newestScore);
         }
     }
 

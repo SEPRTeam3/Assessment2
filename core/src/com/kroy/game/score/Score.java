@@ -20,7 +20,6 @@ public class Score {
     public String getName() {
         return this.name;
     }
-
     public Integer getValue() {
         return this.value;
     }
