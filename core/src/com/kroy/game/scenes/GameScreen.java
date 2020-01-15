@@ -83,6 +83,8 @@ public class GameScreen implements Screen
 		mapDrawer.viewport.apply();
 		mapDrawer.render();
 
+		//hud.initializeFireTruckUI();
+
 		hud.stage.getViewport().apply();
 		game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 
@@ -111,10 +113,14 @@ public class GameScreen implements Screen
 						// Player clicked firetruck with nothing selected, select firetruck
 						selected = new Vector2(tileX, tileY);
 						hud.createGameTable();
+						if(!hud.moveClicked || !hud.attackClicked){
+							selectAction = selectedMode.NONE;
+						}
 					}
 					else if (map.getEntity(tileX, tileY) == null && selected != null && selectAction == selectedMode.MOVE)
 					{
 						// Player clicked an empty space with move selected, so move to that area
+
 						map.moveEntity((int)selected.x, (int)selected.y, tileX, tileY);
 						selectAction = selectedMode.NONE;
 						selected = null;
@@ -137,7 +143,12 @@ public class GameScreen implements Screen
 				else
 				{
 					// Clicked outside of map
-					selected = null;
+					if(!hud.clickInTable()) {
+						hud.clickOffInGameTable();
+						System.out.print("UI??");
+						selected = null;
+					}
+
 				}
 			}
 
