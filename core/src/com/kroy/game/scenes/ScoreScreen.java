@@ -4,6 +4,7 @@ package com.kroy.game.scenes;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -19,6 +20,7 @@ public class ScoreScreen implements Screen
 	final MyGdxGame game;
 	private SpriteBatch batch;
 	private BitmapFont font;
+	private GlyphLayout layout;
 	//private BitmapFont.TextBounds;
 	private String[] nameList, valueList;
 	private String outputString;
@@ -58,18 +60,23 @@ public class ScoreScreen implements Screen
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(0, 0, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		//bounds = this.font.getData();
 		getOutputs("TopTen");
 		outputString = getString();
 
-		this.batch.begin();
-		this.font.draw(this.batch, outputString,
-		Gdx.graphics.getWidth(),
-		Gdx.graphics.getHeight());
-		this.batch.end();
+		layout = new GlyphLayout(game.font, outputString);
+
+		float fontX = Gdx.graphics.getWidth()/2 - layout.width/2;
+		float fontY = Gdx.graphics.getHeight()/2 + layout.height/2;
+
+		game.batch.begin();
+		game.font.draw(game.batch, outputString,
+		fontX,
+		fontY);
+		game.batch.end();
 		// TODO Auto-generated method stub
 		
 	}
