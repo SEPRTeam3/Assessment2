@@ -42,9 +42,9 @@ public class GameScreen implements Screen
 	private TiledMap tileMap;
 	private MapDrawer mapDrawer;
 	
-	Vector2 selected = null;
-	turnStates turnState;
-	selectedMode selectAction = selectedMode.NONE;
+	private Vector2 selected = null;
+	private turnStates turnState;
+	private selectedMode selectAction = selectedMode.NONE;
 	private int turnNumber = 0;
 
 	private ETMastermind enemyAI;
