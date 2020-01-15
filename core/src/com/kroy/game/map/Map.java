@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.kroy.game.blocks.Building;
 import com.kroy.game.blocks.Obstacle;
 import com.kroy.game.entities.*;
-import com.kroy.game.entities.Entity.entityID;
 import com.kroy.game.map.tiles.Grass;
 
 import java.util.*;
@@ -61,9 +60,8 @@ public class Map
 		
 		Entity e = entityLayer[x1][y1];
 		
-		switch (e.id)
+		if (e != null && e instanceof Firetruck)
 		{
-		case FIRETRUCK:
 			Firetruck f = (Firetruck) e;
 			// Check if the firetruck has moved this turn
 			if (!f.hasMovedThisTurn())
@@ -101,8 +99,12 @@ public class Map
 				Firetruck f = (Firetruck) entityLayer[x1][y1];
 				if (!f.hasAttackedThisTurn())
 				{
-					damageLocation(f.getAttackStrength(), x2, y2);
-					f.setAttackedThisTurn();
+					boolean hasEnoughWater = f.useWater();
+					if (hasEnoughWater)
+					{
+						damageLocation(f.getAttackStrength(), x2, y2);
+						f.setAttackedThisTurn();
+					}
 				}
 				else
 				{
@@ -179,7 +181,7 @@ public class Map
 		{
 			for (int j = 0; j < WIDTH; j++)
 			{
-				if (entityLayer[i][j] != null && entityLayer[i][j].id == entityID.FIRETRUCK)
+				if (entityLayer[i][j] != null && entityLayer[i][j] instanceof Firetruck)
 				{
 					Firetruck f = (Firetruck) entityLayer[i][j];
 					f.resetTurn();
