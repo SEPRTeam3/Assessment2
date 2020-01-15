@@ -12,21 +12,27 @@ apply plugin: "java"
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.test.java.srcDirs = ["/src/test"]
 
-repositories{mavenCentral()}
+repositories{mavenCentral()
+            jcenter()
+}
 
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    compile "org.mockito:mockito-core:3.2.4"
+    testCompile "org.mockito:mockito-core:3.2.4"
     implementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
     runtimeOnly ('org.junit.jupiter:junit-jupiter-engine:5.1.0')
-
+    testImplementation 'org.mockito:mockito-core:3.2.4'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
     testRuntimeOnly ('org.junit.jupiter:junit-jupiter-engine:5.1.0')
+
     testCompile (
             "com.badlogicgames.gdx:gdx:$gdxVersion",
             "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop",
             "com.badlogicgames.gdx:gdx-box2d:$gdxVersion",
-            "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+            "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop",
+            //"org.mockito:mockito-core:3.2.4"
     )
 }
 

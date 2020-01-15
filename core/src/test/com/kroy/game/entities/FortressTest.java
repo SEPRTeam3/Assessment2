@@ -9,6 +9,7 @@ class FortressTest {
 
     @Test
     void takeDamage() {
+
         Fortress testfortress = new Fortress();
         assertTrue(testfortress.takeDamage(5));
         testfortress.setHealth(4);
