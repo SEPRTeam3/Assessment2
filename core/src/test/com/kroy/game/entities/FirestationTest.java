@@ -1,12 +1,15 @@
 package com.kroy.game.entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import org.junit.jupiter.api.Test;
-
+import static org.mockito.Mockito.*;
 /*import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;*/
 import static org.junit.jupiter.api.Assertions.*;
 
 class FirestationTest {
+
 
     @Test
     void takeDamage() {
