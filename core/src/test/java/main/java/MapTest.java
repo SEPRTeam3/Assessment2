@@ -1,10 +1,12 @@
-package com.kroy.game.map;
+package main.java;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import com.kroy.game.entities.Firestation;
+import static org.junit.Assert.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class MapTest {
+@RunWith(GdxTestRunner.class)
+public class MapTest {
 
     @Test
     void getBackground() {

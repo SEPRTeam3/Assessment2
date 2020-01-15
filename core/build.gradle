@@ -10,32 +10,46 @@ apply plugin: "java"
 //[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 sourceSets.main.java.srcDirs = [ "src/" ]
-sourceSets.test.java.srcDirs = ["/src/test"]
+//sourceSets.test.java.srcDirs = ["/src/test"]
 
 repositories{mavenCentral()
-            jcenter()
+            //jcenter()
 }
 
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-    compile "org.mockito:mockito-core:3.2.4"
-    testCompile "org.mockito:mockito-core:3.2.4"
-    implementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
-    runtimeOnly ('org.junit.jupiter:junit-jupiter-engine:5.1.0')
-    testImplementation 'org.mockito:mockito-core:3.2.4'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
-    testRuntimeOnly ('org.junit.jupiter:junit-jupiter-engine:5.1.0')
 
-    testCompile (
+    compile "junit:junit:4.+"
+    compile "org.mockito:mockito-core:3.2.4"
+
+    compile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+
+    testCompile 'junit:junit:4.+'
+    testCompile "org.mockito:mockito-core:3.2.4"
+
+    testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+    testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    //compile "org.mockito:mockito-core:3.2.4"
+    //testCompile "org.mockito:mockito-core:3.2.4"
+    //implementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+    //runtimeOnly ('org.junit.jupiter:junit-jupiter-engine:5.1.0')
+    //testImplementation 'org.mockito:mockito-core:3.2.4'
+    //testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+    //testRuntimeOnly ('org.junit.jupiter:junit-jupiter-engine:5.1.0')
+
+    /*testCompile (
             "com.badlogicgames.gdx:gdx:$gdxVersion",
             "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop",
             "com.badlogicgames.gdx:gdx-box2d:$gdxVersion",
             "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop",
             //"org.mockito:mockito-core:3.2.4"
-    )
+    )*/
 }
 
+/*
 test{
     useJUnitPlatform()
-}
+}*/

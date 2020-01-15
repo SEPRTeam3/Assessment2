@@ -1,10 +1,12 @@
-package com.kroy.game.entities;
+package main.java;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import com.kroy.game.entities.Firetruck;
+import static org.junit.Assert.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class FiretruckTest {
+@RunWith(GdxTestRunner.class)
+public class FiretruckTest {
 
     @Test
     public void testSetHealth(){
