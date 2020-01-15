@@ -40,4 +40,10 @@ public class Fortress extends Entity implements DamageableEntity
     {
         return this.targetsPerTurn;
     }
+
+    public void levelUp()
+    {
+        this.attackRadius++;
+        this.attackStrength++;
+    }
 }

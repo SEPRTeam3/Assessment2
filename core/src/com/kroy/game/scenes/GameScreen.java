@@ -204,6 +204,7 @@ public class GameScreen implements Screen
 			break;
 			
 		case POST_ET:
+			enemyAI.levelUpFortresses();
 			this.turnState = turnStates.PLAYER;
 			map.resetTurn();
 			break;

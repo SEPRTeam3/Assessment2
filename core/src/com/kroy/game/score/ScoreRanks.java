@@ -26,7 +26,7 @@ public class ScoreRanks {
             String row;
             while ((row = bufferedCsv.readLine()) != null) {
                 String[] lineData = row.split(",");
-                String score = lineData[1].strip();
+                String score = lineData[1]; // Removed 'strip'. Was this important?
                 Integer scoreInt = Integer.parseInt(score);
                 InsertScore(lineData[0], scoreInt);
             }
