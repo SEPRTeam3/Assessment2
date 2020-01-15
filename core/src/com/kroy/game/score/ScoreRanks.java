@@ -15,25 +15,28 @@ public class ScoreRanks {
         this.game = game;
         this.newestScore = null;
         String csvFileName = "ScoreData.csv";
+        this.ScoresList = new ArrayList<>();
         ReadFile(csvFileName);
+
     }
     private void ReadFile(String csvFileName){
+        TestScores(csvFileName);
         try {
-            FileReader fileCsv = new FileReader(csvFileName);
+            //FileReader fileCsv = new FileReader(csvFileName);
             //int lineNumber = FileLength(fileCsv);
-            this.ScoresList = new ArrayList<>();
-            BufferedReader bufferedCsv = new BufferedReader(fileCsv);
+            BufferedReader bufferedCsv = new BufferedReader(new FileReader(csvFileName));
             String row;
+            row = bufferedCsv.readLine();
             while ((row = bufferedCsv.readLine()) != null) {
                 String[] lineData = row.split(",");
                 String score = lineData[1]; // Removed 'strip'. Was this important?
                 Integer scoreInt = Integer.parseInt(score);
+                System.out.println(scoreInt);
                 InsertScore(lineData[0], scoreInt);
             }
-            fileCsv.close();
             bufferedCsv.close();
         } catch(FileNotFoundException e) {
-            WriteFile(csvFileName);
+            TestScores(csvFileName);
         } catch(IOException e){
             ;
         }
@@ -62,14 +65,22 @@ public class ScoreRanks {
                 csvWriter.append(name);
                 csvWriter.append(",");
                 csvWriter.append(tempScore.getValuestr());
-                csvWriter.append("/n");
+                csvWriter.append("\n");
             }
             csvWriter.flush();
             csvWriter.close();
         }
         catch(IOException e){
-            ;
         }
+    }
+
+    private void TestScores(String csvFileName){
+        for (Integer i = 0; i < 20; i++){
+            String tempString = "test" + i.toString();
+            Score tempScore = new Score(tempString, i + 1, i + 1);
+            this.ScoresList.add(tempScore);
+        }
+        WriteFile(csvFileName);
     }
 
     private void InsertScore(String newName, Integer newScore){
