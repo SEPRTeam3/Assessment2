@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Firestation extends Entity implements DamageableEntity
 {
+    public static final int restockingRadius = 2;
+
     public Firestation()
     {
         this.texture = new Texture(Gdx.files.internal("firestation.png"));

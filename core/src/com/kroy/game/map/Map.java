@@ -48,7 +48,7 @@ public class Map
 	{
 		return blockLayer[x][y];
 	}
-	
+
 	public void moveEntity(int x1, int y1, int x2, int y2)
 	{
 		/* Moves entity from (x1, y1) to (x2, y2) if the move is legal
@@ -213,5 +213,20 @@ public class Map
 				}
 			}
 		}
+	}
+
+	public Vector2 getFirestationLocation()
+	{
+		for (int i = 0; i < HEIGHT; i++)
+		{
+			for (int j = 0; j < WIDTH; j++)
+			{
+				if (entityLayer[i][j] != null && entityLayer[i][j] instanceof Firestation)
+				{
+					return new Vector2(j, i);
+				}
+			}
+		}
+		return null;
 	}
 }

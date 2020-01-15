@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.kroy.game.ETMastermind;
 import com.kroy.game.MyGdxGame;
+import com.kroy.game.entities.Firestation;
 import com.kroy.game.entities.Firetruck;
 import com.kroy.game.entities.Fortress;
 import com.kroy.game.map.HighlightColours;
@@ -171,6 +172,32 @@ public class GameScreen implements Screen
 				)
 				{
 					selectAction = selectedMode.ATTACK;
+				}
+			}
+
+			// Handling for B key for restock at base
+			if (Gdx.input.isKeyJustPressed(Input.Keys.B))
+			{
+				if
+				(
+					selected != null
+					&&
+					map.getEntity((int) selected.x, (int) selected.y) != null
+					&&
+					map.getEntity((int) selected.x, (int) selected.y) instanceof Firetruck
+				)
+				{
+					Firetruck f = (Firetruck) map.getEntity((int) selected.x, (int) selected.y);
+					Vector2 firestationLocation = map.getFirestationLocation();
+					if (firestationLocation.sub(selected).len() <= Firestation.restockingRadius)
+					{
+						f.restock();
+						System.out.println("The firetruck has been restocked");
+					}
+					else
+					{
+						System.out.println("The firetruck wasn't close enough to the station to restock");
+					}
 				}
 			}
 
