@@ -229,7 +229,8 @@ public class GameScreen implements Screen
 			if (firetrucks <= 0)
 			{
 				System.out.println("Failure!");
-				// Add code for a death screen
+				// In the case the player has failed
+				game.setScreen(new DeathScreen(game));
 			}
 
 			// Condition for leveling up ET Fortresses
