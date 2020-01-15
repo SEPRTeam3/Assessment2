@@ -11,6 +11,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FiretruckTest {
 
+    @org.junit.jupiter.api.Test
+    public void testSetHealth(){
+        Firetruck testtruck = new Firetruck();
+        assertEquals(5,testtruck.setHealth());
+
+    }
+
+    @org.junit.jupiter.api.Test
+    public void testGetHealth() {
+        Firetruck testtruck = new Firetruck();
+        assertEquals(5,testtruck.getHealth());
+    }
+
+
+
 
     @org.junit.jupiter.api.Test
     public void testHasMovedThisTurn() {
@@ -135,9 +150,12 @@ public class FiretruckTest {
         /*
         Method should return False on any value below 5
          */
+
+        assertTrue(testtruck.takeDamage(5));
+        testtruck.setHealth(4);
+        assertTrue(testtruck.takeDamage(10));
+        testtruck.setHealth(4);
         assertFalse(testtruck.takeDamage(0));
-        //assertFalse(testtruck.takeDamage(-2));
-        assertFalse(testtruck.takeDamage(3));
 
 
     }
