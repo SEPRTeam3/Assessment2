@@ -41,7 +41,7 @@ public class TitleScreen implements Screen
 		game.batch.begin();
 		game.batch.draw(titleImage, 0, 0, 512, 512);
 
-		game.font.draw(game.batch, "TEST GAME PLEASE IGNORE", 128, 256);
+		game.font.draw(game.batch, "TEST GAME PLEASE IGNORE \n Press SPACE to start", 128, 256);
 		game.batch.end();
 	}
 
