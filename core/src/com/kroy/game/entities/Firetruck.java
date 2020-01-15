@@ -25,7 +25,11 @@ public class Firetruck extends Entity implements DamageableEntity
 		this.movedThisTurn = false;
 		this.attackedThisTurn = false;
 	}
-	
+
+	public int getHealth(){return this.health; }
+
+	public void setHealth(int health){this.health=health; }
+
 	public boolean hasMovedThisTurn()
 	{
 		return this.movedThisTurn;
