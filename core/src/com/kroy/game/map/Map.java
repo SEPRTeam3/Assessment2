@@ -141,7 +141,7 @@ public class Map
 				boolean destroyed = d.takeDamage(amount);
 				if (destroyed)
 				{
-					entityLayer[x][y] = null;
+					entityLayer[x][y] = new DestroyedEntity();
 					System.out.println("You killed a thing.");
 				}
 			}
