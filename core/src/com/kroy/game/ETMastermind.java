@@ -11,16 +11,28 @@ public class ETMastermind
 {
     private Map map;
 
+    public final int LEVEL_UP_FREQUENCY = 3;   // The number of turns that must elapse before fortresses become stronger
+
     public ETMastermind(Map map)
     {
         this.map = map;
     }
 
-    private ArrayList<Fortress> getFortresses()
+    public int getFortressNumber()
     {
-        ArrayList<Fortress> fortresses = new ArrayList<Fortress>();
+        int count = 0;
+        for (int i = 0; i < map.HEIGHT; i++)
+        {
+            for (int j = 0; j < map.WIDTH; j++)
+            {
+                if (map.getEntity(j, i) != null && map.getEntity(j, i) instanceof Fortress)
+                {
+                    count++;
+                }
+            }
+        }
 
-        return fortresses;
+        return count;
     }
 
     public void takeTurn()
@@ -40,6 +52,22 @@ public class ETMastermind
         }
     }
 
+    public void levelUpFortresses()
+    {
+        System.out.println("The fortresses grow stronger...");
+        for (int i = 0; i < map.HEIGHT; i++)
+        {
+            for (int j = 0; j < map.WIDTH; j++)
+            {
+                if (map.getEntity(j, i) != null && map.getEntity(j, i) instanceof Fortress)
+                {
+                    Fortress f = (Fortress) map.getEntity(j, i);
+                    f.levelUp();
+                }
+            }
+        }
+    }
+
     private void attackNInRadius(int damage, int radius, int n, int x, int y)
     {
         /*
@@ -51,7 +79,14 @@ public class ETMastermind
         {
             for (int j = y-radius; j <= y + radius; j++)
             {
-                if (map.getEntity(i, j) != null && map.getEntity(i, j) instanceof Firetruck)
+                if
+                (
+                    (0 <= i && i < Map.WIDTH) && (0 <= j && j < Map.HEIGHT)
+                    &&
+                    map.getEntity(i, j) != null
+                    &&
+                    map.getEntity(i, j) instanceof Firetruck
+                )
                 {
                     map.damageLocation(damage, i, j);
                     attacksLeft--;
@@ -63,4 +98,5 @@ public class ETMastermind
             }
         }
     }
+
 }

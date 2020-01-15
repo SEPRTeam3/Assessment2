@@ -49,7 +49,6 @@ public class MapDrawer
 		this.backmap = t;
 
 		screenScalingCoefficient = (float) Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth()) / 512f;
-		int adjustedHeight = (Gdx.graphics.getHeight() - Gdx.graphics.getWidth()) / 2;
 
 
 		viewport = new FitViewport(10, 10); //(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -83,8 +82,6 @@ public class MapDrawer
 	public void resize(int width, int height)
 	{
 		viewport.update(width, height);
-		//camera.position.set(0, 0, 0);//(camera.viewportWidth/2,camera.viewportHeight/2,0);
-		//camera.translate(camera.viewportWidth/2,camera.viewportHeight/2,0);
 		viewport.getCamera().update();
 		screenScalingCoefficient = (float) Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth()) / 512f;
 		System.out.println("Viewport dimensions: " + viewport.getScreenWidth() + ", " + viewport.getScreenHeight());
@@ -141,8 +138,6 @@ public class MapDrawer
 				// Render entities
 				if (frontmap.getEntity(i, j) != null)
 				{
-					//System.out.println("Drawing entity at " + drawLocation.x + ", " + drawLocation.y);
-					//game.batch.draw(frontmap.getEntity(i, j).getTexture(), (int)drawLocation.x, -(int)drawLocation.y, 32, 32);
 					game.batch.draw(frontmap.getEntity(i, j).getTexture(), drawLocation.x, drawLocation.y, 16, 16);
 				}
 
