@@ -20,17 +20,6 @@ public class Score {
     public String getName() {
         return this.name;
     }
-    public Integer getIDInt(){
-        return this.ID;
-    }
-
-    public String getIDStr(){
-        return this.ID.toString();
-    }
-
-    public void setID(){
-        this.ID = ID;
-    }
 
     public Integer getValue() {
         return this.value;
