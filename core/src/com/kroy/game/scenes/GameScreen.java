@@ -269,6 +269,7 @@ public class GameScreen implements Screen
 	public void resize(int width, int height)
 	{
 		mapDrawer.resize(width, height);
+		hud.resize(width, height);
 	}
 
 	@Override
@@ -293,5 +294,6 @@ public class GameScreen implements Screen
 	public void dispose() {
 		// TODO Auto-generated method stub
 		this.tileMap.dispose();
+		hud.dispose();
 	}
 }
