@@ -1,24 +1,20 @@
 package com.kroy.game.entities;
 
-import static org.junit.jupiter.api.Assertions.*;
-import com.kroy.game.entities.Entity;
-import com.kroy.game.entities.Firetruck;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+class FiretruckTest {
 
-
-
-public class FiretruckTest {
-
-    @org.junit.jupiter.api.Test
+    @Test
     public void testSetHealth(){
         Firetruck testtruck = new Firetruck();
-        assertEquals(5,testtruck.setHealth());
+        testtruck.setHealth(4);
+        assertEquals(4,testtruck.getHealth());
 
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testGetHealth() {
         Firetruck testtruck = new Firetruck();
         assertEquals(5,testtruck.getHealth());
@@ -27,7 +23,7 @@ public class FiretruckTest {
 
 
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testHasMovedThisTurn() {
         /*
         Test should pass if the method hasMovedThis returns False as the default turn setting
@@ -40,7 +36,7 @@ public class FiretruckTest {
         assertTrue(testtruck.hasMovedThisTurn());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testSetMovedThisTurn() {
         /*
         Test should pass if the method hasMovedThisTurn returns True
@@ -51,7 +47,7 @@ public class FiretruckTest {
         assertTrue(testtruck.hasMovedThisTurn());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testHasAttackedThisTurn() {
         /*
         Test should return the attack turn as the default value False, so it's the players go first to attack
@@ -65,7 +61,7 @@ public class FiretruckTest {
         assertTrue(testtruck.hasAttackedThisTurn());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testSetAttackedThisTurn(){
         /*
         Test should pass if the method hasAttackedThisTurn returns True
@@ -77,7 +73,7 @@ public class FiretruckTest {
     }
 
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testResetTurn() {
 
         /*
@@ -90,7 +86,7 @@ public class FiretruckTest {
 
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testGetMovementDistance() {
         /*
         Testing parameters are values 5,4 and a boolean value True to ensure
@@ -105,7 +101,7 @@ public class FiretruckTest {
 
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testIsAttackPossible() {
         Firetruck testtruck = new Firetruck();
         /*
@@ -139,28 +135,31 @@ public class FiretruckTest {
     }
 
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testTakeDamage() {
         /*
         Method should return True on postive parameters greater than 5
          */
         Firetruck testtruck = new Firetruck();
         assertTrue(testtruck.takeDamage(5));
+        testtruck.setHealth(4);
         assertTrue(testtruck.takeDamage(10));
-        /*
+        testtruck.setHealth(4);
+
+          /*
         Method should return False on any value below 5
          */
-
-        assertTrue(testtruck.takeDamage(5));
-        testtruck.setHealth(4);
-        assertTrue(testtruck.takeDamage(10));
-        testtruck.setHealth(4);
         assertFalse(testtruck.takeDamage(0));
+        testtruck.setHealth(4);
+        assertFalse(testtruck.takeDamage(-2));
+        testtruck.setHealth(4);
+        assertFalse(testtruck.takeDamage(3));
+
 
 
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testGetAttackStrength() {
         /*
         Method should return 1 as the default attack strength of the firetruck
