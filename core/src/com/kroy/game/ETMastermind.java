@@ -11,6 +11,8 @@ public class ETMastermind
 {
     private Map map;
 
+    public final int LEVEL_UP_FREQUENCY = 3;   // The number of turns that must elapse before fortresses become stronger
+
     public ETMastermind(Map map)
     {
         this.map = map;

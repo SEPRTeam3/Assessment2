@@ -44,6 +44,7 @@ public class GameScreen implements Screen
 	Vector2 selected = null;
 	turnStates turnState;
 	selectedMode selectAction = selectedMode.NONE;
+	private int turnNumber = 0;
 
 	private ETMastermind enemyAI;
 	
@@ -204,15 +205,21 @@ public class GameScreen implements Screen
 			break;
 			
 		case POST_ET:
-			enemyAI.levelUpFortresses();
+			if (turnNumber % enemyAI.LEVEL_UP_FREQUENCY == 0 && turnNumber != 0)
+			{
+				enemyAI.levelUpFortresses();
+			}
 			this.turnState = turnStates.PLAYER;
 			map.resetTurn();
+			turnNumber++;
 			break;
 			
 		}
 		
 		
 	}
+
+	public int getTurnNumber() { return turnNumber; }
 
 	@Override
 	public void resize(int width, int height)
