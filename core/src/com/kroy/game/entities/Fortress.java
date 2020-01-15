@@ -26,6 +26,11 @@ public class Fortress extends Entity implements DamageableEntity
         return health <= 0;
     }
 
+    public int getHealth(){return this.health; }
+
+    public void setHealth(int health){this.health=health; }
+
+
     public int getAttackStrength()
     {
         return this.attackStrength;

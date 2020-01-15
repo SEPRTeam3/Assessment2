@@ -18,12 +18,15 @@ public class Firetruck extends Entity implements DamageableEntity
 
 	public Firetruck()
 	{
-		this.texture = new Texture(Gdx.files.internal("firetruck3.png"));
+		//this.texture = new Texture(Gdx.files.internal("firetruck3.png"));
 		this.id = entityID.FIRETRUCK;
 		this.movedThisTurn = false;
 		this.attackedThisTurn = false;
 	}
-	
+	public int getHealth(){return this.health; }
+
+	public void setHealth(int health){this.health=health; }
+
 	public boolean hasMovedThisTurn()
 	{
 		return this.movedThisTurn;
@@ -72,6 +75,7 @@ public class Firetruck extends Entity implements DamageableEntity
 
 	public boolean takeDamage(int i)
 	{
+
 		this.health -= i;
 		return this.health <= 0;
 	}
