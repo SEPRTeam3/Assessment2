@@ -1,6 +1,7 @@
 package com.kroy.game.scenes;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -30,9 +31,15 @@ public class DeathScreen implements Screen
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.begin();
-        game.font.draw(game.batch, "You are ded", 128, 255);
+        game.font.draw(game.batch, "You are ded\n   No high score for you \n \n Space to restart", 128, 255);
         game.batch.end();
 
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
+        {
+            System.out.println("Going to Home");
+            game.setScreen(new TitleScreen(game));
+        }
     }
 
     @Override
