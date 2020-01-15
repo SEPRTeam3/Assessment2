@@ -12,6 +12,7 @@ import com.kroy.game.ETMastermind;
 import com.kroy.game.MyGdxGame;
 import com.kroy.game.entities.Entity.entityID;
 import com.kroy.game.entities.Firetruck;
+import com.kroy.game.entities.Fortress;
 import com.kroy.game.map.HighlightColours;
 import com.kroy.game.map.Map;
 import com.kroy.game.map.MapDrawer;
@@ -192,8 +193,16 @@ public class GameScreen implements Screen
 			{
 				this.turnState = turnStates.POST_PLAYER;
 			}
+
+			if (enemyAI.getFortressNumber() == 0)
+			{
+				System.out.println("Victory!");
+				// Transition to scorescreen
+			}
+
 			break;
-			
+
+
 		case POST_PLAYER:
 			this.turnState = turnStates.ET;
 			break;
@@ -205,6 +214,25 @@ public class GameScreen implements Screen
 			break;
 			
 		case POST_ET:
+			// Condition for failure
+			int firetrucks = 0;
+			for (int i = 0; i < map.HEIGHT; i++)
+			{
+				for (int j = 0; j < map.WIDTH; j++)
+				{
+					if (map.getEntity(j, i) != null && map.getEntity(j, i) instanceof Firetruck)
+					{
+						firetrucks++;
+					}
+				}
+			}
+			if (firetrucks <= 0)
+			{
+				System.out.println("Failure!");
+				// Add code for a death screen
+			}
+
+			// Condition for leveling up ET Fortresses
 			if (turnNumber % enemyAI.LEVEL_UP_FREQUENCY == 0 && turnNumber != 0)
 			{
 				enemyAI.levelUpFortresses();

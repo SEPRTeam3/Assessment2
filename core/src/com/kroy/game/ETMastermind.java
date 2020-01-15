@@ -18,6 +18,23 @@ public class ETMastermind
         this.map = map;
     }
 
+    public int getFortressNumber()
+    {
+        int count = 0;
+        for (int i = 0; i < map.HEIGHT; i++)
+        {
+            for (int j = 0; j < map.WIDTH; j++)
+            {
+                if (map.getEntity(j, i) != null && map.getEntity(j, i) instanceof Fortress)
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
     public void takeTurn()
     {
         for (int i = 0; i < map.HEIGHT; i++)
