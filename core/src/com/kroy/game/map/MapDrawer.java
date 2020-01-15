@@ -34,7 +34,7 @@ public class MapDrawer
 	private final Vector2 HIGHLIGHT_OFFSET = new Vector2(0, -2);
 
 	private TiledMap backmap;
-	private Viewport viewport;
+	public Viewport viewport;
 	private IsometricTiledMapRenderer backmapRenderer;
 	private OrthographicCamera camera;
 
