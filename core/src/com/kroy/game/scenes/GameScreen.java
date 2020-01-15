@@ -1,5 +1,6 @@
 package com.kroy.game.scenes;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -17,6 +18,7 @@ import com.kroy.game.map.HighlightColours;
 import com.kroy.game.map.Map;
 import com.kroy.game.map.MapDrawer;
 import com.kroy.game.map.MapParser;
+import com.kroy.game.ui.GameHud;
 
 public class GameScreen implements Screen
 {
@@ -41,10 +43,11 @@ public class GameScreen implements Screen
 	private Map map;
 	private TiledMap tileMap;
 	private MapDrawer mapDrawer;
-	
-	private Vector2 selected = null;
-	private turnStates turnState;
-	private selectedMode selectAction = selectedMode.NONE;
+	private GameHud hud;
+
+	Vector2 selected = null;
+	turnStates turnState;
+	selectedMode selectAction = selectedMode.NONE;
 	private int turnNumber = 0;
 
 	private ETMastermind enemyAI;
@@ -55,7 +58,8 @@ public class GameScreen implements Screen
 		this.game = game;
 		selected = null;
 		turnState = turnStates.PLAYER;
-		
+
+		hud = new GameHud(game.batch, game.skin);
 		map = new Map();
 		tileMap = new TmxMapLoader().load("MapTestF.tmx");
 
@@ -76,7 +80,13 @@ public class GameScreen implements Screen
 	public void render(float delta)
 	{
 		// Render
+		mapDrawer.viewport.apply();
 		mapDrawer.render();
+
+		hud.stage.getViewport().apply();
+		game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+
+		hud.stage.draw();
 		// Get player input
 
 
@@ -100,6 +110,7 @@ public class GameScreen implements Screen
 					{
 						// Player clicked firetruck with nothing selected, select firetruck
 						selected = new Vector2(tileX, tileY);
+						hud.createGameTable();
 					}
 					else if (map.getEntity(tileX, tileY) == null && selected != null && selectAction == selectedMode.MOVE)
 					{
@@ -117,8 +128,10 @@ public class GameScreen implements Screen
 					}
 					else
 					{
-						selectAction = selectedMode.NONE;
-						selected = null;
+						if(!hud.menuOpen) {
+							selectAction = selectedMode.NONE;
+							selected = null;
+						}
 					}
 				}
 				else
@@ -129,8 +142,9 @@ public class GameScreen implements Screen
 			}
 
 			// Handling for M key for move action
-			if (Gdx.input.isKeyJustPressed(Input.Keys.M))
+			if (Gdx.input.isKeyJustPressed(Input.Keys.M) || hud.moveClicked)
 			{
+				hud.moveClicked = false;
 				if
 				(
 					selected != null
@@ -145,8 +159,9 @@ public class GameScreen implements Screen
 			}
 
 			// Handling for N key for attack action
-			if (Gdx.input.isKeyJustPressed(Input.Keys.N))
+			if (Gdx.input.isKeyJustPressed(Input.Keys.N) || hud.attackClicked)
 			{
+				hud.attackClicked = false;
 				if
 				(
 					selected != null
@@ -254,6 +269,7 @@ public class GameScreen implements Screen
 	public void resize(int width, int height)
 	{
 		mapDrawer.resize(width, height);
+		hud.resize(width, height);
 	}
 
 	@Override
@@ -278,5 +294,6 @@ public class GameScreen implements Screen
 	public void dispose() {
 		// TODO Auto-generated method stub
 		this.tileMap.dispose();
+		hud.dispose();
 	}
 }
