@@ -44,6 +44,7 @@ public class GameHud {
     private int sizeX, sizeY;
 
     private Map map;
+
     public GameHud(SpriteBatch batch, Skin skin){
         sizeX = 120;
         sizeY = 60;
@@ -155,18 +156,45 @@ public class GameHud {
 
     public void createGameTable() {
         menuOpen = true;
+        moveClicked = attackClicked = waitClicked = refillClicked = false;
         Vector2 position = stage.screenToStageCoordinates( new Vector2(Gdx.input.getX(), Gdx.input.getY()) );
-
 
         inGameTable.setPosition(position.x ,position.y);
         inGameTable.setVisible(true);
 
+    }
+    public void clickOffInGameTable() {
+        inGameTable.setVisible(false);
     }
     public TextureRegionDrawable tableBackground() {
         Pixmap bgPixmap = new Pixmap(1,1, Pixmap.Format.RGB565);
         bgPixmap.setColor(Color.GRAY);
         bgPixmap.fill();
         return textureRegionDrawableBg = new TextureRegionDrawable(new TextureRegion(new Texture(bgPixmap)));
+    }
+    public boolean clickInTable() {
+        int x = Gdx.input.getX();
+        int y = Gdx.graphics.getHeight() - Gdx.input.getY();
+
+        if(x>= inGameTable.getX() && x<= (inGameTable.getX()+inGameTable.getWidth()) && y>= inGameTable.getY() && y<= (inGameTable.getY()+inGameTable.getHeight())) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public void initializeFireTruckUI() {
+        int y = 0;
+        for (int i = 0; i < Map.HEIGHT; i++) {
+            for (int j = 0; j < Map.WIDTH; j++) {
+                if(map.getEntity(i, j) != null && map.getEntity(i, j).id == Entity.entityID.FIRETRUCK){
+                    Firetruck f = (Firetruck) map.getEntity(i, j);
+                    y++;
+                }
+            }
+        }
+        System.out.print(" nnnnnn    " + y);
     }
 
     public void resize(int width, int height){
