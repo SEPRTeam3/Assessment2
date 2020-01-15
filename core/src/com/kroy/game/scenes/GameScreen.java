@@ -176,8 +176,9 @@ public class GameScreen implements Screen
 			}
 
 			// Handling for B key for restock at base
-			if (Gdx.input.isKeyJustPressed(Input.Keys.B))
+			if (Gdx.input.isKeyJustPressed(Input.Keys.B) || hud.refillClicked)
 			{
+				hud.refillClicked = false;
 				if
 				(
 					selected != null

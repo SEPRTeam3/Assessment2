@@ -83,6 +83,17 @@ public class GameHud {
             }
         });
         refill = new TextButton("refill", skin);
+        refill.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                System.out.println("Clicked!");
+                refillClicked = true;
+                inGameTable.setVisible(false);
+                menuOpen = false;
+            }
+        });
+
+
 
         wait = new TextButton("wait", skin);
         wait.addListener(new ClickListener() {
