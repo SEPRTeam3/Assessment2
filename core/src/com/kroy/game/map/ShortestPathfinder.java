@@ -157,8 +157,9 @@ public class ShortestPathfinder
 		eg from (0, 0) to (3, 3) the result might be [(0, 1), (1, 1), (1, 2), (2, 2), (2, 3), (3, 3)]
 		 */
 
-
-		return this.getPathMap(x1, y1)[x2][y2];
+        ArrayList<Vector2> path = this.getPathMap(x1, y1)[x2][y2];
+        path.add(new Vector2(x2, y2));
+		return path;
     }
 
     public int[][] getDistanceMatrix(int fromX, int fromY)
