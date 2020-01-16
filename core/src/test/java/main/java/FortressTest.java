@@ -10,7 +10,7 @@ public class FortressTest {
 
 
     @Test
-    void takeDamage() {
+    public void takeDamage() {
 
         Fortress testfortress = new Fortress();
         assertTrue(testfortress.takeDamage(5));
@@ -25,39 +25,39 @@ public class FortressTest {
     }
 
     @Test
-    void getAttackStrength() {
+    public void getAttackStrength() {
         Fortress testfortress = new Fortress();
         assertEquals(1,testfortress.getAttackStrength());
     }
 
     @Test
-    void getAttackRadius() {
+    public void getAttackRadius() {
         Fortress testfortress = new Fortress();
-        assertEquals(2,testfortress.getAttackRadius());
+        assertEquals(1,testfortress.getAttackRadius());
     }
 
     @Test
-    void getTargetsPerTurn() {
+    public void getTargetsPerTurn() {
         Fortress testfortress = new Fortress();
         assertEquals(1,testfortress.getTargetsPerTurn());
     }
 
     @Test
-    void levelUp() {
+    public void levelUp() {
         Fortress testfortress = new Fortress();
         testfortress.levelUp();
-        assertEquals(3,testfortress.getAttackRadius());
+        assertEquals(2,testfortress.getAttackRadius());
         assertEquals(2,testfortress.getAttackStrength());
     }
 
     @Test
-    void getHealth() {
+    public void getHealth() {
         Fortress testfortress = new Fortress();
         assertEquals(4,testfortress.getHealth());
     }
 
     @Test
-    void setHealth() {
+    public void setHealth() {
         Fortress testfortress = new Fortress();
         testfortress.setHealth(2);
         assertEquals(2,testfortress.getHealth());

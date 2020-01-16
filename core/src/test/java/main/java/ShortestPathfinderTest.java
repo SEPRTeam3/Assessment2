@@ -9,10 +9,10 @@ import static org.junit.Assert.*;
 public class ShortestPathfinderTest {
 
     @Test
-    void shortestPath() {
+    public void shortestPath() {
     }
 
     @Test
-    void getDistanceMatrix() {
+    public void getDistanceMatrix() {
     }
 }

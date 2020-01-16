@@ -17,6 +17,27 @@ public class FiretruckTest {
     }
 
     @Test
+    public void testGetWater(){
+        Firetruck testtruck = new Firetruck();
+        assertEquals(2,testtruck.getWater());
+    }
+
+    @Test
+    public void testSetWater(){
+        Firetruck testtruck = new Firetruck();
+        testtruck.setWater(1);
+        assertEquals(1,testtruck.getWater());
+    }
+
+    @Test
+    public void testUseWater(){
+        Firetruck testtruck = new Firetruck();
+        assertEquals(true,testtruck.useWater());
+        testtruck.setWater(0);
+        assertEquals(false,testtruck.useWater());
+    }
+
+    @Test
     public void testGetHealth() {
         Firetruck testtruck = new Firetruck();
         assertEquals(5,testtruck.getHealth());
@@ -101,6 +122,16 @@ public class FiretruckTest {
         assertNotEquals(true, testtruck.getMovementDistance());
 
 
+    }
+
+    @Test
+    public void testRestock(){
+        Firetruck testtruck = new Firetruck();
+        testtruck.setHealth(0);
+        testtruck.setWater(0);
+        testtruck.restock();
+        assertEquals(5,testtruck.getHealth());
+        assertEquals(2,testtruck.getWater());
     }
 
     @Test

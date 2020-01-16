@@ -2,62 +2,61 @@ package main.java;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import com.kroy.game.entities.Firestation;
 import static org.junit.Assert.*;
 
 @RunWith(GdxTestRunner.class)
 public class MapTest {
 
     @Test
-    void getBackground() {
+    public void getBackground() {
 
     }
 
     @Test
-    void getEntity() {
+    public void getEntity() {
     }
 
     @Test
-    void getBlock() {
+    public void getBlock() {
     }
 
     @Test
-    void moveEntity() {
+    public void moveEntity() {
     }
 
     @Test
-    void attackEntity() {
+    public void attackEntity() {
     }
 
     @Test
-    void damageLocation() {
+    public void damageLocation() {
     }
 
     @Test
-    void isSpaceEmpty() {
+    public void isSpaceEmpty() {
     }
 
     @Test
-    void spawnFiretruck() {
+    public void spawnFiretruck() {
     }
 
     @Test
-    void spawnBuilding() {
+    public void spawnBuilding() {
     }
 
     @Test
-    void spawnFortress() {
+    public void spawnFortress() {
     }
 
     @Test
-    void spawnFirestation() {
+    public void spawnFirestation() {
     }
 
     @Test
-    void spawnObstacle() {
+    public void spawnObstacle() {
     }
 
     @Test
-    void resetTurn() {
+    public void resetTurn() {
     }
 }

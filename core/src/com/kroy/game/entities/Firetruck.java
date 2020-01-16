@@ -92,6 +92,11 @@ public class Firetruck extends Entity implements DamageableEntity
 		}
 	}
 
+	public int getWater(){return(this.water);}
+
+	public void setWater(int water){this.water=water;}
+
+
 	public void restock()
 	{
 		/*

@@ -188,7 +188,7 @@ public class GameHud {
         int y = 0;
         for (int i = 0; i < Map.HEIGHT; i++) {
             for (int j = 0; j < Map.WIDTH; j++) {
-                if(map.getEntity(i, j) != null && map.getEntity(i, j).id == Entity.entityID.FIRETRUCK){
+                if(map.getEntity(i, j) != null && map.getEntity(i, j) instanceof Firetruck){
                     Firetruck f = (Firetruck) map.getEntity(i, j);
                     y++;
                 }
