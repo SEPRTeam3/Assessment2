@@ -70,7 +70,7 @@ public class Map
 			{
 				ArrayList<Vector2> path = pathfinder.shortestPath(x1, y1, x2, y2);
 
-				if (path != null && path.size() <= f.getMovementDistance())
+				if (path != null && path.size() -1 <= f.getMovementDistance())
 				{
 					f.setMovedThisTurn();
 					entityLayer[x2][y2] = f;
