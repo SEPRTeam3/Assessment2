@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -18,8 +19,6 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kroy.game.MyGdxGame;
 import com.kroy.game.blocks.Obstacle;
-
-import java.util.ArrayList;
 
 public class MapDrawer
 {
@@ -36,15 +35,12 @@ public class MapDrawer
 	private final Vector2 HIGHLIGHT_OFFSET = new Vector2(0, -2);
 
 	private TiledMap backmap;
-	private Viewport viewport;
+	public Viewport viewport;
 	private IsometricTiledMapRenderer backmapRenderer;
 	private OrthographicCamera camera;
 
 	private HighlightColours[][] highlightColours;
-	private int[][] arrowMatrix;
 
-
-	private Texture[] arrowTextures;
 	private Texture highlightTexture;
 
 	public MapDrawer(MyGdxGame g, Map m, TiledMap t)
@@ -54,7 +50,6 @@ public class MapDrawer
 		this.backmap = t;
 
 		screenScalingCoefficient = (float) Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth()) / 512f;
-		int adjustedHeight = (Gdx.graphics.getHeight() - Gdx.graphics.getWidth()) / 2;
 
 
 		viewport = new FitViewport(10, 10); //(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -67,11 +62,10 @@ public class MapDrawer
 		camera.zoom = 85f;
 		camera.update();
 
+		highlightTexture = new Texture(Gdx.files.internal("selectTile.png"));
+		SpriteBatch spriteBatch = new SpriteBatch();
 
 		backmapRenderer = new IsometricTiledMapRenderer(backmap, 1);
-
-		// Highlight init
-		highlightTexture = new Texture(Gdx.files.internal("selectTile.png"));
 
 		highlightColours = new HighlightColours[Map.HEIGHT][Map.WIDTH];
 		for (int i = 0; i < Map.WIDTH; i++)
@@ -82,34 +76,6 @@ public class MapDrawer
 			}
 		}
 
-		// Arrow init
-		arrowTextures = new Texture[]
-		{
-			new Texture(Gdx.files.internal("Arrows/Arrow_00.png")),
-			new Texture(Gdx.files.internal("Arrows/Arrow_01.png")),
-			new Texture(Gdx.files.internal("Arrows/Arrow_02.png")),
-			new Texture(Gdx.files.internal("Arrows/Arrow_03.png")),
-			new Texture(Gdx.files.internal("Arrows/Arrow_04.png")),
-			new Texture(Gdx.files.internal("Arrows/Arrow_05.png")),
-			new Texture(Gdx.files.internal("Arrows/Arrow_06.png")),
-			new Texture(Gdx.files.internal("Arrows/Arrow_07.png")),
-			new Texture(Gdx.files.internal("Arrows/Arrow_08.png")),
-			new Texture(Gdx.files.internal("Arrows/Arrow_09.png")),
-			new Texture(Gdx.files.internal("Arrows/Arrow_10.png")),
-			new Texture(Gdx.files.internal("Arrows/Arrow_11.png")),
-			new Texture(Gdx.files.internal("Arrows/Arrow_12.png")),
-			new Texture(Gdx.files.internal("Arrows/Arrow_13.png")),
-		};
-
-		arrowMatrix = new int[Map.HEIGHT][Map.WIDTH];
-		for (int i = 0; i < Map.WIDTH; i++)
-		{
-			for (int j = 0; j < Map.HEIGHT; j++)
-			{
-				arrowMatrix[i][j] = -1;
-			}
-		}
-
 		System.out.println("UnitScale: " + backmapRenderer.getUnitScale());
 		System.out.println("Viewbounds: " + backmapRenderer.getViewBounds());
 	}
@@ -117,8 +83,6 @@ public class MapDrawer
 	public void resize(int width, int height)
 	{
 		viewport.update(width, height);
-		//camera.position.set(0, 0, 0);//(camera.viewportWidth/2,camera.viewportHeight/2,0);
-		//camera.translate(camera.viewportWidth/2,camera.viewportHeight/2,0);
 		viewport.getCamera().update();
 		screenScalingCoefficient = (float) Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth()) / 512f;
 		System.out.println("Viewport dimensions: " + viewport.getScreenWidth() + ", " + viewport.getScreenHeight());
@@ -172,25 +136,9 @@ public class MapDrawer
 				}
 				game.batch.setColor(c);
 
-				// Render arrows
-
-				if (arrowMatrix[j][i] != -1)
-				{
-					game.batch.draw
-					(
-							arrowTextures[arrowMatrix[j][i]],
-							drawLocation.x + HIGHLIGHT_OFFSET.x,
-							drawLocation.y + HIGHLIGHT_OFFSET.y,
-							16, 16
-					);
-					arrowMatrix[j][i] = -1;
-				}
-
 				// Render entities
 				if (frontmap.getEntity(i, j) != null)
 				{
-					//System.out.println("Drawing entity at " + drawLocation.x + ", " + drawLocation.y);
-					//game.batch.draw(frontmap.getEntity(i, j).getTexture(), (int)drawLocation.x, -(int)drawLocation.y, 32, 32);
 					game.batch.draw(frontmap.getEntity(i, j).getTexture(), drawLocation.x, drawLocation.y, 16, 16);
 				}
 
@@ -341,27 +289,9 @@ public class MapDrawer
 		}
 	}
 
-	public void drawArrowToPath(ArrayList<Vector2> path)
+	public void setCorruption(int x, int y)
 	{
-		/*
-		Draws an arrow following the coordinates given in 'path'
-		 */
-		System.out.println("Path to here is: ");
-		for (Vector2 v : path)
-		{
-			if (v == path.get(0))
-			{
-				// This was the first one, draw the tail
-				arrowMatrix[(int) v.x][(int) v.y] = 0;
-			}
-			else if (v == path.get((path.size()-1)))
-			{
-				// This was the last one, draw the head
-			}
-			else
-			{
-				// This was a middle one, poll forward and backward
-			}
-		}
+		TiledMapTileLayer tileLayer = (TiledMapTileLayer) backmap.getLayers().get("Corruption");
+		tileLayer.setCell(x, tileLayer.getHeight()-y-1, MapParser.getCorruption(backmap));
 	}
 }

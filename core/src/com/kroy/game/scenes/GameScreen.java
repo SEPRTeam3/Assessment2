@@ -1,5 +1,6 @@
 package com.kroy.game.scenes;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -10,13 +11,14 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.kroy.game.ETMastermind;
 import com.kroy.game.MyGdxGame;
+import com.kroy.game.entities.Firestation;
 import com.kroy.game.entities.Firetruck;
+import com.kroy.game.entities.Fortress;
 import com.kroy.game.map.HighlightColours;
 import com.kroy.game.map.Map;
 import com.kroy.game.map.MapDrawer;
 import com.kroy.game.map.MapParser;
-
-import java.util.ArrayList;
+import com.kroy.game.ui.GameHud;
 
 public class GameScreen implements Screen
 {
@@ -41,10 +43,12 @@ public class GameScreen implements Screen
 	private Map map;
 	private TiledMap tileMap;
 	private MapDrawer mapDrawer;
-	
+	private GameHud hud;
+
 	Vector2 selected = null;
 	turnStates turnState;
 	selectedMode selectAction = selectedMode.NONE;
+	private int turnNumber = 0;
 
 	private ETMastermind enemyAI;
 	
@@ -53,8 +57,9 @@ public class GameScreen implements Screen
 		
 		this.game = game;
 		selected = null;
-		turnState = turnStates.PLAYER;
-		
+ 		turnState = turnStates.PLAYER;
+
+		hud = new GameHud(game.batch, game.skin);
 		map = new Map();
 		tileMap = new TmxMapLoader().load("MapTestF.tmx");
 
@@ -63,7 +68,7 @@ public class GameScreen implements Screen
 		parser.addAll(map, tileMap);
 		map.spawnFortress(5, 5);
 		mapDrawer = new MapDrawer(game, map, tileMap);
-		enemyAI = new ETMastermind(this.map);
+		enemyAI = new ETMastermind(this.map, this.mapDrawer);
 	}
 
 	@Override
@@ -75,7 +80,15 @@ public class GameScreen implements Screen
 	public void render(float delta)
 	{
 		// Render
+		mapDrawer.viewport.apply();
 		mapDrawer.render();
+
+		//hud.initializeFireTruckUI();
+
+		hud.stage.getViewport().apply();
+		game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+
+		hud.stage.draw();
 		// Get player input
 
 
@@ -99,11 +112,15 @@ public class GameScreen implements Screen
 					{
 						// Player clicked firetruck with nothing selected, select firetruck
 						selected = new Vector2(tileX, tileY);
-						selectAction = selectedMode.NONE;
+						hud.createGameTable();
+						if(!hud.moveClicked || !hud.attackClicked){
+							selectAction = selectedMode.NONE;
+						}
 					}
 					else if (map.getEntity(tileX, tileY) == null && selected != null && selectAction == selectedMode.MOVE)
 					{
 						// Player clicked an empty space with move selected, so move to that area
+
 						map.moveEntity((int)selected.x, (int)selected.y, tileX, tileY);
 						selectAction = selectedMode.NONE;
 						selected = null;
@@ -117,20 +134,28 @@ public class GameScreen implements Screen
 					}
 					else
 					{
-						selectAction = selectedMode.NONE;
-						selected = null;
+						if(!hud.menuOpen) {
+							selectAction = selectedMode.NONE;
+							selected = null;
+						}
 					}
 				}
 				else
 				{
 					// Clicked outside of map
-					selected = null;
+					if(!hud.clickInTable()) {
+						hud.clickOffInGameTable();
+						System.out.print("UI??");
+						selected = null;
+					}
+
 				}
 			}
 
 			// Handling for M key for move action
-			if (Gdx.input.isKeyJustPressed(Input.Keys.M))
+			if (Gdx.input.isKeyJustPressed(Input.Keys.M) || hud.moveClicked)
 			{
+				hud.moveClicked = false;
 				if
 				(
 					selected != null
@@ -145,8 +170,9 @@ public class GameScreen implements Screen
 			}
 
 			// Handling for N key for attack action
-			if (Gdx.input.isKeyJustPressed(Input.Keys.N))
+			if (Gdx.input.isKeyJustPressed(Input.Keys.N) || hud.attackClicked)
 			{
+				hud.attackClicked = false;
 				if
 				(
 					selected != null
@@ -157,6 +183,33 @@ public class GameScreen implements Screen
 				)
 				{
 					selectAction = selectedMode.ATTACK;
+				}
+			}
+
+			// Handling for B key for restock at base
+			if (Gdx.input.isKeyJustPressed(Input.Keys.B) || hud.refillClicked)
+			{
+				hud.refillClicked = false;
+				if
+				(
+					selected != null
+					&&
+					map.getEntity((int) selected.x, (int) selected.y) != null
+					&&
+					map.getEntity((int) selected.x, (int) selected.y) instanceof Firetruck
+				)
+				{
+					Firetruck f = (Firetruck) map.getEntity((int) selected.x, (int) selected.y);
+					Vector2 firestationLocation = map.getFirestationLocation();
+					if (firestationLocation.sub(selected).len() <= Firestation.restockingRadius)
+					{
+						f.restock();
+						System.out.println("The firetruck has been restocked");
+					}
+					else
+					{
+						System.out.println("The firetruck wasn't close enough to the station to restock");
+					}
 				}
 			}
 
@@ -174,24 +227,6 @@ public class GameScreen implements Screen
 						}
 					}
 					mapDrawer.highlightBlocks(b, HighlightColours.GREEN);
-					// Draw arrows for shortest path to hovered over location
-					Vector2 tileHovered = mapDrawer.toMapSpace(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
-					if
-					(
-							tileHovered != null
-							&&
-							(0<tileHovered.x && tileHovered.x<Map.WIDTH && 0<tileHovered.y && tileHovered.y<Map.HEIGHT)
-							&&
-							b[(int) tileHovered.x][(int) tileHovered.y]
-					)
-					{
-						ArrayList<Vector2> path = map.pathfinder.shortestPath
-						(
-								(int) selected.x, (int) selected.y,
-								(int) tileHovered.x, (int) tileHovered.y
-						);
-						//mapDrawer.drawArrowToPath(path);
-					}
 				}
 				else if (selectAction == selectedMode.ATTACK && map.getEntity((int)selected.x, (int)selected.y) instanceof Firetruck)
 				{
@@ -206,14 +241,21 @@ public class GameScreen implements Screen
 				}
 			}
 
-
 			// Space key handling
 			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
 			{
 				this.turnState = turnStates.POST_PLAYER;
 			}
+
+			if (enemyAI.getFortressNumber() == 0)
+			{
+				System.out.println("Victory!");
+				// Transition to scorescreen
+			}
+
 			break;
-			
+
+
 		case POST_PLAYER:
 			this.turnState = turnStates.ET;
 			break;
@@ -225,8 +267,33 @@ public class GameScreen implements Screen
 			break;
 			
 		case POST_ET:
+			// Condition for failure
+			int firetrucks = 0;
+			for (int i = 0; i < map.HEIGHT; i++)
+			{
+				for (int j = 0; j < map.WIDTH; j++)
+				{
+					if (map.getEntity(j, i) != null && map.getEntity(j, i) instanceof Firetruck)
+					{
+						firetrucks++;
+					}
+				}
+			}
+			if (firetrucks <= 0)
+			{
+				System.out.println("Failure!");
+				// In the case the player has failed
+				game.setScreen(new DeathScreen(game));
+			}
+
+			// Condition for leveling up ET Fortresses
+			if (turnNumber % enemyAI.LEVEL_UP_FREQUENCY == 0 && turnNumber != 0)
+			{
+				enemyAI.levelUpFortresses();
+			}
 			this.turnState = turnStates.PLAYER;
 			map.resetTurn();
+			turnNumber++;
 			break;
 			
 		}
@@ -234,10 +301,13 @@ public class GameScreen implements Screen
 		
 	}
 
+	public int getTurnNumber() { return turnNumber; }
+
 	@Override
 	public void resize(int width, int height)
 	{
 		mapDrawer.resize(width, height);
+		hud.resize(width, height);
 	}
 
 	@Override
@@ -262,5 +332,6 @@ public class GameScreen implements Screen
 	public void dispose() {
 		// TODO Auto-generated method stub
 		this.tileMap.dispose();
+		hud.dispose();
 	}
 }

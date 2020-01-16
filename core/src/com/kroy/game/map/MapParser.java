@@ -1,5 +1,7 @@
 package com.kroy.game.map;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -7,6 +9,11 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 public class MapParser
 {
     public MapParser() {}
+
+    private int firetrucksAdded = 0;
+
+    private Texture truckOneTexture = new Texture(Gdx.files.internal("SpecialFiretrucks1.png"));
+    private Texture truckTwoTexture = new Texture(Gdx.files.internal("SpecialFiretrucks2.png"));
 
     public void addAll(Map map, TiledMap tilemap)
     {
@@ -27,7 +34,21 @@ public class MapParser
                 TiledMapTileLayer.Cell cell =  tileLayer.getCell(x, y);
                 if (cell != null)
                 {
-                    map.spawnFiretruck(x, tileLayer.getHeight()-y-1);
+                    switch (firetrucksAdded)
+                    {
+                        case 0:
+                            map.spawnFiretruck(x,tileLayer.getHeight()-y-1, truckOneTexture, 3, 10, 10);
+                            firetrucksAdded++;
+                            break;
+                        case 1:
+                            map.spawnFiretruck(x,tileLayer.getHeight()-y-1, truckTwoTexture, 10, 3, 1);
+                            firetrucksAdded++;
+                            break;
+                        default:
+                            map.spawnFiretruck(x,tileLayer.getHeight()-y-1);
+                            firetrucksAdded++;
+                            break;
+                    }
                 }
             }
         }
@@ -82,5 +103,22 @@ public class MapParser
                 }
             }
         }
+    }
+
+    public static TiledMapTileLayer.Cell getCorruption(TiledMap tilemap)
+    {
+        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tilemap.getLayers().get("FireStation");
+        for (int x = 0; x < tileLayer.getWidth(); x++)
+        {
+            for (int y = 0; y < tileLayer.getHeight(); y++)
+            {
+                TiledMapTileLayer.Cell cell =  tileLayer.getCell(x, y);
+                if (cell != null)
+                {
+                    return cell;
+                }
+            }
+        }
+        return null;
     }
 }

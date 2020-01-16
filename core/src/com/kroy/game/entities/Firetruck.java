@@ -14,7 +14,10 @@ public class Firetruck extends Entity implements DamageableEntity
 	private int movementDistance = 5;
 	private int attackStrength = 1;
 	private int maxHealth = 5;
-	private int health = 5;
+	private int health = maxHealth;
+	private int maxWater = 2;
+	private int water = maxWater;
+
 
 	public Firetruck()
 	{
@@ -22,7 +25,23 @@ public class Firetruck extends Entity implements DamageableEntity
 		this.movedThisTurn = false;
 		this.attackedThisTurn = false;
 	}
-	
+
+	public int getHealth(){return this.health; }
+
+	public void setHealth(int health){this.health=health; }
+
+
+	public Firetruck(Texture texture, int maxMove, int maxHealth, int maxWater)
+	{
+		System.out.println("Alt init is used");
+		this.texture = texture;
+		this.movementDistance = maxMove;
+		this.maxHealth = maxHealth;
+		this.maxWater = maxWater;
+		this.movedThisTurn = false;
+		this.attackedThisTurn = false;
+	}
+
 	public boolean hasMovedThisTurn()
 	{
 		return this.movedThisTurn;
@@ -55,19 +74,32 @@ public class Firetruck extends Entity implements DamageableEntity
 		return (x1 == x2) || (y1 == y2);
 	}
 
-//	public void attack(int targetX, int targetY, Map map)
-//	{
-//		Entity e = map.getEntity(targetX, targetY);
-//		if (e != null && e instanceof WarlikeEntity)
-//		{
-//			System.out.println("Dealing damage to the enemy");
-//			((WarlikeEntity) e).takeDamage(attackStrength);
-//		}
-//		else
-//		{
-//			System.out.println("There's nothing for me to attack");
-//		}
-//	}
+	public boolean useWater()
+	{
+		/*
+		Returns true if the firetruck has water left, and depletes the available water
+		Returns false if there is no available water
+		 */
+		if (this.water <= 0)
+		{
+			System.out.println("The firetruck had no water left!");
+			return false;
+		}
+		else
+		{
+			water--;
+			return true;
+		}
+	}
+
+	public void restock()
+	{
+		/*
+		Returns the firetruck to max health and max water
+		 */
+		this.health = maxHealth;
+		this.water = maxWater;
+	}
 
 	public boolean takeDamage(int i)
 	{

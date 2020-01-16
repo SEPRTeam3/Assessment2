@@ -1,9 +1,9 @@
 package com.kroy.game.score;
 
+import com.badlogic.gdx.Gdx;
 import com.kroy.game.MyGdxGame;
 
 import java.io.*;
-import java.util.List;
 import java.util.ArrayList;
 
 public class ScoreRanks {
@@ -20,34 +20,21 @@ public class ScoreRanks {
 
     }
     private void ReadFile(String csvFileName){
+        //TestScores(csvFileName);
         try {
             BufferedReader bufferedCsv = new BufferedReader(new FileReader(csvFileName));
             String row;
+            row = bufferedCsv.readLine();
             while ((row = bufferedCsv.readLine()) != null) {
                 String[] lineData = row.split(",");
                 Integer scoreInt = Integer.parseInt(lineData[1]);
-                InsertScore(lineData[0], scoreInt, true);
+                InsertScore(lineData[0], scoreInt);
             }
             bufferedCsv.close();
         } catch(FileNotFoundException e) {
             TestScores(csvFileName);
         } catch(IOException e){
             ;
-        }
-    }
-
-    private int FileLength(FileReader fileCsv){
-        int lineNumber = 0;
-        try {
-            LineNumberReader lineCsv = new LineNumberReader(fileCsv);
-            while (lineCsv.readLine() != null) {
-                lineNumber++;
-            }
-            lineCsv.close();
-            return lineNumber;
-        }
-        catch(IOException e){
-            return lineNumber;
         }
     }
     private void WriteFile(String csvFileName){
@@ -77,24 +64,18 @@ public class ScoreRanks {
         WriteFile(csvFileName);
     }
 
-    private void InsertScore(String newName, Integer newScore, Boolean fromFile){
-        if (fromFile == false) {
-            if (this.ScoresList.size() == 0) {
-                this.newestScore = new Score(newName, newScore, 1);
-                this.ScoresList.add(0, this.newestScore);
-            } else {
-                int numScores = this.ScoresList.size();
-                for (int i = 0; i < numScores; i++) {
-                    if (this.ScoresList.get(i).getValue() < newScore) {
-                        this.newestScore = new Score(newName, newScore, numScores + 1);
-                        this.ScoresList.add(i, this.newestScore);
-                    }
-                }
-            }
+    private void InsertScore(String newName, Integer newScore){
+        if (this.ScoresList.size() == 1) {
+            this.newestScore = new Score(newName, newScore, 1);
+            this.ScoresList.add(0, this.newestScore);
         } else {
             int numScores = this.ScoresList.size();
-            this.newestScore = new Score(newName, newScore, numScores + 1);
-            this.ScoresList.add(numScores, this.newestScore);
+            for (int i = 0; i < numScores; i++) {
+                if (this.ScoresList.get(i).getValue() < newScore) {
+                    this.newestScore = new Score(newName, newScore, numScores + 1);
+                    this.ScoresList.add(i, this.newestScore);
+                }
+            }
         }
     }
 

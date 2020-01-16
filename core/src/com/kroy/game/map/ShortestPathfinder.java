@@ -17,11 +17,18 @@ public class ShortestPathfinder
 
     public ShortestPathfinder(Map map)
     {
+        /**
+         * Constructor for shortest pathfinder helper class
+         * @param map   This is the map object with the positions of entities and blocks so the path finder can navigate
+         */
         this.map = map;
     }
 
     private void buildOcclusionMap()
     {
+        /**
+         * Builds and stores a matrix the same size as a map where each element is a boolean
+         */
         for (int i = 0; i < map.HEIGHT; i++)
         {
             for (int j = 0; j < map.WIDTH; j++)

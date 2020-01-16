@@ -1,5 +1,6 @@
 package com.kroy.game.map;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.kroy.game.blocks.Building;
 import com.kroy.game.blocks.Obstacle;
@@ -26,6 +27,7 @@ public class Map
 			for (int j = 0; j < WIDTH; j++)
 			{
 				backgroundLayer[j][i] = new Grass();
+				backgroundLayer[j][i] = new Grass();
 				entityLayer[j][i] = null;
 				blockLayer[j][i] = null;
 			}
@@ -46,7 +48,7 @@ public class Map
 	{
 		return blockLayer[x][y];
 	}
-	
+
 	public void moveEntity(int x1, int y1, int x2, int y2)
 	{
 		/* Moves entity from (x1, y1) to (x2, y2) if the move is legal
@@ -60,7 +62,7 @@ public class Map
 		
 		Entity e = entityLayer[x1][y1];
 		
-		if (e instanceof Firetruck)
+		if (e != null && e instanceof Firetruck)
 		{
 			Firetruck f = (Firetruck) e;
 			// Check if the firetruck has moved this turn
@@ -99,8 +101,12 @@ public class Map
 				Firetruck f = (Firetruck) entityLayer[x1][y1];
 				if (!f.hasAttackedThisTurn())
 				{
-					damageLocation(f.getAttackStrength(), x2, y2);
-					f.setAttackedThisTurn();
+					boolean hasEnoughWater = f.useWater();
+					if (hasEnoughWater)
+					{
+						damageLocation(f.getAttackStrength(), x2, y2);
+						f.setAttackedThisTurn();
+					}
 				}
 				else
 				{
@@ -135,7 +141,7 @@ public class Map
 				boolean destroyed = d.takeDamage(amount);
 				if (destroyed)
 				{
-					entityLayer[x][y] = null;
+					entityLayer[x][y] = new DestroyedEntity();
 					System.out.println("You killed a thing.");
 				}
 			}
@@ -158,18 +164,41 @@ public class Map
 		return entityLayer[x][y] == null && blockLayer[x][y] == null;
 	}
 	
-	public void spawnFiretruck(int x, int y) { entityLayer[x][y] = new Firetruck(); }
-	
-	public void spawnBuilding(int x, int y) { blockLayer[x][y] = new Building(); }
-
-	public void spawnFortress(int x, int y)
+	public Firetruck spawnFiretruck(int x, int y)
 	{
-		entityLayer[x][y] = new Fortress();
+		entityLayer[x][y] = new Firetruck();
+		return (Firetruck) entityLayer[x][y];
 	}
 
-	public void spawnFirestation(int x, int y) { entityLayer[x][y] = new Firestation(); }
+	public Firetruck spawnFiretruck(int x, int y, Texture texture, int maxMove, int maxHealth, int maxWater)
+	{
+		entityLayer[x][y] = new Firetruck(texture, maxMove, maxHealth, maxWater);
+		return (Firetruck) entityLayer[x][y];
+	}
+	
+	public Building spawnBuilding(int x, int y)
+	{
+		blockLayer[x][y] = new Building();
+		return (Building) blockLayer[x][y];
+	}
 
-	public void spawnObstacle(int x, int y) { blockLayer[x][y] = new Obstacle(); }
+	public Fortress spawnFortress(int x, int y)
+	{
+		entityLayer[x][y] = new Fortress();
+		return (Fortress) entityLayer[x][y];
+	}
+
+	public Firestation spawnFirestation(int x, int y)
+	{
+		entityLayer[x][y] = new Firestation();
+		return (Firestation) entityLayer[x][y];
+	}
+
+	public Obstacle spawnObstacle(int x, int y)
+	{
+		blockLayer[x][y] = new Obstacle();
+		return (Obstacle) blockLayer[x][y];
+	}
 	
 	public void resetTurn()
 	{
@@ -184,5 +213,20 @@ public class Map
 				}
 			}
 		}
+	}
+
+	public Vector2 getFirestationLocation()
+	{
+		for (int i = 0; i < HEIGHT; i++)
+		{
+			for (int j = 0; j < WIDTH; j++)
+			{
+				if (entityLayer[i][j] != null && entityLayer[i][j] instanceof Firestation)
+				{
+					return new Vector2(j, i);
+				}
+			}
+		}
+		return null;
 	}
 }

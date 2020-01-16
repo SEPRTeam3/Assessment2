@@ -6,7 +6,7 @@ public class Score {
     private Integer value;
     private Integer ID;
 
-    public Score(String name, Integer value, Integer ID) {
+    public Score(String name, Integer value, Integer ID){
         this.name = name;
         this.value = value;
         this.ID = ID;
@@ -14,26 +14,23 @@ public class Score {
     public Score() {
         this.value = 0;
         this.name = "Undefined_User";
-        this.ID = ID;
+        this.ID = -1;
     }
 
     public String getName() {
         return this.name;
     }
-    public Integer getIDInt(){
-        return this.ID;
-    }
-
-    public String getIDStr(){
-        return this.ID.toString();
-    }
-
-    public void setID(){
-        this.ID = ID;
-    }
-
     public Integer getValue() {
         return this.value;
+    }
+    public String getValuestr(){
+        return this.value.toString();
+    }
+    public Integer getIDint(){
+        return this.ID;
+    }
+    public String getIDstr(){
+        return this.ID.toString();
     }
     public void addScore(int value){
         this.value += value;
@@ -44,8 +41,11 @@ public class Score {
     public void subtractScore(int value) {
         this.value -= value;
     }
-    public void changeName(String name)
+    public void setName(String name)
     {
         this.name = name;
+    }
+    public void setID(Integer ID){
+        this.ID = ID;
     }
 }
