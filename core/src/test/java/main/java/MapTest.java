@@ -1,10 +1,15 @@
 package main.java;
 
+import com.badlogic.gdx.math.Vector2;
 import com.kroy.game.blocks.*;
 import com.kroy.game.entities.*;
 import com.kroy.game.map.Map;
+import com.kroy.game.map.ShortestPathfinder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 
@@ -54,42 +59,121 @@ public class MapTest {
 
     @Test
     public void moveEntity() {
+        Map testmap = new Map();
 
+        //test that moving a null entity has no effect
+        testmap.moveEntity(0,0,1,1);
+        assertNull(testmap.getEntity(1,1));
+        assertNull(testmap.getEntity(0,0));
+
+        //test that moving a fortress entity has no effect
+        testmap.spawnFortress(2,2);
+        testmap.moveEntity(2,2,3,3);
+        assertTrue(testmap.getEntity(2,2) instanceof Fortress);
+        assertNull(testmap.getEntity(3,3));
+
+        //test that moving a truck that has already moved this turn has no effect
+        Firetruck testtruck=testmap.spawnFiretruck(4,4);
+        testtruck.setMovedThisTurn();
+        testmap.moveEntity(4,4,5,5);
+        assertTrue(testmap.getEntity(4,4) instanceof Firetruck);
+        assertNull(testmap.getEntity(5,5));
+
+        //test that moving truck outside truck moving range has no effect
+        testmap.spawnFiretruck(6,6);
+        testmap.moveEntity(6,6,23,23);
+        assertTrue(testmap.getEntity(6,6) instanceof Firetruck);
+        assertNull(testmap.getEntity(23,23));
+
+        //test that moving truck inside truck moving range moves truck to x2, y2
+        testmap.spawnFiretruck(8,8);
+        testmap.moveEntity(8,8,9,9);
+        assertNull(testmap.getEntity(8,8));
+        assertTrue(testmap.getEntity(9,9) instanceof Firetruck);
     }
+
 
     @Test
     public void attackEntity() {
+
     }
 
     @Test
     public void damageLocation() {
+        Map testmap = new Map();
+
+        Firetruck testtruck=testmap.spawnFiretruck(0,0);
+        testmap.damageLocation(2,0,0);
+
+        assertEquals(testtruck.getHealth(),3);
+
+        testmap.damageLocation(3,0,0);
+        assertEquals(testtruck.getHealth(),0);
     }
 
     @Test
     public void isSpaceEmpty() {
+        Map testmap = new Map();
+
+        assertTrue(testmap.isSpaceEmpty(0,0));
+
+        testmap.spawnFiretruck(0,0);
+        assertFalse(testmap.isSpaceEmpty(0,0));
+
+        testmap.spawnObstacle(1,1);
+        assertFalse(testmap.isSpaceEmpty(1,1));
+
     }
 
     @Test
     public void spawnFiretruck() {
+        Map testmap = new Map();
+        testmap.spawnFiretruck(0,0);
+        assertTrue(testmap.getEntity(0,0) instanceof Firetruck );
     }
 
     @Test
     public void spawnBuilding() {
+        Map testmap = new Map();
+        testmap.spawnBuilding(0,0);
+        assertTrue(testmap.getBlock(0,0) instanceof Building );
     }
 
     @Test
     public void spawnFortress() {
+        Map testmap = new Map();
+        testmap.spawnFortress(0,0);
+        assertTrue(testmap.getEntity(0,0) instanceof Fortress );
     }
 
     @Test
     public void spawnFirestation() {
+        Map testmap = new Map();
+        testmap.spawnFirestation(0,0);
+        assertTrue(testmap.getEntity(0,0) instanceof Firestation );
     }
 
     @Test
     public void spawnObstacle() {
+        Map testmap = new Map();
+        testmap.spawnObstacle(0,0);
+        assertTrue(testmap.getBlock(0,0) instanceof Obstacle );
     }
 
     @Test
     public void resetTurn() {
+        Map testmap = new Map();
+
+        Firetruck testtruck=testmap.spawnFiretruck(0,0);
+        testmap.resetTurn();
+        assertFalse(testtruck.hasMovedThisTurn());
+        assertFalse(testtruck.hasAttackedThisTurn());    }
+
+    @Test
+    public void testGetFirestationLocation(){
+        Map testmap = new Map();
+
+        Firestation teststation=testmap.spawnFirestation(0,0);
+        assertEquals(testmap.getFirestationLocation(), new Vector2(0,0));
     }
 }
