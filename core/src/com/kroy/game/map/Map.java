@@ -33,11 +33,7 @@ public class Map
 			}
 		}
 	}
-	
-	public Tile getBackground(int x, int y)
-	{
-		return backgroundLayer[x][y];
-	}
+
 	
 	public Entity getEntity(int x, int y)
 	{

@@ -32,9 +32,9 @@ public class FiretruckTest {
     @Test
     public void testUseWater(){
         Firetruck testtruck = new Firetruck();
-        assertEquals(true,testtruck.useWater());
+        assertTrue(testtruck.useWater());
         testtruck.setWater(0);
-        assertEquals(false,testtruck.useWater());
+        assertFalse(testtruck.useWater());
     }
 
     @Test
