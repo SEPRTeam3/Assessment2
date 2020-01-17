@@ -96,10 +96,27 @@ public class MapTest {
     @Test
     public void attackEntity() {
         Map testmap = new Map();
-        testmap.spawnFirestation(0,0);
-        testmap.spawnFortress(0,2);
+        Firetruck testtruck= testmap.spawnFiretruck(0,0);
+        Fortress testfortress= testmap.spawnFortress(0,2);
 
-        //testmap.attackEntity(0,0);
+        //test a firetruck with appropriate resources attacking a fortress
+        testmap.attackEntity(0,0,0,2);
+        assertEquals(testfortress.getHealth(),3);
+
+        //test a fortress with appropriate resources attacking a firetruck
+        testmap.attackEntity(0,2,0,0);
+        assertEquals(testtruck.getHealth(),4);
+
+        //test attacking  firetruck that has already attacked has no effect
+        testtruck.setAttackedThisTurn();
+        testmap.attackEntity(0,0,0,2);
+        assertEquals(testfortress.getHealth(),3);
+
+        //test a firetruck attacking with no water has no effect
+        testtruck.resetTurn();
+        testtruck.setWater(0);
+        testmap.attackEntity(0,0,0,2);
+        assertEquals(testfortress.getHealth(),3);
     }
 
     @Test
