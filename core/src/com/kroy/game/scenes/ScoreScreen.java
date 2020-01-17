@@ -6,13 +6,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kroy.game.MyGdxGame;
 import com.kroy.game.score.ScoreRanks;
 import com.kroy.game.score.Score;
 import java.util.ArrayList;
-import java.util.List;
 import com.badlogic.gdx.Gdx;
 
 public class ScoreScreen implements Screen
@@ -31,6 +28,13 @@ public class ScoreScreen implements Screen
 		this.batch = new SpriteBatch();
 		this.font = new BitmapFont();
 		this.ScoreRanking = new ScoreRanks(this.game);
+	}
+	public ScoreScreen(final MyGdxGame game, Score playerScore) {
+		this.game = game;
+		this.batch = new SpriteBatch();
+		this.font = new BitmapFont();
+		this.ScoreRanking = new ScoreRanks(this.game);
+		this.ScoreRanking.getPlayerScore(playerScore);
 	}
 
 	private String getString(){

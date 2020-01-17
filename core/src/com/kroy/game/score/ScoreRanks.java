@@ -3,23 +3,22 @@ package com.kroy.game.score;
 import com.kroy.game.MyGdxGame;
 
 import java.io.*;
-import java.util.List;
 import java.util.ArrayList;
 
 public class ScoreRanks {
     final MyGdxGame game;
     private ArrayList<Score> ScoresList;
     private Score newestScore;
+    private String csvFileName = "ScoreData.csv";
 
     public ScoreRanks(final MyGdxGame game){
         this.game = game;
         this.newestScore = null;
-        String csvFileName = "ScoreData.csv";
         this.ScoresList = new ArrayList<>();
-        ReadFile(csvFileName);
+        ReadFile();
 
     }
-    private void ReadFile(String csvFileName){
+    private void ReadFile(){
         try {
             BufferedReader bufferedCsv = new BufferedReader(new FileReader(csvFileName));
             String row;
@@ -30,12 +29,12 @@ public class ScoreRanks {
             }
             bufferedCsv.close();
         } catch(FileNotFoundException e) {
-            TestScores(csvFileName);
+            TestScores();
         } catch(IOException e){
             ;
         }
     }
-    private void WriteFile(String csvFileName){
+    private void WriteFile(){
         try {
             FileWriter csvWriter = new FileWriter(csvFileName);
             for (int i = 0; i < this.ScoresList.size(); i++) {
@@ -53,13 +52,17 @@ public class ScoreRanks {
         }
     }
 
-    private void TestScores(String csvFileName){
+    private void TestScores(){
         for (Integer i = 0; i < 20; i++){
             String tempString = "test" + i.toString();
             Score tempScore = new Score(tempString, i + 1, i + 1);
             this.ScoresList.add(tempScore);
         }
-        WriteFile(csvFileName);
+        WriteFile();
+    }
+
+    public void getPlayerScore(Score playerScore){
+        InsertScore(playerScore.getName(), playerScore.getValue(), false);
     }
 
     private void InsertScore(String newName, Integer newScore, Boolean fromFile){
@@ -75,7 +78,7 @@ public class ScoreRanks {
                         this.ScoresList.add(i, this.newestScore);
                     }
                 }
-            }
+            } WriteFile();
         } else {
             int numScores = this.ScoresList.size();
             this.newestScore = new Score(newName, newScore, numScores + 1);
