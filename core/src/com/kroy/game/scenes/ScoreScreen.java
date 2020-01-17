@@ -18,7 +18,6 @@ public class ScoreScreen implements Screen
 	private SpriteBatch batch;
 	private BitmapFont font;
 	private GlyphLayout layout;
-	//private BitmapFont.TextBounds;
 	private String[] nameList, valueList;
 	private String outputString;
 	private ScoreRanks ScoreRanking;
@@ -28,13 +27,17 @@ public class ScoreScreen implements Screen
 		this.batch = new SpriteBatch();
 		this.font = new BitmapFont();
 		this.ScoreRanking = new ScoreRanks();
+		getOutputs("TopTen");
+		this.outputString = getString();
 	}
 	public ScoreScreen(final MyGdxGame game, Score playerScore) {
 		this.game = game;
 		this.batch = new SpriteBatch();
 		this.font = new BitmapFont();
 		this.ScoreRanking = new ScoreRanks();
-		this.ScoreRanking.getPlayerScore(playerScore);
+		this.ScoreRanking.setPlayerScore(playerScore);
+		getOutputs("TopAndNew");
+		this.outputString = getString();
 	}
 
 	private String getString(){
@@ -50,7 +53,7 @@ public class ScoreScreen implements Screen
 		ArrayList<Score> outputScores = this.ScoreRanking.SelectScores(scoreTypes);
 		this.nameList = new String[10];
 		this.valueList = new String[10];
-		for (int i = 0; i < 10; i++){
+		for (int i = 0; i < 8; i++){
 			this.nameList[i] = outputScores.get(i).getName();
 			this.valueList[i] = outputScores.get(i).getValuestr();
 		}
@@ -67,7 +70,6 @@ public class ScoreScreen implements Screen
 		Gdx.gl.glClearColor(0, 0, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		//bounds = this.font.getData();
 		getOutputs("TopTen");
 		outputString = getString();
 

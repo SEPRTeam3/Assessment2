@@ -57,7 +57,7 @@ public class ScoreRanks {
         WriteFile();
     }
 
-    public void getPlayerScore(Score playerScore){
+    public void setPlayerScore(Score playerScore){
         InsertScore(playerScore.getName(), playerScore.getValue(), false);
     }
 
@@ -94,19 +94,19 @@ public class ScoreRanks {
                 outputScore.add(i, this.ScoresList.get(i));
             } return outputScore;
         } else if(scoreTypes == "TopAndNew"){
-            if (GetRank(this.newestScore) < 11){
+            if (getRank(this.newestScore) < 11){
                 return SelectScores("TopTen");
             }
             for (int i = 0; i < 8; i++){
                 outputScore.add(i, this.ScoresList.get(i));
-            } int rank = GetRank(this.newestScore);
+            } int rank = getRank(this.newestScore);
             outputScore.add(this.ScoresList.get(rank-1));
             outputScore.add(this.ScoresList.get(rank));
             return outputScore;
         }
         return outputScore;
     }
-    private Integer GetRank(Score ScoreToFind){
+    private Integer getRank(Score ScoreToFind){
         return this.ScoresList.indexOf(ScoreToFind);
     }
 }
