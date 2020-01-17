@@ -152,7 +152,7 @@ public class Map
 		}
 	}
 
-	boolean isSpaceEmpty(int x, int y)
+	public boolean isSpaceEmpty(int x, int y)
 	{
 		/*
 		If there is a block or entity in that location, return false, else return true
