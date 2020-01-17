@@ -35,21 +35,6 @@ public class ScoreRanks {
             ;
         }
     }
-
-    private int FileLength(FileReader fileCsv){
-        int lineNumber = 0;
-        try {
-            LineNumberReader lineCsv = new LineNumberReader(fileCsv);
-            while (lineCsv.readLine() != null) {
-                lineNumber++;
-            }
-            lineCsv.close();
-            return lineNumber;
-        }
-        catch(IOException e){
-            return lineNumber;
-        }
-    }
     private void WriteFile(String csvFileName){
         try {
             FileWriter csvWriter = new FileWriter(csvFileName);
