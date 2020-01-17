@@ -27,13 +27,13 @@ public class ScoreScreen implements Screen
 		this.game = game;
 		this.batch = new SpriteBatch();
 		this.font = new BitmapFont();
-		this.ScoreRanking = new ScoreRanks(this.game);
+		this.ScoreRanking = new ScoreRanks();
 	}
 	public ScoreScreen(final MyGdxGame game, Score playerScore) {
 		this.game = game;
 		this.batch = new SpriteBatch();
 		this.font = new BitmapFont();
-		this.ScoreRanking = new ScoreRanks(this.game);
+		this.ScoreRanking = new ScoreRanks();
 		this.ScoreRanking.getPlayerScore(playerScore);
 	}
 

@@ -1,18 +1,14 @@
 package com.kroy.game.score;
 
-import com.kroy.game.MyGdxGame;
-
 import java.io.*;
 import java.util.ArrayList;
 
 public class ScoreRanks {
-    final MyGdxGame game;
     private ArrayList<Score> ScoresList;
     private Score newestScore;
     private String csvFileName = "ScoreData.csv";
 
-    public ScoreRanks(final MyGdxGame game){
-        this.game = game;
+    public ScoreRanks(){
         this.newestScore = null;
         this.ScoresList = new ArrayList<>();
         ReadFile();

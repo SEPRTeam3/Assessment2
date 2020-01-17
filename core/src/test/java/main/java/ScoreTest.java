@@ -8,7 +8,6 @@ import com.kroy.game.score.Score;
 
 @RunWith(GdxTestRunner.class)
 public class ScoreTest {
-
     @Test
     public void getName() {
         Score testScore = new Score("TestName", 10, 1);

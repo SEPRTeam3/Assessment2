@@ -11,5 +11,6 @@ public class ScoreRanksTest {
 
     @Test
     public void selectScores() {
+        ScoreRanks testRanks = new ScoreRanks();
     }
 }
