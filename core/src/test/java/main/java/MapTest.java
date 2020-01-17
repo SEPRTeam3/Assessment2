@@ -99,7 +99,7 @@ public class MapTest {
         testmap.spawnFirestation(0,0);
         testmap.spawnFortress(0,2);
 
-        testmap.attackEntity(0,0);
+        //testmap.attackEntity(0,0);
     }
 
     @Test
