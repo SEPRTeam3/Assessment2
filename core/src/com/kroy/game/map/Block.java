@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 
 public abstract class Block
 {
+	/**
+	 * A block is a map object that is static and cannot perform actions
+	 */
 	protected Texture texture;
 	
 	public Block(){}

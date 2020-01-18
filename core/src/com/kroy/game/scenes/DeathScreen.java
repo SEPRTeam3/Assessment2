@@ -10,7 +10,9 @@ import com.kroy.game.MyGdxGame;
 
 public class DeathScreen implements Screen
 {
-
+    /**
+     * Screen for player death
+     */
     final MyGdxGame game;
     private Viewport viewport;
 
@@ -18,6 +20,7 @@ public class DeathScreen implements Screen
     {
         this.game = game;
         viewport = new FitViewport(10, 10);
+        Gdx.graphics.setWindowedMode(512, 512);
     }
 
     @Override

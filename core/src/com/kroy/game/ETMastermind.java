@@ -10,6 +10,10 @@ import java.util.ArrayList;
 
 public class ETMastermind
 {
+    /**
+     * ET AI class
+     */
+
     private Map map;
     private MapDrawer mapDrawer;
 
@@ -17,6 +21,10 @@ public class ETMastermind
 
     public ETMastermind(Map map, MapDrawer mapDrawer)
     {
+        /**
+         * Constructor for ETMastermind
+         * @param map the Map object for the Mastermind to manipulate in heinous ways
+         */
         this.map = map;
         this.mapDrawer = mapDrawer;
         drawCorruption();
@@ -24,6 +32,10 @@ public class ETMastermind
 
     public int getFortressNumber()
     {
+        /**
+         * Returns the number of fortresses in the map
+         * @return The number of fortresses in the map
+         */
         int count = 0;
         for (int i = 0; i < map.HEIGHT; i++)
         {
@@ -41,15 +53,18 @@ public class ETMastermind
 
     public void takeTurn()
     {
+        /**
+         * Triggers the Mastermind to think deeply and take coordinated action
+         */
+
+        // For each fortress, look for nearby truck to attack
         for (int i = 0; i < map.HEIGHT; i++)
         {
             for (int j = 0; j < map.WIDTH; j++)
             {
                 if (map.getEntity(j, i) != null && map.getEntity(j, i) instanceof Fortress)
                 {
-                    Vector2 fortressLocation = new Vector2(j, i);
                     Fortress f = (Fortress) map.getEntity(j, i);
-                    // For each fortress, look for nearby truck to attack
                     attackNInRadius(f.getAttackStrength(), f.getAttackRadius(), f.getTargetsPerTurn(), j, i);
                 }
             }
@@ -58,6 +73,9 @@ public class ETMastermind
 
     public void levelUpFortresses()
     {
+        /**
+         * Increases the strength of all fortresses in the map by calling 'levelUp' on each of them
+         */
         System.out.println("The fortresses grow stronger...");
         for (int i = 0; i < map.HEIGHT; i++)
         {
@@ -70,11 +88,16 @@ public class ETMastermind
                 }
             }
         }
+
+        // Update corruption
         drawCorruption();
     }
 
     public void drawCorruption()
     {
+        /**
+         * set all tiles reachable by any fortress to be displayed as 'corruption'
+         */
         for (int i = 0; i < map.HEIGHT; i++)
         {
             for (int j = 0; j < map.WIDTH; j++)
@@ -100,8 +123,13 @@ public class ETMastermind
 
     private void attackNInRadius(int damage, int radius, int n, int x, int y)
     {
-        /*
-        Attacks the first n firetrucks found within a radius of (x, y) where the damage dealt is given.
+        /**
+         * Attacks the first n firetrucks found within a radius of (x, y) where the damage dealt is given.
+         * @param damage The number of points of damage to be dealt to the enemy
+         * @param radius The radius of the circle centred at (x, y) within which to deal damage
+         * @param x The x location of the locus
+         * @param y The y location fo the locus
+         * @param n The number of enemies to attack
          */
         int attacksLeft = n;
 

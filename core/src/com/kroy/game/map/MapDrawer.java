@@ -22,7 +22,7 @@ import com.kroy.game.blocks.Obstacle;
 
 public class MapDrawer
 {
-	/*
+	/**
 	 * Object responsible for rendering the tiledmap, entities and blocks
 	 */
 	
@@ -45,28 +45,33 @@ public class MapDrawer
 
 	public MapDrawer(MyGdxGame g, Map m, TiledMap t)
 	{
+		/**
+		 * Initialise the MapDrawer
+		 * @param g the game object
+		 * @param m the map object that the map drawer should render
+		 * @param t the TiledMap object that the drawer should render
+		 */
 		this.game = g;
 		this.frontmap = m;
 		this.backmap = t;
 
 		screenScalingCoefficient = (float) Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth()) / 512f;
 
-
-		viewport = new FitViewport(10, 10); //(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		// Setup camera
+		viewport = new FitViewport(10, 10);
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, (int)backmap.getProperties().get("width") * (int)backmap.getProperties().get("tilewidth"), (int)backmap.getProperties().get("height") * (int)backmap.getProperties().get("tileheight"));
 		camera.translate(new Vector2(0, -((int)backmap.getProperties().get("height") * (int)backmap.getProperties().get("tileheight") / 2)));
 		viewport.setCamera(camera);
-		//viewport.setScreenSize(10, 10);
 		viewport.getCamera().update();
 		camera.zoom = 85f;
 		camera.update();
 
-		highlightTexture = new Texture(Gdx.files.internal("selectTile.png"));
-		SpriteBatch spriteBatch = new SpriteBatch();
-
+		// Setup isometric map renderer
 		backmapRenderer = new IsometricTiledMapRenderer(backmap, 1);
 
+		// Setup map highlights
+		highlightTexture = new Texture(Gdx.files.internal("selectTile.png"));
 		highlightColours = new HighlightColours[Map.HEIGHT][Map.WIDTH];
 		for (int i = 0; i < Map.WIDTH; i++)
 		{
@@ -75,25 +80,31 @@ public class MapDrawer
 				highlightColours[i][j] = HighlightColours.NONE;
 			}
 		}
-
-		System.out.println("UnitScale: " + backmapRenderer.getUnitScale());
-		System.out.println("Viewbounds: " + backmapRenderer.getViewBounds());
 	}
 
 	public void resize(int width, int height)
 	{
+		/**
+		 * Resize the window
+		 * @param width the new width of the window
+		 * @param height the new height of the window
+		 */
 		viewport.update(width, height);
 		viewport.getCamera().update();
 		screenScalingCoefficient = (float) Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth()) / 512f;
-		System.out.println("Viewport dimensions: " + viewport.getScreenWidth() + ", " + viewport.getScreenHeight());
-		System.out.println("Viewpoint origin at: " + getMapViewportOrigin().x + ", " + getMapViewportOrigin().y);
 	}
 
 	public void render()
 	{
+		/**
+		 * Render background map (TiledMap) and foreground map (Map) to screen
+		 */
+
+		// Render background
 		backmapRenderer.setView(camera);
 		backmapRenderer.render();
 
+		// Render foreground
 		game.batch.begin();
 		for (int i = 0; i < Map.WIDTH; i++)
 		{
@@ -154,8 +165,9 @@ public class MapDrawer
 
 	public Vector2 getMapScreenOrigin()
 	{
-		/*
-		Returns the location of the top point of the map as a 2d vector with reference to the whole screen.
+		/**
+		 * Returns the location of the top point of the map as a 2d vector with reference to the whole screen.
+		 * @return map origin in screenspace
 		 */
 		int adjustedHeight = (Gdx.graphics.getHeight() - Gdx.graphics.getWidth()) / 2;
 		return new Vector2(Gdx.graphics.getWidth() / 2,
@@ -165,27 +177,33 @@ public class MapDrawer
 
 	public Vector2 getMapViewportOrigin()
 	{
-		/*
-		Returns the location of the top point of the map as a 2d vector with reference to the viewpoint, which is a
-		subset of the screen, as it does not include the white bars.
+		/**
+		 * Returns the location of the top point of the map as a 2d vector with reference to the viewpoint, which is a
+		 * subset of the screen, as it does not include the white bars.
+		 * @return map origin in viewport space
 		 */
-
 		return new Vector2(255.5f, 496.5f);
 	}
 
 	public Vector2 getMapUpVector()
 	{
-		/*
-		The up vector of the map is a vector that points in the direction of the up axis of the isometric map
-		The up axis is taken to be south-east
-		The length of this vector is the length of an edge of an isometric tile.
+		/**
+		 * The up vector of the map is a vector that points in the direction of the up axis of the isometric map
+		 * The up axis is taken to be south-east
+		 * The length of this vector is the length of an edge of an isometric tile.
+		 * @return unit vector pointing up in tile space
 		 */
 		return new Vector2(TILE_WIDTH, -TILE_WIDTH);
 	}
 
 	public Vector2 getMapRightVector()
 	{
-		// The right vector of the drawn map is the up vector rotated 90 degrees clockwise
+		/**
+		 * The right vector of the map is a vector that points in the direction of the right axis of the isometric map
+		 * The right axis is taken to be south-west
+		 * The length of this vector is the length of an edge of an isometric tile.
+		 * @return unit vector pointing right in tile space
+		 */
 		return new Vector2(-TILE_WIDTH, -TILE_WIDTH);
 	}
 
@@ -199,6 +217,10 @@ public class MapDrawer
 
 	public void highlightBlocks(boolean[][] blocks)
 	{
+		/**
+		 * Highlights all squares given as true in blocks in red
+		 * @param blocks 2*2 matrix the same size as the map
+		 */
 		for (int i = 0; i < Map.WIDTH; i++)
 		{
 			for (int j = 0; j < Map.HEIGHT; j++)
@@ -213,6 +235,11 @@ public class MapDrawer
 
 	public void highlightBlocks(boolean[][] blocks, HighlightColours colour)
 	{
+		/**
+		 * Highlights all squares given as true in blocks in the given colour
+		 * @param colour enum designating the colour of the highlights
+		 * @param blocks 2*2 matrix the same size as the map
+		 */
 		for (int i = 0; i < Map.WIDTH; i++)
 		{
 			for (int j = 0; j < Map.HEIGHT; j++)
@@ -227,22 +254,25 @@ public class MapDrawer
 
 	public Vector2 toMapSpace(Vector2 click)
 	{
-		/*
-		Maps a coordinate as a vector from screenspace to isometric map space.
-		Precondition:
-			Origin is screen bottom left
-			Up vector is screen up
-			Right vector is screen right
-			Scale is the window resolution
-		Postcondition:
-			Origin is the top point of the isometric diamond
-			Up vector is south-east
-			Right vector is south-west
-			Scale is such that one map tile is one unit
+		/**
+		 * Maps a coordinate as a vector from screenspace to isometric map space.
+		 * Precondition:
+		 * 	Origin is screen bottom left
+		 * 	Up vector is screen up
+		 * 	Right vector is screen right
+		 * 	Scale is the window resolution
+		 * Postcondition:
+		 * 	Origin is the top point of the isometric diamond
+		 * 	Up vector is south-east
+		 * 	Right vector is south-west
+		 * 	Scale is such that one map tile is one unit
+		 * If the coordinate is outside of the map, return null
+		 *  @param click coordinates in screen space
 		 */
 		Vector2 clicked;
 
-		if (Gdx.graphics.getHeight() > Gdx.graphics.getWidth())		// Size of grid is bounded by shortest axis
+		// Size of grid is bounded by shortest axis
+		if (Gdx.graphics.getHeight() > Gdx.graphics.getWidth())
 		{
 			clicked = new Vector2
 			(
@@ -258,20 +288,10 @@ public class MapDrawer
 					Gdx.input.getY() - Gdx.graphics.getHeight() * 0.025f
 			);
 		}
-		clicked = clicked.rotate(-45f);	// Rotate
+		clicked = clicked.rotate(-45f);	// Rotate to match isometric perspective
 
-		clicked.x = (float) Math.floor(clicked.x);
+		clicked.x = (float) Math.floor(clicked.x);	// Snap to match tilespace
 		clicked.y = (float) Math.floor(clicked.y);
-		if (Gdx.graphics.getHeight() > Gdx.graphics.getWidth())
-		{
-			int extra = Gdx.graphics.getHeight() - Gdx.graphics.getWidth();
-			int distanceIn = Gdx.input.getY() - extra / 2;
-			float ratio =  (float) distanceIn / (float) Gdx.graphics.getWidth();
-		}
-		else
-		{
-			float ratio =  (float) Gdx.input.getY() / (float) Gdx.graphics.getWidth();
-		}
 
 		// Scale to grid
 		clicked.scl(1f/(getScreenScalingCoefficient()));	// Is relative to the scaling coefficient
@@ -279,6 +299,7 @@ public class MapDrawer
 		clicked.x = (float) Math.floor(clicked.x);	// Floor values
 		clicked.y = (float) Math.floor(clicked.y);
 
+		// If the position is outside of the map, return null
 		if (clicked.x >= 0f && clicked.x < Map.WIDTH && clicked.y >= 0f && clicked.y < Map.HEIGHT)
 		{
 			return clicked;
@@ -291,6 +312,12 @@ public class MapDrawer
 
 	public void setCorruption(int x, int y)
 	{
+		/**
+		 * Corruption is a sprite that appears on the map as a visual representation of ET strength
+		 * Sets location (x,y) to render as 'corrupted'
+		 * @param x The x location of the corruption
+		 * @param y The y location of the corruption
+		 */
 		TiledMapTileLayer tileLayer = (TiledMapTileLayer) backmap.getLayers().get("Corruption");
 		tileLayer.setCell(x, tileLayer.getHeight()-y-1, MapParser.getCorruption(backmap));
 	}
