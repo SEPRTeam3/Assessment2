@@ -275,7 +275,7 @@ public class GameHud {
         int etFortressHealth;
         int etFortressName;
 
-        int labelOffset = 30;
+        int labelOffset =  30;
 
         ftPosY = Gdx.graphics.getHeight() - 40;
         ftPosX = Gdx.graphics.getWidth() - 240;

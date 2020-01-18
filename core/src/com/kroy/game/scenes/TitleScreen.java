@@ -11,6 +11,10 @@ import com.kroy.game.MyGdxGame.eScreen;
 
 public class TitleScreen implements Screen
 {
+	/**
+	 * Title screen
+	 */
+
 	final MyGdxGame game;
 	private Texture titleImage;
 	public TitleScreen(final MyGdxGame game)
@@ -30,7 +34,6 @@ public class TitleScreen implements Screen
 	{
 		
 		// Do inputs
-		
 		if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
 		{
 			System.out.println("Going to game screen");

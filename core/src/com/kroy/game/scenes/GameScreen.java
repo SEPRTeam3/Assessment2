@@ -1,15 +1,19 @@
 package com.kroy.game.scenes;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.kroy.game.ETMastermind;
 import com.kroy.game.MyGdxGame;
 import com.kroy.game.entities.Firestation;
 import com.kroy.game.entities.Firetruck;
+import com.kroy.game.entities.Fortress;
 import com.kroy.game.map.HighlightColours;
 import com.kroy.game.map.Map;
 import com.kroy.game.map.MapDrawer;
@@ -18,7 +22,11 @@ import com.kroy.game.ui.GameHud;
 
 public class GameScreen implements Screen
 {
-	
+	/**
+	 * Screen for main game
+	 */
+
+	// Who's turn it is
 	public enum turnStates
 	{
 		PLAYER,
@@ -27,6 +35,7 @@ public class GameScreen implements Screen
 		POST_ET
 	}
 
+	// The action selected by the player
 	public enum selectedMode
 	{
 		NONE,
@@ -35,38 +44,41 @@ public class GameScreen implements Screen
 	}
 	
 	final MyGdxGame game;
-	
+
+	// Technical objects
 	private Map map;
 	private TiledMap tileMap;
 	private MapDrawer mapDrawer;
 	private GameHud hud;
+	private ETMastermind enemyAI;
 
+	// Variables
+	private int turnNumber = 0;
 	Vector2 selected = null;
 	turnStates turnState;
 	selectedMode selectAction = selectedMode.NONE;
-	private int turnNumber = 0;
 
-	private ETMastermind enemyAI;
-	
+
 	public GameScreen(final MyGdxGame game)
 	{
-		
+		// Initialise technical objects
 		this.game = game;
 		selected = null;
  		turnState = turnStates.PLAYER;
 
-		hud = new GameHud(game.batch, game.skin);
+		// Initialise map
 		map = new Map();
 		tileMap = new TmxMapLoader().load("MapTestF.tmx");
-
-		// Gets truck locations from tilemap
 		MapParser parser = new MapParser();
 		parser.addAll(map, tileMap);
-		map.spawnFortress(5, 5);
 		mapDrawer = new MapDrawer(game, map, tileMap);
-		enemyAI = new ETMastermind(this.map, this.mapDrawer);
 
+		// Initialise HUD
+		hud = new GameHud(game.batch, game.skin);
 		hud.createFireTruckUI(map, game.skin);
+
+		//Initialise enemyAI
+		enemyAI = new ETMastermind(this.map, this.mapDrawer);
 	}
 
 	@Override
@@ -77,24 +89,25 @@ public class GameScreen implements Screen
 	@Override
 	public void render(float delta)
 	{
-		// Render
+		// Render map
 		mapDrawer.viewport.apply();
 		mapDrawer.render();
 
-
+		// Render HUD
 		hud.stage.getViewport().apply();
 		game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-
 		hud.stage.draw();
+
 		// Get player input
-
-
 		switch(turnState)
 		{
 		case PLAYER:
-			if(!hud.menuOpen) {
+			// Update HUD
+			if(!hud.menuOpen) 
+			{
 				hud.setDialog("Player:", "\nPlayer Turn", 4.0f);
 			}
+
 			// Left click handling
 			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
 			{
@@ -112,7 +125,6 @@ public class GameScreen implements Screen
 						// Player clicked firetruck with nothing selected, select firetruck
 						selected = new Vector2(tileX, tileY);
 						hud.createGameTable();
-
 						if(!hud.moveClicked || !hud.attackClicked){
 							selectAction = selectedMode.NONE;
 						}
@@ -134,6 +146,7 @@ public class GameScreen implements Screen
 					}
 					else
 					{
+						// Player clicked on nothing
 						if(!hud.menuOpen) {
 							selectAction = selectedMode.NONE;
 							selected = null;
@@ -145,18 +158,17 @@ public class GameScreen implements Screen
 					// Clicked outside of map
 					if(!hud.clickInTable()) {
 						hud.clickOffInGameTable();
-
+						System.out.print("UI??");
 						selected = null;
 					}
 
 				}
 			}
 
-			// Handling for M key for move action
+			// Player triggers movement
 			if (Gdx.input.isKeyJustPressed(Input.Keys.M) || hud.moveClicked)
 			{
 				hud.moveClicked = false;
-
 				if
 				(
 					selected != null
@@ -170,7 +182,7 @@ public class GameScreen implements Screen
 				}
 			}
 
-			// Handling for N key for attack action
+			// Player triggers attack
 			if (Gdx.input.isKeyJustPressed(Input.Keys.N) || hud.attackClicked)
 			{
 				hud.attackClicked = false;
@@ -187,7 +199,7 @@ public class GameScreen implements Screen
 				}
 			}
 
-			// Handling for B key for restock at base
+			// Player triggers restock
 			if (Gdx.input.isKeyJustPressed(Input.Keys.B) || hud.refillClicked)
 			{
 				hud.refillClicked = false;
@@ -214,11 +226,12 @@ public class GameScreen implements Screen
 				}
 			}
 
-			// Draw highlights around fire engine
+			// Draw highlights for movement or attack patterns
 			if (selected != null && map.getEntity((int)selected.x, (int)selected.y) != null)
 			{
 				if (selectAction == selectedMode.MOVE && map.getEntity((int)selected.x, (int)selected.y) instanceof Firetruck)
 				{
+					// Movement pattern
 					Firetruck f = (Firetruck) map.getEntity((int)selected.x, (int)selected.y);
 					boolean[][] b = new boolean[map.HEIGHT][map.WIDTH];
 					int[][] distanceMatrix = map.pathfinder.getDistanceMatrix((int)selected.x, (int)selected.y);
@@ -231,11 +244,14 @@ public class GameScreen implements Screen
 				}
 				else if (selectAction == selectedMode.ATTACK && map.getEntity((int)selected.x, (int)selected.y) instanceof Firetruck)
 				{
+					// Attack pattern
 					Firetruck f = (Firetruck) map.getEntity((int)selected.x, (int)selected.y);
 					boolean[][] b = new boolean[map.HEIGHT][map.WIDTH];
 					for (int i = 0; i < map.HEIGHT; i++) {
 						for (int j = 0; j < map.WIDTH; j++) {
-							b[i][j] = f.isAttackPossible((int) selected.x, (int) selected.y, j, i);
+							b[i][j] = f.isAttackPossible((int) selected.x, (int) selected.y, j, i)
+									&&
+									map.pathfinder.straightPath((int) selected.x, (int) selected.y, j, i);
 						}
 					}
 					mapDrawer.highlightBlocks(b, HighlightColours.RED);
@@ -243,8 +259,8 @@ public class GameScreen implements Screen
 			}
 
 			// Space key handling
-			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || hud.endTurnClicked)
-			{
+			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
+			{	
 				hud.endTurnClicked = false;
 				this.turnState = turnStates.POST_PLAYER;
 			}
@@ -252,6 +268,7 @@ public class GameScreen implements Screen
 			if (enemyAI.getFortressNumber() == 0)
 			{
 				System.out.println("Victory!");
+				// Transition to scorescreen
 				game.setScreen(new ScoreScreen(game));
 			}
 
@@ -260,20 +277,17 @@ public class GameScreen implements Screen
 
 		case POST_PLAYER:
 			this.turnState = turnStates.ET;
-
 			break;
 			
 		case ET:
 			System.out.println("ETs are taking their turn");
 			hud.setDialog("ETs:", "\nETs are taking \ntheir turn", 0.0f);
-
-
 			enemyAI.takeTurn();
 			this.turnState = turnStates.POST_ET;
 			break;
 			
 		case POST_ET:
-			// Condition for failure
+			// Test for failure
 			int firetrucks = 0;
 			for (int i = 0; i < map.HEIGHT; i++)
 			{

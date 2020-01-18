@@ -2,10 +2,8 @@ package com.kroy.game.map;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import com.kroy.game.blocks.Building;
 import com.kroy.game.blocks.Obstacle;
 import com.kroy.game.entities.*;
-import com.kroy.game.map.tiles.Grass;
 
 import java.util.*;
 
@@ -13,8 +11,7 @@ public class Map
 {
 	public final static int HEIGHT = 24;
 	public final static int WIDTH = 24;
-	
-	private Tile backgroundLayer[][] = new Tile[WIDTH][HEIGHT];
+
 	private Entity entityLayer[][] = new Entity[WIDTH][HEIGHT];
 	private Block blockLayer[][] = new Block[WIDTH][HEIGHT];
 
@@ -22,12 +19,13 @@ public class Map
 	
 	public Map()
 	{
+		/**
+		 * Map constructor, initialises all tiles to null
+		 */
 		for (int i = 0; i < HEIGHT; i++)
 		{
 			for (int j = 0; j < WIDTH; j++)
 			{
-				backgroundLayer[j][i] = new Grass();
-				backgroundLayer[j][i] = new Grass();
 				entityLayer[j][i] = null;
 				blockLayer[j][i] = null;
 			}
@@ -35,22 +33,21 @@ public class Map
 	}
 
 	
-	public Entity getEntity(int x, int y)
-	{
-		return entityLayer[x][y];
-	}
+	public Entity getEntity(int x, int y) { return entityLayer[x][y]; }
 	
-	public Block getBlock(int x, int y)
-	{
-		return blockLayer[x][y];
-	}
+	public Block getBlock(int x, int y) { return blockLayer[x][y]; }
 
 	public void moveEntity(int x1, int y1, int x2, int y2)
 	{
-		/* Moves entity from (x1, y1) to (x2, y2) if the move is legal
-		 * 
+		/**
+		 * Moves entity from (x1, y1) to (x2, y2) if the move is legal
+		 * @param x1 x location of the entity to be moved
+		 * @param y1 y location of the entity to be moved
+		 * @param x2 x location to move to
+		 * @param y2 y location to move to
 		 */
-		
+
+		// If there is no entity at (x1, y1) do nothing
 		if (entityLayer[x1][y1] == null)
 		{
 			return;
@@ -60,6 +57,8 @@ public class Map
 		
 		if (e != null && e instanceof Firetruck)
 		{
+			// If entity is firetruck
+
 			Firetruck f = (Firetruck) e;
 			// Check if the firetruck has moved this turn
 			if (!f.hasMovedThisTurn())
@@ -86,8 +85,12 @@ public class Map
 
 	public void attackEntity(int x1, int y1, int x2, int y2)
 	{
-		/*
-		The entity at (x1, y1) attacks at (x2, y2) if it is possible to do so
+		/**
+		 * The entity at (x1, y1) attacks at (x2, y2) if it is possible to do so
+		 * @param x1 the x location of the attacking entity
+		 * @param y1 the y location of the attacking entity
+		 * @param x2 the x location that is attacked
+		 * @param y2 the y location that is attacked
 		 */
 		// Add pre-check that locations are within map
 		if (entityLayer[x1][y1] != null)
@@ -95,13 +98,28 @@ public class Map
 			if (entityLayer[x1][y1] instanceof Firetruck)
 			{
 				Firetruck f = (Firetruck) entityLayer[x1][y1];
-				if (!f.hasAttackedThisTurn())
+
+				if
+				(
+					!f.hasAttackedThisTurn()
+				)
 				{
 					boolean hasEnoughWater = f.useWater();
 					if (hasEnoughWater)
 					{
-						damageLocation(f.getAttackStrength(), x2, y2);
-						f.setAttackedThisTurn();
+						if (pathfinder.straightPath(x1, y1, x2, y2))
+						{
+							damageLocation(f.getAttackStrength(), x2, y2);
+							f.setAttackedThisTurn();
+						}
+						else
+						{
+							System.out.println("There was something in the way");
+						}
+					}
+					else
+					{
+						System.out.println("The fire truck didn't have any water");
 					}
 				}
 				else
@@ -129,6 +147,13 @@ public class Map
 
 	public void damageLocation(int amount, int x, int y)
 	{
+		/**
+		 * Deals a given amount of damage to any entity at (x, y)
+		 * @param amount The amount of damage points to deal
+		 * @param x The x location to deal damage to
+		 * @param y The y location to deal damage to
+		 */
+
 		if ((x >= 0 && x < WIDTH) && (y >= 0 && y < HEIGHT))
 		{
 			if (entityLayer[x][y] != null && entityLayer[x][y] instanceof DamageableEntity)
@@ -138,7 +163,7 @@ public class Map
 				if (destroyed)
 				{
 					entityLayer[x][y] = new DestroyedEntity();
-					System.out.println("You killed a thing.");
+					System.out.println("Entity was destroyed");
 				}
 			}
 			else
@@ -154,50 +179,84 @@ public class Map
 
 	public boolean isSpaceEmpty(int x, int y)
 	{
-		/*
-		If there is a block or entity in that location, return false, else return true
+		/**
+		 * Returns whether location (x, y) is empty
+		 * @param x The x location to test
+		 * @param y The y location to test
+		 * @return true if the location contains no blocks or entities, else false
 		 */
 		return entityLayer[x][y] == null && blockLayer[x][y] == null;
 	}
 	
 	public Firetruck spawnFiretruck(int x, int y)
 	{
+		/**
+		 * Create firetruck at (x, y) with the default stats
+		 * @param x The x location to spawn
+		 * @param y The y location to spawn
+		 * @return A reference to the firetruck that was spawned
+		 */
 		entityLayer[x][y] = new Firetruck();
 		return (Firetruck) entityLayer[x][y];
 	}
 
-	public Firetruck spawnFiretruck(int x, int y, Texture texture, int maxMove, int maxHealth, int maxWater)
+	public Firetruck spawnFiretruck(int x, int y, Texture texture, int maxMove, int maxHealth, int maxWater, int attackDistance, int attackStrength)
 	{
-		entityLayer[x][y] = new Firetruck(texture, maxMove, maxHealth, maxWater);
+		/**
+		 * Create firetruck at (x, y) specifying the stats
+		 * @param texture texture for the Firetruck
+		 * @param maxMove maximum movement distance for the Firetruck
+		 * @param maxHealth maximum health for the Firetruck
+		 * @param maxWater maximum water capacity for the Firetruck
+		 * @param attackDistance maxmimum attacking distance for the Firetruck
+		 * @param attackStrength the number of points of damage dealt by the firetruck
+		 * @return A reference to the firetruck that was spawned
+		 */
+		entityLayer[x][y] = new Firetruck(texture, maxMove, maxHealth, maxWater, attackDistance, attackStrength);
 		return (Firetruck) entityLayer[x][y];
-	}
-	
-	public Building spawnBuilding(int x, int y)
-	{
-		blockLayer[x][y] = new Building();
-		return (Building) blockLayer[x][y];
 	}
 
 	public Fortress spawnFortress(int x, int y)
 	{
+		/**
+		 * Create fortress at (x, y)
+		 * @param x The x location to spawn
+		 * @param y The y location to spawn
+		 * @return A reference to the fortress that was spawned
+		 */
 		entityLayer[x][y] = new Fortress();
 		return (Fortress) entityLayer[x][y];
 	}
 
 	public Firestation spawnFirestation(int x, int y)
 	{
+		/**
+		 * Create firestation at (x, y)
+		 * @param x The x location to spawn
+		 * @param y The y location to spawn
+		 * @return A reference to the firestation that was spawned
+		 */
 		entityLayer[x][y] = new Firestation();
 		return (Firestation) entityLayer[x][y];
 	}
 
 	public Obstacle spawnObstacle(int x, int y)
 	{
+		/**
+		 * Create an obstacle at (x, y)
+		 * @param x The x location to spawn
+		 * @param y The y location to spawn
+		 * @return A reference to the obstacle that was spawned
+		 */
 		blockLayer[x][y] = new Obstacle();
 		return (Obstacle) blockLayer[x][y];
 	}
 	
 	public void resetTurn()
 	{
+		/**
+		 * Calls reset turn on every entity in the map
+		 */
 		for (int i = 0; i < HEIGHT; i++)
 		{
 			for (int j = 0; j < WIDTH; j++)
@@ -213,6 +272,10 @@ public class Map
 
 	public Vector2 getFirestationLocation()
 	{
+		/**
+		 * Gets the location of the firestation as a 2-vector
+		 * @return firestation location
+		 */
 		for (int i = 0; i < HEIGHT; i++)
 		{
 			for (int j = 0; j < WIDTH; j++)

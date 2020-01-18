@@ -8,6 +8,9 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class MapParser
 {
+    /**
+     * Class for turning elements of the tiled map into interactive objects in the map
+     */
     public MapParser() {}
 
     private int firetrucksAdded = 0;
@@ -17,6 +20,11 @@ public class MapParser
 
     public void addAll(Map map, TiledMap tilemap)
     {
+        /**
+         * spawns all entities designated in the tilemap
+         * @param map the Map object to add entities to
+         * @param tilemap the TiledMap object to read layers from
+         */
         addTrucks(map, tilemap);
         addObstacles(map, tilemap);
         addFortresses(map, tilemap);
@@ -37,11 +45,11 @@ public class MapParser
                     switch (firetrucksAdded)
                     {
                         case 0:
-                            map.spawnFiretruck(x,tileLayer.getHeight()-y-1, truckOneTexture, 3, 10, 10);
+                            map.spawnFiretruck(x,tileLayer.getHeight()-y-1, truckOneTexture, 3, 10, 10, 10, 1);
                             firetrucksAdded++;
                             break;
                         case 1:
-                            map.spawnFiretruck(x,tileLayer.getHeight()-y-1, truckTwoTexture, 10, 3, 1);
+                            map.spawnFiretruck(x,tileLayer.getHeight()-y-1, truckTwoTexture, 10, 3, 1, 5, 2);
                             firetrucksAdded++;
                             break;
                         default:

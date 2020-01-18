@@ -53,8 +53,7 @@ public class MapTest {
 
         //testing other entities and any other values on the map
         assertNull(testmap.getBlock(22, 2));
-        testmap.spawnBuilding(22,2);
-        assertTrue(testmap.getBlock(22,2) instanceof Building);
+
     }
 
     @Test
@@ -162,13 +161,6 @@ public class MapTest {
         Map testmap = new Map();
         testmap.spawnFiretruck(0,0);
         assertTrue(testmap.getEntity(0,0) instanceof Firetruck );
-    }
-
-    @Test
-    public void spawnBuilding() {
-        Map testmap = new Map();
-        testmap.spawnBuilding(0,0);
-        assertTrue(testmap.getBlock(0,0) instanceof Building );
     }
 
     @Test
