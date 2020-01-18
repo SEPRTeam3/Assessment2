@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.kroy.game.entities.Entity;
 import com.kroy.game.entities.Firetruck;
 import com.kroy.game.entities.Fortress;
 import com.kroy.game.map.Map;
@@ -32,6 +33,8 @@ public class GameHud {
     private Table backgroundDialogTable;
     private Table backgroundTurnStateTable;
 
+
+
     private TextureRegionDrawable textureRegionDrawableBg;
 
     private Label test;
@@ -39,7 +42,7 @@ public class GameHud {
     private ImageButton image;
     private Label turnState, dialog, difficultyLabel;
 
-    private Label[] fireTruckStats = new Label[2];
+    private Label[] fireTruckStats = new Label[2], etFortressStats = new Label[3];
     private Image[] fireTruckImg = new Image[2], etFortressImg = new Image[3];
 
     private Image player;
@@ -186,7 +189,7 @@ public class GameHud {
         turnStateTable.add(turnState);
         turnStateTable.row();
         turnStateTable.add(endTurn);
-        setFireTruckUI(skin);
+
 
         stage.addActor(difficultyLabel);
         stage.addActor(player);
@@ -200,11 +203,26 @@ public class GameHud {
     }
 
     public void createGameTable() {
+        float midHeight = Gdx.graphics.getHeight()/2;
+        float midWidth = Gdx.graphics.getWidth()/2;
+
+        float tableHeight = inGameTable.getHeight();
+        float tableWidth = inGameTable.getWidth();
+
         menuOpen = true;
         moveClicked = attackClicked = waitClicked = refillClicked = false;
-        Vector2 position = stage.screenToStageCoordinates( new Vector2(Gdx.input.getX(), Gdx.input.getY()) );
+        Vector2 position = stage.screenToStageCoordinates( new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
-        inGameTable.setPosition(position.x ,position.y);
+        if(position.x <= midWidth && position.y <= midHeight) {
+            inGameTable.setPosition(position.x ,position.y);
+        } else if (position.x >= midWidth && position.y <= midHeight) {
+            inGameTable.setPosition(position.x-tableWidth, position.y);
+        } else if (position.x <= midWidth && position.y >= midHeight) {
+            inGameTable.setPosition(position.x, position.y-tableHeight);
+        } else {
+            inGameTable.setPosition(position.x-tableWidth, position.y-tableHeight);
+        }
+
         inGameTable.setVisible(true);
 
     }
@@ -220,20 +238,21 @@ public class GameHud {
             switch (voice) {
                 case "Narrator:":
                     dialog.setText(voice + statement);
-
+                    backgroundDialogTable.setBackground(new TextureRegionDrawable(tableBackground(Color.GOLDENROD)));
                     break;
                 case "ETs":
                 case "Player":
                     dialog.setText(voice + ":" + statement);
+                    backgroundDialogTable.setBackground(new TextureRegionDrawable(tableBackground(Color.SKY)));
                     break;
                 case "ETs:":
-                    backgroundDialogTable.setBackground(new TextureRegionDrawable(tableBackground(Color.RED)));
+
                     backgroundTurnStateTable.setBackground(new TextureRegionDrawable(tableBackground(Color.RED)));
                     turnState.setText(voice + statement);
 
                     break;
                 case "Player:":
-                    backgroundDialogTable.setBackground(new TextureRegionDrawable(tableBackground(Color.SKY)));
+
                     backgroundTurnStateTable.setBackground(new TextureRegionDrawable(tableBackground(Color.SKY)));
                     turnState.setText(voice + statement);
                     break;
@@ -272,10 +291,10 @@ public class GameHud {
         int y = 0;
         int waterLevel;
         int firetruckHealth;
-        int etFortressHealth;
-        int etFortressName;
+        int maxWaterLevel;
+        int maxFireTruckHealth;
 
-        int labelOffset =  30;
+        int labelOffset = 30;
 
         ftPosY = Gdx.graphics.getHeight() - 40;
         ftPosX = Gdx.graphics.getWidth() - 240;
@@ -291,15 +310,23 @@ public class GameHud {
                 {
 
                     Firetruck f = (Firetruck) map.getEntity(i, j);
+                    f.restock();
                     waterLevel = f.getWater();
+                    maxWaterLevel = f.getMaxWater();
                     firetruckHealth = f.getHealth();
-                    String stats = String.format("Health: %s \nWater Level: %s", firetruckHealth, waterLevel);
+                    maxFireTruckHealth = f.getMaxHealth();
+
+                    String stats = String.format("Health: %s/%s \nWater Level: %s/%s", firetruckHealth, maxFireTruckHealth ,waterLevel, maxWaterLevel);
 
                     fireTruckImg[x] = new Image(fireTruckIconTexture);
                     fireTruckImg[x].setPosition(ftPosX, ftPosY);
                     fireTruckImg[x].setScale(0.3f);
 
+                    if(x == 0) {
+                        fireTruckImg[x].setColor(Color.CYAN);
+                    }
                     fireTruckStats[x] = new Label(stats, skin);
+
                     fireTruckStats[x].setPosition(ftPosX + labelOffset, ftPosY);
                     fireTruckStats[x].setSize(20, 20);
                     fireTruckStats[x].setFontScale(0.8f);
@@ -317,19 +344,89 @@ public class GameHud {
                         Fortress f = (Fortress) map.getEntity(i, j);
                         int fortressHealth = f.getHealth();
 
+                        String stats = String.format("Health: %s \n", fortressHealth);
+
                         etFortressImg[y] = new Image(etFortressIconTexture);
                         etFortressImg[y].setPosition(etPosX, etPosY);
 
+                        etFortressStats[y] = new Label(stats, skin);
+
+                        etFortressStats[y].setPosition(etPosX + labelOffset, etPosY);
+                        etFortressStats[y].setSize(20, 20);
+                        etFortressStats[y].setFontScale(0.8f);
+                        etFortressStats[y].setColor(Color.BLACK);
 
                         stage.addActor(etFortressImg[y]);
-                        etPosX += 40;
-                        etPosY -= 40;
+                        stage.addActor(etFortressStats[y]);
+
+                        etPosX += 30;
+                        etPosY -= 30;
                         y++;
                     }
                 }
             }
         }
 
+
+    }
+    public void getEntityStats(Firetruck f) {
+        boolean movedThisTurn = f.hasAttackedThisTurn();
+        boolean attackedThisTurn = f.hasAttackedThisTurn();
+
+        int movementDistance = f.getMovementDistance();
+        int attackDistance = f.getAttackDistance();
+
+        int attackStrength = f.getAttackStrength();
+
+        int maxHealth = f.getMaxHealth();
+        int health = f.getHealth();
+        int maxWater = f.getMaxWater();
+        int water = f.getWater();
+    }
+    public void getEntityStats(Fortress f) {
+
+    }
+    public void updateStatsUI(Map map) {
+        int waterLevel;
+        int firetruckHealth;
+        int maxWaterLevel;
+        int maxFireTruckHealth;
+        int x = 0;
+        int y = 0;
+
+        for (int i = 0; i < map.HEIGHT; i++)
+        {
+            for (int j = 0; j < map.WIDTH; j++)
+            {
+                if (map.getEntity(i, j) != null && map.getEntity(i, j) instanceof Firetruck)
+                {
+
+                    Firetruck f = (Firetruck) map.getEntity(i, j);
+                    waterLevel = f.getWater();
+                    maxWaterLevel = f.getMaxWater();
+
+                    firetruckHealth = f.getHealth();
+                    maxFireTruckHealth = f.getMaxHealth();
+                    String stats = String.format("Health: %s/%s \n Water Level: %s/%s", firetruckHealth, maxFireTruckHealth, waterLevel, maxWaterLevel);
+
+                    fireTruckStats[x].setText(stats);
+
+                    x++;
+
+                } else if(map.getEntity(i, j) != null && map.getEntity(i, j) instanceof Fortress) {
+                    if(y < 3) {
+                        Fortress f = (Fortress) map.getEntity(i, j);
+                        int fortressHealth = f.getHealth();
+
+                        String stats = String.format("Health: %s \n", fortressHealth);
+
+                        etFortressStats[y].setText(stats);
+
+                        y++;
+                    }
+                }
+            }
+        }
 
     }
 
@@ -340,10 +437,6 @@ public class GameHud {
     }
     public void updateDifficulty(int difficulty) {
         difficultyLabel.setText(String.format("Difficulty Level %d", difficulty));
-    }
-    public void setFireTruckUI(Skin skin) {
-
-
     }
 
     public void dispose(){
