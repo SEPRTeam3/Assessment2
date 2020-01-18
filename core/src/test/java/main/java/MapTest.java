@@ -90,6 +90,17 @@ public class MapTest {
         testmap.moveEntity(8,8,9,9);
         assertNull(testmap.getEntity(8,8));
         assertTrue(testmap.getEntity(9,9) instanceof Firetruck);
+
+        testmap.spawnFiretruck(22,22);
+        testmap.moveEntity(22,22,23,23);
+        assertNull(testmap.getEntity(22,22));
+        assertTrue(testmap.getEntity(23,23) instanceof Firetruck);
+
+        testmap.spawnFiretruck(0,0);
+        testmap.moveEntity(0,0,1,1);
+        assertNull(testmap.getEntity(0,0));
+        assertTrue(testmap.getEntity(1,1) instanceof Firetruck);
+
     }
 
 

@@ -1,0 +1,539 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameHud</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.kroy.game.ui</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameHud (com.kroy.game.ui)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameHud</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 146)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GameHud$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">GameHud$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">GameHud$3</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">GameHud$4</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">GameHud$5</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 21)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 171)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;
+<i>2</i>&nbsp;package com.kroy.game.ui;
+<i>3</i>&nbsp;
+<i>4</i>&nbsp;import com.badlogic.gdx.Gdx;
+<i>5</i>&nbsp;import com.badlogic.gdx.graphics.Color;
+<i>6</i>&nbsp;import com.badlogic.gdx.graphics.OrthographicCamera;
+<i>7</i>&nbsp;import com.badlogic.gdx.graphics.Pixmap;
+<i>8</i>&nbsp;import com.badlogic.gdx.graphics.Texture;
+<i>9</i>&nbsp;import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+<i>10</i>&nbsp;import com.badlogic.gdx.graphics.g2d.TextureRegion;
+<i>11</i>&nbsp;import com.badlogic.gdx.math.Vector2;
+<i>12</i>&nbsp;import com.badlogic.gdx.scenes.scene2d.InputEvent;
+<i>13</i>&nbsp;import com.badlogic.gdx.scenes.scene2d.Stage;
+<i>14</i>&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.*;
+<i>15</i>&nbsp;import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+<i>16</i>&nbsp;import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+<i>17</i>&nbsp;import com.badlogic.gdx.utils.Align;
+<i>18</i>&nbsp;import com.badlogic.gdx.utils.viewport.FitViewport;
+<i>19</i>&nbsp;import com.badlogic.gdx.utils.viewport.StretchViewport;
+<i>20</i>&nbsp;import com.badlogic.gdx.utils.viewport.Viewport;
+<i>21</i>&nbsp;import com.kroy.game.entities.Firetruck;
+<i>22</i>&nbsp;import com.kroy.game.entities.Fortress;
+<i>23</i>&nbsp;import com.kroy.game.map.Map;
+<i>24</i>&nbsp;
+<b class="nc"><i>25</i>&nbsp;public class GameHud {</b>
+<i>26</i>&nbsp;    private OrthographicCamera camera;
+<i>27</i>&nbsp;    public Stage stage;
+<i>28</i>&nbsp;    private Viewport viewport;
+<i>29</i>&nbsp;    private Table inGameTable;
+<i>30</i>&nbsp;    private Table turnStateTable;
+<i>31</i>&nbsp;    private Table dialogTable;
+<i>32</i>&nbsp;    private Table backgroundDialogTable;
+<i>33</i>&nbsp;    private Table backgroundTurnStateTable;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    private TextureRegionDrawable textureRegionDrawableBg;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    private Label test;
+<i>38</i>&nbsp;    private TextButton attack, move, refill, wait, endTurn;
+<i>39</i>&nbsp;    private ImageButton image;
+<i>40</i>&nbsp;    private Label turnState, dialog, difficultyLabel;
+<i>41</i>&nbsp;
+<b class="nc"><i>42</i>&nbsp;    private Label[] fireTruckStats = new Label[2];</b>
+<b class="nc"><i>43</i>&nbsp;    private Image[] fireTruckImg = new Image[2], etFortressImg = new Image[3];</b>
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    private Image player;
+<i>46</i>&nbsp;    private Texture playerIconTexture, fireTruckIconTexture, etFortressIconTexture;
+<i>47</i>&nbsp;    public boolean attackClicked, moveClicked, refillClicked, waitClicked, endTurnClicked, menuOpen;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    private int sizeX, sizeY;
+<i>50</i>&nbsp;    public int difficulty;
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    public int ftPosY, ftPosX, etPosY, etPosX;
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;
+<b class="nc"><i>57</i>&nbsp;    public GameHud(SpriteBatch batch, Skin skin) {</b>
+<b class="nc"><i>58</i>&nbsp;        sizeX = 140;</b>
+<b class="nc"><i>59</i>&nbsp;        sizeY = 80;</b>
+<i>60</i>&nbsp;
+<b class="nc"><i>61</i>&nbsp;        difficulty = 1;</b>
+<b class="nc"><i>62</i>&nbsp;        difficultyLabel = new Label(&quot;Difficulty Level: &quot; + difficulty, skin);</b>
+<b class="nc"><i>63</i>&nbsp;        difficultyLabel.setPosition(60, 445);</b>
+<b class="nc"><i>64</i>&nbsp;        difficultyLabel.setColor(Color.BLACK);</b>
+<i>65</i>&nbsp;
+<b class="nc"><i>66</i>&nbsp;        playerIconTexture = new Texture(Gdx.files.internal(&quot;fox-1.png.png&quot;));</b>
+<b class="nc"><i>67</i>&nbsp;        player = new Image(playerIconTexture);</b>
+<b class="nc"><i>68</i>&nbsp;        player.setPosition(10, 430);</b>
+<b class="nc"><i>69</i>&nbsp;        player.setScale(0.3f);</b>
+<i>70</i>&nbsp;
+<b class="nc"><i>71</i>&nbsp;        fireTruckIconTexture = new Texture(Gdx.files.internal(&quot;fire engine 64 by 64-1.png.png&quot;));</b>
+<b class="nc"><i>72</i>&nbsp;        etFortressIconTexture = new Texture(Gdx.files.internal(&quot;etFortress.png&quot;));</b>
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;
+<b class="nc"><i>75</i>&nbsp;        attackClicked = moveClicked = refillClicked = waitClicked = false;</b>
+<b class="nc"><i>76</i>&nbsp;        menuOpen = false;</b>
+<i>77</i>&nbsp;
+<b class="nc"><i>78</i>&nbsp;        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());</b>
+<i>79</i>&nbsp;        //viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+<b class="nc"><i>80</i>&nbsp;        viewport.apply(true);</b>
+<i>81</i>&nbsp;
+<b class="nc"><i>82</i>&nbsp;        stage = new Stage(viewport, batch);</b>
+<i>83</i>&nbsp;
+<b class="nc"><i>84</i>&nbsp;        attack = new TextButton(&quot;attack&quot;, skin);</b>
+<b class="nc"><i>85</i>&nbsp;        attack.addListener(new ClickListener() {</b>
+<i>86</i>&nbsp;            @Override
+<i>87</i>&nbsp;            public void clicked(InputEvent event, float x, float y){
+<b class="nc"><i>88</i>&nbsp;                System.out.println(&quot;Clicked!&quot;);</b>
+<b class="nc"><i>89</i>&nbsp;                attackClicked = true;</b>
+<b class="nc"><i>90</i>&nbsp;                inGameTable.setVisible(false);</b>
+<b class="nc"><i>91</i>&nbsp;                menuOpen = false;</b>
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;            }
+<i>94</i>&nbsp;        });
+<i>95</i>&nbsp;
+<b class="nc"><i>96</i>&nbsp;        move = new TextButton(&quot;move&quot;, skin);</b>
+<b class="nc"><i>97</i>&nbsp;        move.addListener(new ClickListener() {</b>
+<i>98</i>&nbsp;            @Override
+<i>99</i>&nbsp;            public void clicked(InputEvent event, float x, float y){
+<b class="nc"><i>100</i>&nbsp;                System.out.println(&quot;Clicked!&quot;);</b>
+<b class="nc"><i>101</i>&nbsp;                moveClicked = true;</b>
+<b class="nc"><i>102</i>&nbsp;                inGameTable.setVisible(false);</b>
+<b class="nc"><i>103</i>&nbsp;                menuOpen = false;</b>
+<i>104</i>&nbsp;
+<i>105</i>&nbsp;            }
+<i>106</i>&nbsp;        });
+<b class="nc"><i>107</i>&nbsp;        refill = new TextButton(&quot;refill&quot;, skin);</b>
+<b class="nc"><i>108</i>&nbsp;        refill.addListener(new ClickListener() {</b>
+<i>109</i>&nbsp;            @Override
+<i>110</i>&nbsp;            public void clicked(InputEvent event, float x, float y){
+<b class="nc"><i>111</i>&nbsp;                System.out.println(&quot;Clicked!&quot;);</b>
+<b class="nc"><i>112</i>&nbsp;                refillClicked = true;</b>
+<b class="nc"><i>113</i>&nbsp;                inGameTable.setVisible(false);</b>
+<b class="nc"><i>114</i>&nbsp;                menuOpen = false;</b>
+<i>115</i>&nbsp;            }
+<i>116</i>&nbsp;        });
+<i>117</i>&nbsp;
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;
+<b class="nc"><i>120</i>&nbsp;        wait = new TextButton(&quot;wait&quot;, skin);</b>
+<b class="nc"><i>121</i>&nbsp;        wait.addListener(new ClickListener() {</b>
+<i>122</i>&nbsp;            @Override
+<i>123</i>&nbsp;            public void clicked(InputEvent event, float x, float y){
+<b class="nc"><i>124</i>&nbsp;                System.out.println(&quot;Clicked!&quot;);</b>
+<b class="nc"><i>125</i>&nbsp;                waitClicked = true;</b>
+<b class="nc"><i>126</i>&nbsp;                inGameTable.setVisible(false);</b>
+<b class="nc"><i>127</i>&nbsp;                menuOpen = false;</b>
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;            }
+<i>130</i>&nbsp;        });
+<i>131</i>&nbsp;
+<b class="nc"><i>132</i>&nbsp;        endTurn = new TextButton(&quot;End Turn&quot;, skin);</b>
+<b class="nc"><i>133</i>&nbsp;        endTurn.addListener(new ClickListener() {</b>
+<i>134</i>&nbsp;            @Override
+<i>135</i>&nbsp;            public void clicked(InputEvent event, float x, float y){
+<b class="nc"><i>136</i>&nbsp;                System.out.println(&quot;Clicked!&quot;);</b>
+<b class="nc"><i>137</i>&nbsp;                endTurnClicked = true;</b>
+<b class="nc"><i>138</i>&nbsp;                inGameTable.setVisible(false);</b>
+<b class="nc"><i>139</i>&nbsp;                menuOpen = false;</b>
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;            }
+<i>142</i>&nbsp;        });
+<i>143</i>&nbsp;
+<b class="nc"><i>144</i>&nbsp;        inGameTable = new Table();</b>
+<b class="nc"><i>145</i>&nbsp;        inGameTable.setBackground(skin.getDrawable(&quot;default-scroll&quot;));</b>
+<b class="nc"><i>146</i>&nbsp;        inGameTable.setSize(60, 120);</b>
+<i>147</i>&nbsp;
+<b class="nc"><i>148</i>&nbsp;        inGameTable.add(attack).padBottom(2);</b>
+<b class="nc"><i>149</i>&nbsp;        inGameTable.row();</b>
+<b class="nc"><i>150</i>&nbsp;        inGameTable.add(move).padBottom(2);</b>
+<b class="nc"><i>151</i>&nbsp;        inGameTable.row();</b>
+<b class="nc"><i>152</i>&nbsp;        inGameTable.add(refill).padBottom(2);</b>
+<b class="nc"><i>153</i>&nbsp;        inGameTable.row();</b>
+<b class="nc"><i>154</i>&nbsp;        inGameTable.add(wait);</b>
+<i>155</i>&nbsp;
+<b class="nc"><i>156</i>&nbsp;        inGameTable.setVisible(false);</b>
+<i>157</i>&nbsp;
+<b class="nc"><i>158</i>&nbsp;        backgroundDialogTable = new Table();</b>
+<b class="nc"><i>159</i>&nbsp;        backgroundDialogTable.setSize(sizeX+6, sizeY+6);</b>
+<b class="nc"><i>160</i>&nbsp;        backgroundDialogTable.setBackground(new TextureRegionDrawable(tableBackground(Color.GOLDENROD)));</b>
+<b class="nc"><i>161</i>&nbsp;        backgroundDialogTable.setPosition(17, 17);</b>
+<i>162</i>&nbsp;
+<b class="nc"><i>163</i>&nbsp;        dialog = new Label(&quot;Narrator:\n Welcome savior\n Please save York&quot;, skin);</b>
+<b class="nc"><i>164</i>&nbsp;        dialog.setAlignment(Align.left);</b>
+<i>165</i>&nbsp;
+<b class="nc"><i>166</i>&nbsp;        dialogTable = new Table();</b>
+<b class="nc"><i>167</i>&nbsp;        dialogTable.setSize(sizeX, sizeY);</b>
+<b class="nc"><i>168</i>&nbsp;        dialogTable.setBackground(skin.getDrawable(&quot;default-scroll&quot;));</b>
+<b class="nc"><i>169</i>&nbsp;        dialogTable.setPosition(20, 20);</b>
+<i>170</i>&nbsp;
+<b class="nc"><i>171</i>&nbsp;        dialogTable.add(dialog);</b>
+<i>172</i>&nbsp;
+<b class="nc"><i>173</i>&nbsp;        backgroundTurnStateTable = new Table();</b>
+<b class="nc"><i>174</i>&nbsp;        backgroundTurnStateTable.setSize(sizeX+6, sizeY+6);</b>
+<b class="nc"><i>175</i>&nbsp;        backgroundTurnStateTable.setBackground(new TextureRegionDrawable(tableBackground(Color.GOLDENROD)));</b>
+<b class="nc"><i>176</i>&nbsp;        backgroundTurnStateTable.setPosition(Gdx.graphics.getWidth()-163, 17);</b>
+<i>177</i>&nbsp;
+<b class="nc"><i>178</i>&nbsp;        turnState = new Label(&quot;Narrator:\n Welcome savior\n Please save York&quot;, skin);</b>
+<b class="nc"><i>179</i>&nbsp;        turnState.setAlignment(Align.center);</b>
+<i>180</i>&nbsp;
+<b class="nc"><i>181</i>&nbsp;        turnStateTable = new Table();</b>
+<b class="nc"><i>182</i>&nbsp;        turnStateTable.setSize(sizeX, sizeY);</b>
+<b class="nc"><i>183</i>&nbsp;        turnStateTable.setBackground(skin.getDrawable(&quot;default-scroll&quot;));</b>
+<b class="nc"><i>184</i>&nbsp;        turnStateTable.setPosition(Gdx.graphics.getWidth()-160, 20);</b>
+<i>185</i>&nbsp;
+<b class="nc"><i>186</i>&nbsp;        turnStateTable.add(turnState);</b>
+<b class="nc"><i>187</i>&nbsp;        turnStateTable.row();</b>
+<b class="nc"><i>188</i>&nbsp;        turnStateTable.add(endTurn);</b>
+<b class="nc"><i>189</i>&nbsp;        setFireTruckUI(skin);</b>
+<i>190</i>&nbsp;
+<b class="nc"><i>191</i>&nbsp;        stage.addActor(difficultyLabel);</b>
+<b class="nc"><i>192</i>&nbsp;        stage.addActor(player);</b>
+<b class="nc"><i>193</i>&nbsp;        stage.addActor(inGameTable);</b>
+<b class="nc"><i>194</i>&nbsp;        stage.addActor(backgroundDialogTable);</b>
+<b class="nc"><i>195</i>&nbsp;        stage.addActor(dialogTable);</b>
+<b class="nc"><i>196</i>&nbsp;        stage.addActor(backgroundTurnStateTable);</b>
+<b class="nc"><i>197</i>&nbsp;        stage.addActor(turnStateTable);</b>
+<i>198</i>&nbsp;
+<b class="nc"><i>199</i>&nbsp;        Gdx.input.setInputProcessor(stage);</b>
+<i>200</i>&nbsp;    }
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;    public void createGameTable() {
+<b class="nc"><i>203</i>&nbsp;        menuOpen = true;</b>
+<b class="nc"><i>204</i>&nbsp;        moveClicked = attackClicked = waitClicked = refillClicked = false;</b>
+<b class="nc"><i>205</i>&nbsp;        Vector2 position = stage.screenToStageCoordinates( new Vector2(Gdx.input.getX(), Gdx.input.getY()) );</b>
+<i>206</i>&nbsp;
+<b class="nc"><i>207</i>&nbsp;        inGameTable.setPosition(position.x ,position.y);</b>
+<b class="nc"><i>208</i>&nbsp;        inGameTable.setVisible(true);</b>
+<i>209</i>&nbsp;
+<i>210</i>&nbsp;    }
+<i>211</i>&nbsp;    public void clickOffInGameTable() {
+<b class="nc"><i>212</i>&nbsp;        inGameTable.setVisible(false);</b>
+<i>213</i>&nbsp;    }
+<i>214</i>&nbsp;
+<i>215</i>&nbsp;    public void setDialog(final String voice, final String statement, float delayTime) {
+<b class="nc"><i>216</i>&nbsp;        float waitTime = 0;</b>
+<i>217</i>&nbsp;
+<b class="nc"><i>218</i>&nbsp;        while (waitTime &lt;= delayTime) {</b>
+<i>219</i>&nbsp;
+<b class="nc"><i>220</i>&nbsp;            switch (voice) {</b>
+<i>221</i>&nbsp;                case &quot;Narrator:&quot;:
+<b class="nc"><i>222</i>&nbsp;                    dialog.setText(voice + statement);</b>
+<i>223</i>&nbsp;
+<b class="nc"><i>224</i>&nbsp;                    break;</b>
+<i>225</i>&nbsp;                case &quot;ETs&quot;:
+<i>226</i>&nbsp;                case &quot;Player&quot;:
+<b class="nc"><i>227</i>&nbsp;                    dialog.setText(voice + &quot;:&quot; + statement);</b>
+<b class="nc"><i>228</i>&nbsp;                    break;</b>
+<i>229</i>&nbsp;                case &quot;ETs:&quot;:
+<b class="nc"><i>230</i>&nbsp;                    backgroundDialogTable.setBackground(new TextureRegionDrawable(tableBackground(Color.RED)));</b>
+<b class="nc"><i>231</i>&nbsp;                    backgroundTurnStateTable.setBackground(new TextureRegionDrawable(tableBackground(Color.RED)));</b>
+<b class="nc"><i>232</i>&nbsp;                    turnState.setText(voice + statement);</b>
+<i>233</i>&nbsp;
+<b class="nc"><i>234</i>&nbsp;                    break;</b>
+<i>235</i>&nbsp;                case &quot;Player:&quot;:
+<b class="nc"><i>236</i>&nbsp;                    backgroundDialogTable.setBackground(new TextureRegionDrawable(tableBackground(Color.SKY)));</b>
+<b class="nc"><i>237</i>&nbsp;                    backgroundTurnStateTable.setBackground(new TextureRegionDrawable(tableBackground(Color.SKY)));</b>
+<b class="nc"><i>238</i>&nbsp;                    turnState.setText(voice + statement);</b>
+<b class="nc"><i>239</i>&nbsp;                    break;</b>
+<i>240</i>&nbsp;                default:
+<i>241</i>&nbsp;                    break;
+<i>242</i>&nbsp;            }
+<b class="nc"><i>243</i>&nbsp;            waitTime += Gdx.graphics.getDeltaTime();</b>
+<i>244</i>&nbsp;        }
+<i>245</i>&nbsp;    }
+<i>246</i>&nbsp;
+<i>247</i>&nbsp;
+<i>248</i>&nbsp;
+<i>249</i>&nbsp;
+<i>250</i>&nbsp;
+<i>251</i>&nbsp;    public TextureRegionDrawable tableBackground(Color color) {
+<b class="nc"><i>252</i>&nbsp;        Pixmap bgPixmap = new Pixmap(1,1, Pixmap.Format.RGB565);</b>
+<b class="nc"><i>253</i>&nbsp;        bgPixmap.setColor(color);</b>
+<b class="nc"><i>254</i>&nbsp;        bgPixmap.fill();</b>
+<b class="nc"><i>255</i>&nbsp;        return textureRegionDrawableBg = new TextureRegionDrawable(new TextureRegion(new Texture(bgPixmap)));</b>
+<i>256</i>&nbsp;    }
+<i>257</i>&nbsp;
+<i>258</i>&nbsp;    public boolean clickInTable() {
+<i>259</i>&nbsp;
+<b class="nc"><i>260</i>&nbsp;        Vector2 position = stage.screenToStageCoordinates( new Vector2(Gdx.input.getX(), Gdx.input.getY()) );</b>
+<i>261</i>&nbsp;
+<b class="nc"><i>262</i>&nbsp;        if(position.x&gt;= inGameTable.getX() &amp;&amp; position.x&lt;= (inGameTable.getX()+inGameTable.getWidth()) &amp;&amp; position.y&gt;= inGameTable.getY() &amp;&amp; position.y&lt;= (inGameTable.getY()+inGameTable.getHeight())) {</b>
+<b class="nc"><i>263</i>&nbsp;            return true;</b>
+<i>264</i>&nbsp;        } else {
+<b class="nc"><i>265</i>&nbsp;            return false;</b>
+<i>266</i>&nbsp;        }
+<i>267</i>&nbsp;
+<i>268</i>&nbsp;    }
+<i>269</i>&nbsp;
+<i>270</i>&nbsp;    public void createFireTruckUI(Map map, Skin skin) {
+<b class="nc"><i>271</i>&nbsp;        int x = 0;</b>
+<b class="nc"><i>272</i>&nbsp;        int y = 0;</b>
+<i>273</i>&nbsp;        int waterLevel;
+<i>274</i>&nbsp;        int firetruckHealth;
+<i>275</i>&nbsp;        int etFortressHealth;
+<i>276</i>&nbsp;        int etFortressName;
+<i>277</i>&nbsp;
+<b class="nc"><i>278</i>&nbsp;        int labelOffset = 30;</b>
+<i>279</i>&nbsp;
+<b class="nc"><i>280</i>&nbsp;        ftPosY = Gdx.graphics.getHeight() - 40;</b>
+<b class="nc"><i>281</i>&nbsp;        ftPosX = Gdx.graphics.getWidth() - 240;</b>
+<i>282</i>&nbsp;
+<b class="nc"><i>283</i>&nbsp;        etPosY = ftPosY - 80;</b>
+<b class="nc"><i>284</i>&nbsp;        etPosX = ftPosX + 80;</b>
+<i>285</i>&nbsp;
+<b class="nc"><i>286</i>&nbsp;        for (int i = 0; i &lt; map.HEIGHT; i++)</b>
+<i>287</i>&nbsp;        {
+<b class="nc"><i>288</i>&nbsp;            for (int j = 0; j &lt; map.WIDTH; j++)</b>
+<i>289</i>&nbsp;            {
+<b class="nc"><i>290</i>&nbsp;                if (map.getEntity(i, j) != null &amp;&amp; map.getEntity(i, j) instanceof Firetruck)</b>
+<i>291</i>&nbsp;                {
+<i>292</i>&nbsp;
+<b class="nc"><i>293</i>&nbsp;                    Firetruck f = (Firetruck) map.getEntity(i, j);</b>
+<b class="nc"><i>294</i>&nbsp;                    waterLevel = f.getWater();</b>
+<b class="nc"><i>295</i>&nbsp;                    firetruckHealth = f.getHealth();</b>
+<b class="nc"><i>296</i>&nbsp;                    String stats = String.format(&quot;Health: %s \nWater Level: %s&quot;, firetruckHealth, waterLevel);</b>
+<i>297</i>&nbsp;
+<b class="nc"><i>298</i>&nbsp;                    fireTruckImg[x] = new Image(fireTruckIconTexture);</b>
+<b class="nc"><i>299</i>&nbsp;                    fireTruckImg[x].setPosition(ftPosX, ftPosY);</b>
+<b class="nc"><i>300</i>&nbsp;                    fireTruckImg[x].setScale(0.3f);</b>
+<i>301</i>&nbsp;
+<b class="nc"><i>302</i>&nbsp;                    fireTruckStats[x] = new Label(stats, skin);</b>
+<b class="nc"><i>303</i>&nbsp;                    fireTruckStats[x].setPosition(ftPosX + labelOffset, ftPosY);</b>
+<b class="nc"><i>304</i>&nbsp;                    fireTruckStats[x].setSize(20, 20);</b>
+<b class="nc"><i>305</i>&nbsp;                    fireTruckStats[x].setFontScale(0.8f);</b>
+<b class="nc"><i>306</i>&nbsp;                    fireTruckStats[x].setColor(Color.BLACK);</b>
+<i>307</i>&nbsp;
+<b class="nc"><i>308</i>&nbsp;                    stage.addActor(fireTruckImg[x]);</b>
+<b class="nc"><i>309</i>&nbsp;                    stage.addActor(fireTruckStats[x]);</b>
+<i>310</i>&nbsp;
+<b class="nc"><i>311</i>&nbsp;                    ftPosX += 40;</b>
+<b class="nc"><i>312</i>&nbsp;                    ftPosY -= 40;</b>
+<b class="nc"><i>313</i>&nbsp;                    x++;</b>
+<i>314</i>&nbsp;
+<b class="nc"><i>315</i>&nbsp;                } else if(map.getEntity(i, j) != null &amp;&amp; map.getEntity(i, j) instanceof Fortress) {</b>
+<b class="nc"><i>316</i>&nbsp;                    if(y &lt; 3) {</b>
+<b class="nc"><i>317</i>&nbsp;                        Fortress f = (Fortress) map.getEntity(i, j);</b>
+<b class="nc"><i>318</i>&nbsp;                        int fortressHealth = f.getHealth();</b>
+<i>319</i>&nbsp;
+<b class="nc"><i>320</i>&nbsp;                        etFortressImg[y] = new Image(etFortressIconTexture);</b>
+<b class="nc"><i>321</i>&nbsp;                        etFortressImg[y].setPosition(etPosX, etPosY);</b>
+<i>322</i>&nbsp;
+<i>323</i>&nbsp;
+<b class="nc"><i>324</i>&nbsp;                        stage.addActor(etFortressImg[y]);</b>
+<b class="nc"><i>325</i>&nbsp;                        etPosX += 40;</b>
+<b class="nc"><i>326</i>&nbsp;                        etPosY -= 40;</b>
+<b class="nc"><i>327</i>&nbsp;                        y++;</b>
+<i>328</i>&nbsp;                    }
+<i>329</i>&nbsp;                }
+<i>330</i>&nbsp;            }
+<i>331</i>&nbsp;        }
+<i>332</i>&nbsp;
+<i>333</i>&nbsp;
+<i>334</i>&nbsp;    }
+<i>335</i>&nbsp;
+<i>336</i>&nbsp;    public void resize(int width, int height){
+<b class="nc"><i>337</i>&nbsp;        stage.getViewport().update(width, height, true);</b>
+<b class="nc"><i>338</i>&nbsp;        stage.getViewport().apply();</b>
+<i>339</i>&nbsp;
+<i>340</i>&nbsp;    }
+<i>341</i>&nbsp;    public void updateDifficulty(int difficulty) {
+<b class="nc"><i>342</i>&nbsp;        difficultyLabel.setText(String.format(&quot;Difficulty Level %d&quot;, difficulty));</b>
+<i>343</i>&nbsp;    }
+<i>344</i>&nbsp;    public void setFireTruckUI(Skin skin) {
+<i>345</i>&nbsp;
+<i>346</i>&nbsp;
+<i>347</i>&nbsp;    }
+<i>348</i>&nbsp;
+<i>349</i>&nbsp;    public void dispose(){
+<b class="nc"><i>350</i>&nbsp;        stage.dispose();</b>
+<i>351</i>&nbsp;
+<i>352</i>&nbsp;    }
+<i>353</i>&nbsp;}
+<i>354</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-01-18 16:19</div>
+</div>
+</body>
+</html>

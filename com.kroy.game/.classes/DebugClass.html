@@ -1,0 +1,122 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DebugClass</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.kroy.game</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DebugClass (com.kroy.game)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DebugClass</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.kroy.game;
+<i>2</i>&nbsp;
+<b class="nc"><i>3</i>&nbsp;public class DebugClass</b>
+<i>4</i>&nbsp;{
+<i>5</i>&nbsp;    public static String get2DBoolArrayPrint(boolean[][] matrix)
+<i>6</i>&nbsp;    {
+<i>7</i>&nbsp;		/*
+<i>8</i>&nbsp;		For array debugging
+<i>9</i>&nbsp;		 */
+<b class="nc"><i>10</i>&nbsp;        String output = new String();</b>
+<b class="nc"><i>11</i>&nbsp;        for (int i = 0; i &lt; matrix.length; i++) {</b>
+<b class="nc"><i>12</i>&nbsp;            for (int j = 0; j &lt; matrix[i].length; j++) {</b>
+<b class="nc"><i>13</i>&nbsp;                if (matrix[i][j])</b>
+<i>14</i>&nbsp;                {
+<b class="nc"><i>15</i>&nbsp;                    output = output + (&#39;x&#39; + &quot;\t&quot;);</b>
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;                }
+<i>18</i>&nbsp;                else
+<i>19</i>&nbsp;                {
+<b class="nc"><i>20</i>&nbsp;                    output = output + (&#39;o&#39; + &quot;\t&quot;);</b>
+<i>21</i>&nbsp;                }
+<i>22</i>&nbsp;            }
+<b class="nc"><i>23</i>&nbsp;            output = output + &quot;\n&quot;;</b>
+<i>24</i>&nbsp;        }
+<b class="nc"><i>25</i>&nbsp;        return output;</b>
+<i>26</i>&nbsp;    }
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    public static String get2DIntArrayPrint(int[][] matrix)
+<i>29</i>&nbsp;    {
+<b class="nc"><i>30</i>&nbsp;        String output = new String();</b>
+<b class="nc"><i>31</i>&nbsp;        for (int i = 0; i &lt; matrix.length; i++) {</b>
+<b class="nc"><i>32</i>&nbsp;            for (int j = 0; j &lt; matrix[i].length; j++) {</b>
+<b class="nc"><i>33</i>&nbsp;                output = output + (matrix[j][i] + &quot;\t&quot;);</b>
+<i>34</i>&nbsp;            }
+<b class="nc"><i>35</i>&nbsp;            output = output + &quot;\n&quot;;</b>
+<i>36</i>&nbsp;        }
+<b class="nc"><i>37</i>&nbsp;        return output;</b>
+<i>38</i>&nbsp;    }
+<i>39</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-01-18 16:19</div>
+</div>
+</body>
+</html>
