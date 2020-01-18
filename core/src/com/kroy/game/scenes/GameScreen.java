@@ -65,8 +65,6 @@ public class GameScreen implements Screen
 		this.game = game;
 		selected = null;
  		turnState = turnStates.PLAYER;
-		hud = new GameHud(game.batch, game.skin);
-		hud.createFireTruckUI(map, game.skin);
 
 		// Initialise map
 		map = new Map();
@@ -74,6 +72,10 @@ public class GameScreen implements Screen
 		MapParser parser = new MapParser();
 		parser.addAll(map, tileMap);
 		mapDrawer = new MapDrawer(game, map, tileMap);
+
+		// Initialise HUD
+		hud = new GameHud(game.batch, game.skin);
+		hud.createFireTruckUI(map, game.skin);
 
 		//Initialise enemyAI
 		enemyAI = new ETMastermind(this.map, this.mapDrawer);

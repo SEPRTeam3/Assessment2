@@ -34,12 +34,7 @@ public class Firetruck extends Entity implements DamageableEntity
 		this.attackedThisTurn = false;
 	}
 
-	public int getHealth(){return this.health; }
-
-	public void setHealth(int health){this.health=health; }
-
-
-	public Firetruck(Texture texture, int maxMove, int maxHealth, int maxWater)
+	public Firetruck(Texture texture, int maxMove, int maxHealth, int maxWater, int attackDistance, int attackStrength)
 	{
 		/**
 		 * Alternate Firetruck constructor
