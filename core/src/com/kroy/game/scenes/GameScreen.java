@@ -1,19 +1,15 @@
 package com.kroy.game.scenes;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.kroy.game.ETMastermind;
 import com.kroy.game.MyGdxGame;
 import com.kroy.game.entities.Firestation;
 import com.kroy.game.entities.Firetruck;
-import com.kroy.game.entities.Fortress;
 import com.kroy.game.map.HighlightColours;
 import com.kroy.game.map.Map;
 import com.kroy.game.map.MapDrawer;
@@ -69,6 +65,8 @@ public class GameScreen implements Screen
 		map.spawnFortress(5, 5);
 		mapDrawer = new MapDrawer(game, map, tileMap);
 		enemyAI = new ETMastermind(this.map, this.mapDrawer);
+
+		hud.createFireTruckUI(map, game.skin);
 	}
 
 	@Override
@@ -83,7 +81,6 @@ public class GameScreen implements Screen
 		mapDrawer.viewport.apply();
 		mapDrawer.render();
 
-		//hud.initializeFireTruckUI();
 
 		hud.stage.getViewport().apply();
 		game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
@@ -95,7 +92,9 @@ public class GameScreen implements Screen
 		switch(turnState)
 		{
 		case PLAYER:
-
+			if(!hud.menuOpen) {
+				hud.setDialog("Player:", "\nPlayer Turn", 4.0f);
+			}
 			// Left click handling
 			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
 			{
@@ -113,6 +112,7 @@ public class GameScreen implements Screen
 						// Player clicked firetruck with nothing selected, select firetruck
 						selected = new Vector2(tileX, tileY);
 						hud.createGameTable();
+
 						if(!hud.moveClicked || !hud.attackClicked){
 							selectAction = selectedMode.NONE;
 						}
@@ -145,7 +145,7 @@ public class GameScreen implements Screen
 					// Clicked outside of map
 					if(!hud.clickInTable()) {
 						hud.clickOffInGameTable();
-						System.out.print("UI??");
+
 						selected = null;
 					}
 
@@ -156,6 +156,7 @@ public class GameScreen implements Screen
 			if (Gdx.input.isKeyJustPressed(Input.Keys.M) || hud.moveClicked)
 			{
 				hud.moveClicked = false;
+
 				if
 				(
 					selected != null
@@ -242,15 +243,16 @@ public class GameScreen implements Screen
 			}
 
 			// Space key handling
-			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
+			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || hud.endTurnClicked)
 			{
+				hud.endTurnClicked = false;
 				this.turnState = turnStates.POST_PLAYER;
 			}
 
 			if (enemyAI.getFortressNumber() == 0)
 			{
 				System.out.println("Victory!");
-				// Transition to scorescreen
+				game.setScreen(new ScoreScreen(game));
 			}
 
 			break;
@@ -258,10 +260,14 @@ public class GameScreen implements Screen
 
 		case POST_PLAYER:
 			this.turnState = turnStates.ET;
+
 			break;
 			
 		case ET:
 			System.out.println("ETs are taking their turn");
+			hud.setDialog("ETs:", "\nETs are taking \ntheir turn", 0.0f);
+
+
 			enemyAI.takeTurn();
 			this.turnState = turnStates.POST_ET;
 			break;
@@ -290,6 +296,9 @@ public class GameScreen implements Screen
 			if (turnNumber % enemyAI.LEVEL_UP_FREQUENCY == 0 && turnNumber != 0)
 			{
 				enemyAI.levelUpFortresses();
+				hud.difficulty++;
+				hud.updateDifficulty(hud.difficulty);
+				hud.setDialog("Narrator:", "\nThe ETs are getting\n stronger", 0.0f);
 			}
 			this.turnState = turnStates.PLAYER;
 			map.resetTurn();

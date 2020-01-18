@@ -1,3 +1,4 @@
+
 package com.kroy.game.ui;
 
 import com.badlogic.gdx.Gdx;
@@ -5,49 +6,71 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.kroy.game.entities.Entity;
 import com.kroy.game.entities.Firetruck;
+import com.kroy.game.entities.Fortress;
 import com.kroy.game.map.Map;
 
 public class GameHud {
     private OrthographicCamera camera;
     public Stage stage;
     private Viewport viewport;
-    private Table inGameTable, topLeftTable, topRightTable, bottomRightTable, bottomLeftTable;
+    private Table inGameTable;
+    private Table turnStateTable;
+    private Table dialogTable;
+    private Table backgroundDialogTable;
+    private Table backgroundTurnStateTable;
 
     private TextureRegionDrawable textureRegionDrawableBg;
 
     private Label test;
-    private TextButton attack, move, refill, wait;
+    private TextButton attack, move, refill, wait, endTurn;
     private ImageButton image;
-    private Label fireTruckStats;
+    private Label turnState, dialog, difficultyLabel;
 
-    public boolean attackClicked, moveClicked, refillClicked, waitClicked, menuOpen;
+    private Label[] fireTruckStats = new Label[2];
+    private Image[] fireTruckImg = new Image[2], etFortressImg = new Image[3];
+
+    private Image player;
+    private Texture playerIconTexture, fireTruckIconTexture, etFortressIconTexture;
+    public boolean attackClicked, moveClicked, refillClicked, waitClicked, endTurnClicked, menuOpen;
 
     private int sizeX, sizeY;
+    public int difficulty;
 
-    private Map map;
+    public int ftPosY, ftPosX, etPosY, etPosX;
 
-    public GameHud(SpriteBatch batch, Skin skin){
-        sizeX = 120;
-        sizeY = 60;
+
+
+
+    public GameHud(SpriteBatch batch, Skin skin) {
+        sizeX = 140;
+        sizeY = 80;
+
+        difficulty = 1;
+        difficultyLabel = new Label("Difficulty Level: " + difficulty, skin);
+        difficultyLabel.setPosition(60, 445);
+        difficultyLabel.setColor(Color.BLACK);
+
+        playerIconTexture = new Texture(Gdx.files.internal("fox-1.png.png"));
+        player = new Image(playerIconTexture);
+        player.setPosition(10, 430);
+        player.setScale(0.3f);
+
+        fireTruckIconTexture = new Texture(Gdx.files.internal("fire engine 64 by 64-1.png.png"));
+        etFortressIconTexture = new Texture(Gdx.files.internal("etFortress.png"));
+
 
         attackClicked = moveClicked = refillClicked = waitClicked = false;
         menuOpen = false;
@@ -57,8 +80,6 @@ public class GameHud {
         viewport.apply(true);
 
         stage = new Stage(viewport, batch);
-
-        //test = new Label("Lucas", new Label.LabelStyle(new BitmapFont(), Color.CORAL));
 
         attack = new TextButton("attack", skin);
         attack.addListener(new ClickListener() {
@@ -108,8 +129,20 @@ public class GameHud {
             }
         });
 
+        endTurn = new TextButton("End Turn", skin);
+        endTurn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                System.out.println("Clicked!");
+                endTurnClicked = true;
+                inGameTable.setVisible(false);
+                menuOpen = false;
+
+            }
+        });
+
         inGameTable = new Table();
-        inGameTable.setBackground(tableBackground());
+        inGameTable.setBackground(skin.getDrawable("default-scroll"));
         inGameTable.setSize(60, 120);
 
         inGameTable.add(attack).padBottom(2);
@@ -122,34 +155,46 @@ public class GameHud {
 
         inGameTable.setVisible(false);
 
+        backgroundDialogTable = new Table();
+        backgroundDialogTable.setSize(sizeX+6, sizeY+6);
+        backgroundDialogTable.setBackground(new TextureRegionDrawable(tableBackground(Color.GOLDENROD)));
+        backgroundDialogTable.setPosition(17, 17);
 
-        topLeftTable = new Table();
-        topLeftTable.setSize(sizeX, sizeY);
-        topLeftTable.setBackground(tableBackground());
-        topLeftTable.setPosition(20, Gdx.graphics.getHeight()-60);
+        dialog = new Label("Narrator:\n Welcome savior\n Please save York", skin);
+        dialog.setAlignment(Align.left);
 
-        topRightTable = new Table();
-        topRightTable.setSize(sizeX, sizeY);
-        topRightTable.setBackground(tableBackground());
-        topRightTable.setPosition(Gdx.graphics.getWidth()-140, Gdx.graphics.getHeight()-60);
+        dialogTable = new Table();
+        dialogTable.setSize(sizeX, sizeY);
+        dialogTable.setBackground(skin.getDrawable("default-scroll"));
+        dialogTable.setPosition(20, 20);
 
-        bottomLeftTable = new Table();
-        bottomLeftTable.setSize(sizeX, sizeY);
-        bottomLeftTable.setBackground(tableBackground());
-        bottomLeftTable.setPosition(20, 20);
+        dialogTable.add(dialog);
 
-        bottomRightTable = new Table();
-        bottomRightTable.setSize(sizeX, sizeY);
-        bottomRightTable.setBackground(tableBackground());
-        bottomRightTable.setPosition(Gdx.graphics.getWidth()-140, 20);
+        backgroundTurnStateTable = new Table();
+        backgroundTurnStateTable.setSize(sizeX+6, sizeY+6);
+        backgroundTurnStateTable.setBackground(new TextureRegionDrawable(tableBackground(Color.GOLDENROD)));
+        backgroundTurnStateTable.setPosition(Gdx.graphics.getWidth()-163, 17);
 
+        turnState = new Label("Narrator:\n Welcome savior\n Please save York", skin);
+        turnState.setAlignment(Align.center);
+
+        turnStateTable = new Table();
+        turnStateTable.setSize(sizeX, sizeY);
+        turnStateTable.setBackground(skin.getDrawable("default-scroll"));
+        turnStateTable.setPosition(Gdx.graphics.getWidth()-160, 20);
+
+        turnStateTable.add(turnState);
+        turnStateTable.row();
+        turnStateTable.add(endTurn);
         setFireTruckUI(skin);
 
+        stage.addActor(difficultyLabel);
+        stage.addActor(player);
         stage.addActor(inGameTable);
-        stage.addActor(topLeftTable);
-        stage.addActor(topRightTable);
-        stage.addActor(bottomLeftTable);
-        stage.addActor(bottomRightTable);
+        stage.addActor(backgroundDialogTable);
+        stage.addActor(dialogTable);
+        stage.addActor(backgroundTurnStateTable);
+        stage.addActor(turnStateTable);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -166,17 +211,55 @@ public class GameHud {
     public void clickOffInGameTable() {
         inGameTable.setVisible(false);
     }
-    public TextureRegionDrawable tableBackground() {
+
+    public void setDialog(final String voice, final String statement, float delayTime) {
+        float waitTime = 0;
+
+        while (waitTime <= delayTime) {
+
+            switch (voice) {
+                case "Narrator:":
+                    dialog.setText(voice + statement);
+
+                    break;
+                case "ETs":
+                case "Player":
+                    dialog.setText(voice + ":" + statement);
+                    break;
+                case "ETs:":
+                    backgroundDialogTable.setBackground(new TextureRegionDrawable(tableBackground(Color.RED)));
+                    backgroundTurnStateTable.setBackground(new TextureRegionDrawable(tableBackground(Color.RED)));
+                    turnState.setText(voice + statement);
+
+                    break;
+                case "Player:":
+                    backgroundDialogTable.setBackground(new TextureRegionDrawable(tableBackground(Color.SKY)));
+                    backgroundTurnStateTable.setBackground(new TextureRegionDrawable(tableBackground(Color.SKY)));
+                    turnState.setText(voice + statement);
+                    break;
+                default:
+                    break;
+            }
+            waitTime += Gdx.graphics.getDeltaTime();
+        }
+    }
+
+
+
+
+
+    public TextureRegionDrawable tableBackground(Color color) {
         Pixmap bgPixmap = new Pixmap(1,1, Pixmap.Format.RGB565);
-        bgPixmap.setColor(Color.GRAY);
+        bgPixmap.setColor(color);
         bgPixmap.fill();
         return textureRegionDrawableBg = new TextureRegionDrawable(new TextureRegion(new Texture(bgPixmap)));
     }
-    public boolean clickInTable() {
-        int x = Gdx.input.getX();
-        int y = Gdx.graphics.getHeight() - Gdx.input.getY();
 
-        if(x>= inGameTable.getX() && x<= (inGameTable.getX()+inGameTable.getWidth()) && y>= inGameTable.getY() && y<= (inGameTable.getY()+inGameTable.getHeight())) {
+    public boolean clickInTable() {
+
+        Vector2 position = stage.screenToStageCoordinates( new Vector2(Gdx.input.getX(), Gdx.input.getY()) );
+
+        if(position.x>= inGameTable.getX() && position.x<= (inGameTable.getX()+inGameTable.getWidth()) && position.y>= inGameTable.getY() && position.y<= (inGameTable.getY()+inGameTable.getHeight())) {
             return true;
         } else {
             return false;
@@ -184,17 +267,70 @@ public class GameHud {
 
     }
 
-    public void initializeFireTruckUI() {
+    public void createFireTruckUI(Map map, Skin skin) {
+        int x = 0;
         int y = 0;
-        for (int i = 0; i < Map.HEIGHT; i++) {
-            for (int j = 0; j < Map.WIDTH; j++) {
-                if(map.getEntity(i, j) != null && map.getEntity(i, j) instanceof Firetruck){
+        int waterLevel;
+        int firetruckHealth;
+        int etFortressHealth;
+        int etFortressName;
+
+        int labelOffset = 30;
+
+        ftPosY = Gdx.graphics.getHeight() - 40;
+        ftPosX = Gdx.graphics.getWidth() - 240;
+
+        etPosY = ftPosY - 80;
+        etPosX = ftPosX + 80;
+
+        for (int i = 0; i < map.HEIGHT; i++)
+        {
+            for (int j = 0; j < map.WIDTH; j++)
+            {
+                if (map.getEntity(i, j) != null && map.getEntity(i, j) instanceof Firetruck)
+                {
+
                     Firetruck f = (Firetruck) map.getEntity(i, j);
-                    y++;
+                    waterLevel = f.getWater();
+                    firetruckHealth = f.getHealth();
+                    String stats = String.format("Health: %s \nWater Level: %s", firetruckHealth, waterLevel);
+
+                    fireTruckImg[x] = new Image(fireTruckIconTexture);
+                    fireTruckImg[x].setPosition(ftPosX, ftPosY);
+                    fireTruckImg[x].setScale(0.3f);
+
+                    fireTruckStats[x] = new Label(stats, skin);
+                    fireTruckStats[x].setPosition(ftPosX + labelOffset, ftPosY);
+                    fireTruckStats[x].setSize(20, 20);
+                    fireTruckStats[x].setFontScale(0.8f);
+                    fireTruckStats[x].setColor(Color.BLACK);
+
+                    stage.addActor(fireTruckImg[x]);
+                    stage.addActor(fireTruckStats[x]);
+
+                    ftPosX += 40;
+                    ftPosY -= 40;
+                    x++;
+
+                } else if(map.getEntity(i, j) != null && map.getEntity(i, j) instanceof Fortress) {
+                    if(y < 3) {
+                        Fortress f = (Fortress) map.getEntity(i, j);
+                        int fortressHealth = f.getHealth();
+
+                        etFortressImg[y] = new Image(etFortressIconTexture);
+                        etFortressImg[y].setPosition(etPosX, etPosY);
+
+
+                        stage.addActor(etFortressImg[y]);
+                        etPosX += 40;
+                        etPosY -= 40;
+                        y++;
+                    }
                 }
             }
         }
-        System.out.print(" nnnnnn    " + y);
+
+
     }
 
     public void resize(int width, int height){
@@ -202,14 +338,10 @@ public class GameHud {
         stage.getViewport().apply();
 
     }
-
+    public void updateDifficulty(int difficulty) {
+        difficultyLabel.setText(String.format("Difficulty Level %d", difficulty));
+    }
     public void setFireTruckUI(Skin skin) {
-        String stats = String.format("Health: %n Range: %n", 10, 100);
-
-        fireTruckStats = new Label(stats, skin);
-        fireTruckStats.setSize(50, 50);
-
-        topRightTable.add(fireTruckStats);
 
 
     }
