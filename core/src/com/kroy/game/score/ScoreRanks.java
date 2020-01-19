@@ -4,17 +4,26 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class ScoreRanks {
+    /**
+     * Reads and Writes scores, and sorts new scores
+     */
     private ArrayList<Score> ScoresList;
     private Score newestScore;
     private String csvFileName = "ScoreData.csv";
 
     public ScoreRanks(){
+        /**
+         * Initialises class and immediately reads from the save file.
+         */
         this.newestScore = null;
         this.ScoresList = new ArrayList<>();
         ReadFile();
 
     }
     private void ReadFile(){
+        /**
+         * Reads from the save file to get data from previous games
+         */
         try {
             BufferedReader bufferedCsv = new BufferedReader(new FileReader(csvFileName));
             String row;
@@ -31,6 +40,9 @@ public class ScoreRanks {
         }
     }
     private void WriteFile(){
+        /**
+         * Saves all current scores to the save file
+         */
         try {
             FileWriter csvWriter = new FileWriter(csvFileName);
             for (int i = 0; i < this.ScoresList.size(); i++) {
@@ -49,6 +61,9 @@ public class ScoreRanks {
     }
 
     private void TestScores(){
+        /**
+         * Creates 20 base scores if the original csv file cannot be found.
+         */
         for (Integer i = 0; i < 20; i++){
             String tempString = "test" + i.toString();
             Score tempScore = new Score(tempString, i + 1, i + 1);
@@ -58,10 +73,16 @@ public class ScoreRanks {
     }
 
     public void setPlayerScore(Score playerScore){
+        /**
+         * public method for giving a new score from a finished game.
+         */
         InsertScore(playerScore.getName(), playerScore.getValue(), false);
     }
 
     private void InsertScore(String newName, Integer newScore, Boolean fromFile){
+        /**
+         * Takes scores, either from the file or new scores, and sorts them into a list.
+         */
         if (fromFile == false) {
             if (this.ScoresList.size() == 0) {
                 this.newestScore = new Score(newName, newScore, 1);
@@ -75,7 +96,7 @@ public class ScoreRanks {
                     }
                 }
             } WriteFile();
-        } else {
+        } else { // Scores from the file are already sorted
             int numScores = this.ScoresList.size();
             this.newestScore = new Score(newName, newScore, numScores + 1);
             this.ScoresList.add(numScores, this.newestScore);
@@ -83,11 +104,11 @@ public class ScoreRanks {
     }
 
     public ArrayList SelectScores(String scoreTypes){
-		/* score types: "TopTen", "TopAndNew", "AllInst"
-		TopTen - Top ten overall scores,
-		TopAndNew - Top 8 eight scores + new newest added score + next score above newest score
-		AllInst** - Top 10 scores for a given name, not implemented
-		 */
+		/**
+         * score types: "TopTen", "TopAndNew"
+         *TopTen - Top ten overall scores,
+         *TopAndNew - Top 8 eight scores + new newest added score + next score above newest score
+         */
         ArrayList<Score> outputScore = new ArrayList<>(10);
         if (scoreTypes == "TopTen"){
             for (int i = 0; i < 10; i++){
@@ -107,6 +128,9 @@ public class ScoreRanks {
         return outputScore;
     }
     private Integer getRank(Score ScoreToFind){
+        /**
+         * Takes a score, finds the rank of that score out of all scores.
+         */
         return this.ScoresList.indexOf(ScoreToFind);
     }
 }

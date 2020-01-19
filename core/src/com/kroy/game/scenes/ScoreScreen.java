@@ -16,7 +16,7 @@ import com.badlogic.gdx.Gdx;
 public class ScoreScreen implements Screen
 {
 	/**
-	 * Screen for scores
+	 * Generates a screen that displays 10 scores
 	 */
 	final MyGdxGame game;
 	private SpriteBatch batch;
@@ -27,6 +27,9 @@ public class ScoreScreen implements Screen
 	private ScoreRanks ScoreRanking;
 	
 	public ScoreScreen(final MyGdxGame game) {
+		/**
+		 * Generates a score screen with the top 10 scores
+		 */
 		this.game = game;
 		this.batch = new SpriteBatch();
 		this.font = new BitmapFont();
@@ -36,7 +39,7 @@ public class ScoreScreen implements Screen
 	}
 	public ScoreScreen(final MyGdxGame game, Score playerScore) {
 		/**
-		 * Screen for scores
+		 * Generates a screen with the top 8, plus the users score and the score below it.
 		 * @param
 		 * @param
 		 */
@@ -51,7 +54,7 @@ public class ScoreScreen implements Screen
 
 	private String getString(){
 		/**
-		 * Screen for scores
+		 * Gets the output in a string format so it can be put on the screen
 		 */
 		outputString = "Scores:\n";
 		for (int i = 0; i < 10; i++){
@@ -63,8 +66,8 @@ public class ScoreScreen implements Screen
 
 	private void getOutputs(String scoreTypes){
 		/**
-		 * Screen for scores
-		 * @param
+		 * Gets the 10 scores and names from the Score Rank class and puts them into lists.
+		 * @param scoreTypes Either "TopTen" or "TopAndNew", decides whether its the top 10 scores, or top 8 and new and 1 below new.
 		 */
 		ArrayList<Score> outputScores = this.ScoreRanking.SelectScores(scoreTypes);
 		this.nameList = new String[10];
@@ -84,7 +87,7 @@ public class ScoreScreen implements Screen
 	@Override
 	public void render(float delta) {
 		/**
-		 * Screen for scores
+		 * Renders the screen to be displayed
 		 * @param
 		 */
 		Gdx.gl.glClearColor(0, 0, 1, 1);

@@ -7,12 +7,18 @@ public class Score {
     private Integer ID;
 
     public Score(String name, Integer value, Integer ID){
+        /**
+         * Creates a score object with the 3 given inputs
+         */
         this.name = name;
         this.value = value;
         this.ID = ID;
     }
 
     public Score() {
+        /**
+         * Creates a score object with default values
+         */
         this.value = 0;
         this.name = "Undefined_User";
         this.ID = -1;
