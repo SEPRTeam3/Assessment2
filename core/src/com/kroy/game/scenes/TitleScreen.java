@@ -17,8 +17,14 @@ public class TitleScreen implements Screen
 
 	final MyGdxGame game;
 	private Texture titleImage;
+
 	public TitleScreen(final MyGdxGame game)
 	{
+		/**
+		 * Sets the game to the title screen
+		 * @param game Instance of the game
+		 */
+
 		this.game = game;
 		titleImage = new Texture(Gdx.files.internal("mainmenu.jpg")); 
 	}
@@ -30,16 +36,18 @@ public class TitleScreen implements Screen
 	}
 
 	@Override
-	public void render(float delta) 
+	public void render(float delta)
 	{
-		
-		// Do inputs
+		/**
+		 * Renders title screen and sets the game to the game screen on an input
+		 * @param delta This represents the time between the last frame and this frame, given in seconds
+		 */
 		if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
 		{
 			System.out.println("Going to game screen");
 			game.setScreen(new GameScreen(game));
 		}
-		
+
 		// Do rendering
 		game.batch.begin();
 		game.batch.draw(titleImage, 0, 0, 512, 512);

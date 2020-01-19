@@ -22,12 +22,31 @@ public class GameScreen implements Screen
 	 * Screen for main game
 	 */
 
+	/**
+	 *  Turn states
+	 *  <li>{@link #PLAYER}</li>
+	 * 	<li>{@link #POST_PLAYER}<li>
+	 * 	<li>{@link #ET}<li>
+	 * 	<li>{@link #POST_ET}</li>
+	 */
 	// Who's turn it is
 	public enum turnStates
 	{
+		/**
+		 * Player turn
+		 */
 		PLAYER,
+		/**
+		 * Post player turn
+		 */
 		POST_PLAYER,
+		/**
+		 * ET turn
+		 */
 		ET,
+		/**
+		 * Post ET turn
+		 */
 		POST_ET
 	}
 
@@ -57,6 +76,11 @@ public class GameScreen implements Screen
 
 	public GameScreen(final MyGdxGame game)
 	{
+		/**
+		 * Sets the game to the game screen
+		 * Initializes all the game classes and loads assets
+		 * @param game Instance of the game
+		 */
 		// Initialise technical objects
 		this.game = game;
 		selected = null;
@@ -72,8 +96,8 @@ public class GameScreen implements Screen
 		// Initialise HUD
 		hud = new GameHud(game.batch, game.skin);
 		hud.createFireTruckUI(map, game.skin);
-		hud.getEntityStats(game.skin);
-		hud.setVisibilityOfTable(hud.container2, false);
+		hud.getFiretruckEntityStats(game.skin);
+		hud.setVisibilityOfTable(hud.containerSingle, false);
 		//Initialise enemyAI
 		enemyAI = new ETMastermind(this.map, this.mapDrawer);
 	}
@@ -86,6 +110,15 @@ public class GameScreen implements Screen
 	@Override
 	public void render(float delta)
 	{
+		/**
+		 * Renders the map, entities and the Hud using a separate viewport for the Hud
+		 * Depending on the turn, gets player input and carries out an action, updating the UI and map
+		 * Sets graphics for actions and sets win condition
+		 * On ET turn, runs ET actions and updates the UI and map
+		 * Sets graphics for actions and sets lose and difficulty increase condition
+		 *
+		 * @param delta This represents the time between the last frame and this frame, given in seconds
+		 */
 		// Render map
 		mapDrawer.viewport.apply();
 		mapDrawer.render();
@@ -125,8 +158,8 @@ public class GameScreen implements Screen
 
 
 						hud.updateEntityStats((Firetruck) map.getEntity(tileX, tileY));
-						hud.setVisibilityOfTable(hud.container1, false);
-						hud.setVisibilityOfTable(hud.container2, true);
+						hud.setVisibilityOfTable(hud.containerMultiple, false);
+						hud.setVisibilityOfTable(hud.containerSingle, true);
 
 						if(!hud.moveClicked || !hud.attackClicked){
 							selectAction = selectedMode.NONE;
@@ -139,8 +172,8 @@ public class GameScreen implements Screen
 						map.moveEntity((int)selected.x, (int)selected.y, tileX, tileY);
 						selectAction = selectedMode.NONE;
 						selected = null;
-						hud.setVisibilityOfTable(hud.container1, true);
-						hud.setVisibilityOfTable(hud.container2, false);
+						hud.setVisibilityOfTable(hud.containerMultiple, true);
+						hud.setVisibilityOfTable(hud.containerSingle, false);
 					}
 					else if (selected != null && selectAction == selectedMode.ATTACK)
 					{
@@ -148,8 +181,8 @@ public class GameScreen implements Screen
 						map.attackEntity((int)selected.x, (int)selected.y, tileX, tileY);
 						selectAction = selectedMode.NONE;
 						selected = null;
-						hud.setVisibilityOfTable(hud.container1, true);
-						hud.setVisibilityOfTable(hud.container2, false);
+						hud.setVisibilityOfTable(hud.containerMultiple, true);
+						hud.setVisibilityOfTable(hud.containerSingle, false);
 					}
 					else
 					{
@@ -158,8 +191,8 @@ public class GameScreen implements Screen
 						if (!hud.clickInTable(hud.inGameTable)) {
 							selectAction = selectedMode.NONE;
 							selected = null;
-							hud.setVisibilityOfTable(hud.container2, false);
-							hud.setVisibilityOfTable(hud.container1, true);
+							hud.setVisibilityOfTable(hud.containerSingle, false);
+							hud.setVisibilityOfTable(hud.containerMultiple, true);
 							hud.clickOffTable(hud.inGameTable);
 						}
 
@@ -168,9 +201,10 @@ public class GameScreen implements Screen
 				}
 				else
 				{
-					hud.setVisibilityOfTable(hud.container2, false);
-					hud.setVisibilityOfTable(hud.container1, true);
+					hud.setVisibilityOfTable(hud.containerSingle, false);
+					hud.setVisibilityOfTable(hud.containerMultiple, true);
 					// Clicked outside of map
+
 					if(!hud.clickInTable(hud.inGameTable)) {
 						hud.clickOffTable(hud.inGameTable);
 						System.out.print("UI??");
