@@ -11,6 +11,7 @@ public class Score {
         this.value = value;
         this.ID = ID;
     }
+
     public Score() {
         this.value = 0;
         this.name = "Undefined_User";

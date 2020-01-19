@@ -61,7 +61,7 @@
     0%
   </span>
   <span class="absValue">
-    (0/ 11)
+    (0/ 12)
   </span>
 </td>
 </tr>
@@ -84,69 +84,72 @@
 <i>10</i>&nbsp;
 <i>11</i>&nbsp;public class DeathScreen implements Screen
 <i>12</i>&nbsp;{
-<i>13</i>&nbsp;
-<i>14</i>&nbsp;    final MyGdxGame game;
-<i>15</i>&nbsp;    private Viewport viewport;
-<i>16</i>&nbsp;
-<i>17</i>&nbsp;    public DeathScreen(final MyGdxGame game)
-<b class="nc"><i>18</i>&nbsp;    {</b>
-<b class="nc"><i>19</i>&nbsp;        this.game = game;</b>
-<b class="nc"><i>20</i>&nbsp;        viewport = new FitViewport(10, 10);</b>
-<i>21</i>&nbsp;    }
-<i>22</i>&nbsp;
-<i>23</i>&nbsp;    @Override
-<i>24</i>&nbsp;    public void show() {
+<i>13</i>&nbsp;    /**
+<i>14</i>&nbsp;     * Screen for player death
+<i>15</i>&nbsp;     */
+<i>16</i>&nbsp;    final MyGdxGame game;
+<i>17</i>&nbsp;    private Viewport viewport;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    public DeathScreen(final MyGdxGame game)
+<b class="nc"><i>20</i>&nbsp;    {</b>
+<b class="nc"><i>21</i>&nbsp;        this.game = game;</b>
+<b class="nc"><i>22</i>&nbsp;        viewport = new FitViewport(10, 10);</b>
+<b class="nc"><i>23</i>&nbsp;        Gdx.graphics.setWindowedMode(512, 512);</b>
+<i>24</i>&nbsp;    }
 <i>25</i>&nbsp;
-<i>26</i>&nbsp;    }
-<i>27</i>&nbsp;
-<i>28</i>&nbsp;    @Override
-<i>29</i>&nbsp;    public void render(float delta)
-<i>30</i>&nbsp;    {
-<b class="nc"><i>31</i>&nbsp;        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);</b>
-<b class="nc"><i>32</i>&nbsp;        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</b>
-<b class="nc"><i>33</i>&nbsp;        game.batch.begin();</b>
-<b class="nc"><i>34</i>&nbsp;        game.font.draw(game.batch, &quot;You are ded\n   No high score for you \n \n Space to restart&quot;, 128, 255);</b>
-<b class="nc"><i>35</i>&nbsp;        game.batch.end();</b>
-<i>36</i>&nbsp;
-<i>37</i>&nbsp;
-<b class="nc"><i>38</i>&nbsp;        if (Gdx.input.isKeyPressed(Input.Keys.SPACE))</b>
-<i>39</i>&nbsp;        {
-<b class="nc"><i>40</i>&nbsp;            System.out.println(&quot;Going to Home&quot;);</b>
-<b class="nc"><i>41</i>&nbsp;            game.setScreen(new TitleScreen(game));</b>
-<i>42</i>&nbsp;        }
-<i>43</i>&nbsp;    }
-<i>44</i>&nbsp;
-<i>45</i>&nbsp;    @Override
-<i>46</i>&nbsp;    public void resize(int width, int height)
-<i>47</i>&nbsp;    {
-<i>48</i>&nbsp;    }
-<i>49</i>&nbsp;
-<i>50</i>&nbsp;    @Override
-<i>51</i>&nbsp;    public void pause() {
+<i>26</i>&nbsp;    @Override
+<i>27</i>&nbsp;    public void show() {
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    }
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    @Override
+<i>32</i>&nbsp;    public void render(float delta)
+<i>33</i>&nbsp;    {
+<b class="nc"><i>34</i>&nbsp;        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);</b>
+<b class="nc"><i>35</i>&nbsp;        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</b>
+<b class="nc"><i>36</i>&nbsp;        game.batch.begin();</b>
+<b class="nc"><i>37</i>&nbsp;        game.font.draw(game.batch, &quot;You are ded\n   No high score for you \n \n Space to restart&quot;, 128, 255);</b>
+<b class="nc"><i>38</i>&nbsp;        game.batch.end();</b>
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;
+<b class="nc"><i>41</i>&nbsp;        if (Gdx.input.isKeyPressed(Input.Keys.SPACE))</b>
+<i>42</i>&nbsp;        {
+<b class="nc"><i>43</i>&nbsp;            System.out.println(&quot;Going to Home&quot;);</b>
+<b class="nc"><i>44</i>&nbsp;            game.setScreen(new TitleScreen(game));</b>
+<i>45</i>&nbsp;        }
+<i>46</i>&nbsp;    }
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    @Override
+<i>49</i>&nbsp;    public void resize(int width, int height)
+<i>50</i>&nbsp;    {
+<i>51</i>&nbsp;    }
 <i>52</i>&nbsp;
-<i>53</i>&nbsp;    }
-<i>54</i>&nbsp;
-<i>55</i>&nbsp;    @Override
-<i>56</i>&nbsp;    public void resume() {
+<i>53</i>&nbsp;    @Override
+<i>54</i>&nbsp;    public void pause() {
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    }
 <i>57</i>&nbsp;
-<i>58</i>&nbsp;    }
-<i>59</i>&nbsp;
-<i>60</i>&nbsp;    @Override
-<i>61</i>&nbsp;    public void hide() {
+<i>58</i>&nbsp;    @Override
+<i>59</i>&nbsp;    public void resume() {
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    }
 <i>62</i>&nbsp;
-<i>63</i>&nbsp;    }
-<i>64</i>&nbsp;
-<i>65</i>&nbsp;    @Override
-<i>66</i>&nbsp;    public void dispose() {
+<i>63</i>&nbsp;    @Override
+<i>64</i>&nbsp;    public void hide() {
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    }
 <i>67</i>&nbsp;
-<i>68</i>&nbsp;    }
-<i>69</i>&nbsp;}
+<i>68</i>&nbsp;    @Override
+<i>69</i>&nbsp;    public void dispose() {
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    }
+<i>72</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-01-18 16:19</div>
+    <div style="float:right;">generated on 2020-01-19 13:52</div>
 </div>
 </body>
 </html>

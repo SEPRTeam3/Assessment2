@@ -194,7 +194,7 @@ public class ShortestPathfinder
             else
             {
                 // target is down from source
-                for (int i = y1 -1; i > y1; i--)
+                for (int i = y1 -1; i > y2; i--)
                 {
                     if (this.occlusionMap[x1][i] == false)
                     {

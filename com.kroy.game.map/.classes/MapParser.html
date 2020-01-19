@@ -82,126 +82,134 @@
 <i>8</i>&nbsp;
 <i>9</i>&nbsp;public class MapParser
 <i>10</i>&nbsp;{
-<i>11</i>&nbsp;    public MapParser() {}
-<i>12</i>&nbsp;
-<b class="nc"><i>13</i>&nbsp;    private int firetrucksAdded = 0;</b>
-<i>14</i>&nbsp;
-<b class="nc"><i>15</i>&nbsp;    private Texture truckOneTexture = new Texture(Gdx.files.internal(&quot;SpecialFiretrucks1.png&quot;));</b>
-<b class="nc"><i>16</i>&nbsp;    private Texture truckTwoTexture = new Texture(Gdx.files.internal(&quot;SpecialFiretrucks2.png&quot;));</b>
+<i>11</i>&nbsp;    /**
+<i>12</i>&nbsp;     * Class for turning elements of the tiled map into interactive objects in the map
+<i>13</i>&nbsp;     */
+<i>14</i>&nbsp;    public MapParser() {}
+<i>15</i>&nbsp;
+<b class="nc"><i>16</i>&nbsp;    private int firetrucksAdded = 0;</b>
 <i>17</i>&nbsp;
-<i>18</i>&nbsp;    public void addAll(Map map, TiledMap tilemap)
-<i>19</i>&nbsp;    {
-<b class="nc"><i>20</i>&nbsp;        addTrucks(map, tilemap);</b>
-<b class="nc"><i>21</i>&nbsp;        addObstacles(map, tilemap);</b>
-<b class="nc"><i>22</i>&nbsp;        addFortresses(map, tilemap);</b>
-<b class="nc"><i>23</i>&nbsp;        addFirestations(map, tilemap);</b>
-<i>24</i>&nbsp;    }
-<i>25</i>&nbsp;
-<i>26</i>&nbsp;    private void addTrucks(Map map, TiledMap tilemap)
-<i>27</i>&nbsp;    {
-<b class="nc"><i>28</i>&nbsp;        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tilemap.getLayers().get(&quot;TrucksTiles&quot;);</b>
-<i>29</i>&nbsp;
-<b class="nc"><i>30</i>&nbsp;        for (int x = 0; x &lt; tileLayer.getWidth(); x++)</b>
-<i>31</i>&nbsp;        {
-<b class="nc"><i>32</i>&nbsp;            for (int y = 0; y &lt; tileLayer.getHeight(); y++)</b>
-<i>33</i>&nbsp;            {
-<b class="nc"><i>34</i>&nbsp;                TiledMapTileLayer.Cell cell =  tileLayer.getCell(x, y);</b>
-<b class="nc"><i>35</i>&nbsp;                if (cell != null)</b>
-<i>36</i>&nbsp;                {
-<b class="nc"><i>37</i>&nbsp;                    switch (firetrucksAdded)</b>
-<i>38</i>&nbsp;                    {
-<i>39</i>&nbsp;                        case 0:
-<b class="nc"><i>40</i>&nbsp;                            map.spawnFiretruck(x,tileLayer.getHeight()-y-1, truckOneTexture, 3, 10, 10);</b>
-<b class="nc"><i>41</i>&nbsp;                            firetrucksAdded++;</b>
-<b class="nc"><i>42</i>&nbsp;                            break;</b>
-<i>43</i>&nbsp;                        case 1:
-<b class="nc"><i>44</i>&nbsp;                            map.spawnFiretruck(x,tileLayer.getHeight()-y-1, truckTwoTexture, 10, 3, 1);</b>
-<b class="nc"><i>45</i>&nbsp;                            firetrucksAdded++;</b>
-<b class="nc"><i>46</i>&nbsp;                            break;</b>
-<i>47</i>&nbsp;                        default:
-<b class="nc"><i>48</i>&nbsp;                            map.spawnFiretruck(x,tileLayer.getHeight()-y-1);</b>
+<b class="nc"><i>18</i>&nbsp;    private Texture truckOneTexture = new Texture(Gdx.files.internal(&quot;SpecialFiretrucks1.png&quot;));</b>
+<b class="nc"><i>19</i>&nbsp;    private Texture truckTwoTexture = new Texture(Gdx.files.internal(&quot;SpecialFiretrucks2.png&quot;));</b>
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    public void addAll(Map map, TiledMap tilemap)
+<i>22</i>&nbsp;    {
+<i>23</i>&nbsp;        /**
+<i>24</i>&nbsp;         * spawns all entities designated in the tilemap
+<i>25</i>&nbsp;         * @param map the Map object to add entities to
+<i>26</i>&nbsp;         * @param tilemap the TiledMap object to read layers from
+<i>27</i>&nbsp;         */
+<b class="nc"><i>28</i>&nbsp;        addTrucks(map, tilemap);</b>
+<b class="nc"><i>29</i>&nbsp;        addObstacles(map, tilemap);</b>
+<b class="nc"><i>30</i>&nbsp;        addFortresses(map, tilemap);</b>
+<b class="nc"><i>31</i>&nbsp;        addFirestations(map, tilemap);</b>
+<i>32</i>&nbsp;    }
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    private void addTrucks(Map map, TiledMap tilemap)
+<i>35</i>&nbsp;    {
+<b class="nc"><i>36</i>&nbsp;        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tilemap.getLayers().get(&quot;TrucksTiles&quot;);</b>
+<i>37</i>&nbsp;
+<b class="nc"><i>38</i>&nbsp;        for (int x = 0; x &lt; tileLayer.getWidth(); x++)</b>
+<i>39</i>&nbsp;        {
+<b class="nc"><i>40</i>&nbsp;            for (int y = 0; y &lt; tileLayer.getHeight(); y++)</b>
+<i>41</i>&nbsp;            {
+<b class="nc"><i>42</i>&nbsp;                TiledMapTileLayer.Cell cell =  tileLayer.getCell(x, y);</b>
+<b class="nc"><i>43</i>&nbsp;                if (cell != null)</b>
+<i>44</i>&nbsp;                {
+<b class="nc"><i>45</i>&nbsp;                    switch (firetrucksAdded)</b>
+<i>46</i>&nbsp;                    {
+<i>47</i>&nbsp;                        case 0:
+<b class="nc"><i>48</i>&nbsp;                            map.spawnFiretruck(x,tileLayer.getHeight()-y-1, truckOneTexture, 3, 10, 10, 10, 1);</b>
 <b class="nc"><i>49</i>&nbsp;                            firetrucksAdded++;</b>
-<i>50</i>&nbsp;                            break;
-<i>51</i>&nbsp;                    }
-<i>52</i>&nbsp;                }
-<i>53</i>&nbsp;            }
-<i>54</i>&nbsp;        }
-<i>55</i>&nbsp;    }
-<i>56</i>&nbsp;
-<i>57</i>&nbsp;    private void addObstacles(Map map, TiledMap tilemap)
-<i>58</i>&nbsp;    {
-<b class="nc"><i>59</i>&nbsp;        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tilemap.getLayers().get(&quot;Obstacles&quot;);</b>
-<i>60</i>&nbsp;
-<b class="nc"><i>61</i>&nbsp;        for (int x = 0; x &lt; tileLayer.getWidth(); x++)</b>
-<i>62</i>&nbsp;        {
-<b class="nc"><i>63</i>&nbsp;            for (int y = 0; y &lt; tileLayer.getHeight(); y++)</b>
-<i>64</i>&nbsp;            {
-<b class="nc"><i>65</i>&nbsp;                TiledMapTileLayer.Cell cell =  tileLayer.getCell(x, y);</b>
-<b class="nc"><i>66</i>&nbsp;                if (cell != null)</b>
-<i>67</i>&nbsp;                {
-<b class="nc"><i>68</i>&nbsp;                    map.spawnObstacle(x, tileLayer.getHeight()-y-1);</b>
-<i>69</i>&nbsp;                }
-<i>70</i>&nbsp;            }
-<i>71</i>&nbsp;        }
-<i>72</i>&nbsp;    }
-<i>73</i>&nbsp;
-<i>74</i>&nbsp;    private void addFortresses(Map map, TiledMap tilemap)
-<i>75</i>&nbsp;    {
-<b class="nc"><i>76</i>&nbsp;        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tilemap.getLayers().get(&quot;Fortress&quot;);</b>
-<i>77</i>&nbsp;
-<b class="nc"><i>78</i>&nbsp;        for (int x = 0; x &lt; tileLayer.getWidth(); x++)</b>
-<i>79</i>&nbsp;        {
-<b class="nc"><i>80</i>&nbsp;            for (int y = 0; y &lt; tileLayer.getHeight(); y++)</b>
-<i>81</i>&nbsp;            {
-<b class="nc"><i>82</i>&nbsp;                TiledMapTileLayer.Cell cell =  tileLayer.getCell(x, y);</b>
-<b class="nc"><i>83</i>&nbsp;                if (cell != null)</b>
-<i>84</i>&nbsp;                {
-<b class="nc"><i>85</i>&nbsp;                    map.spawnFortress(x, tileLayer.getHeight()-y-1);</b>
-<i>86</i>&nbsp;                }
-<i>87</i>&nbsp;            }
-<i>88</i>&nbsp;        }
-<i>89</i>&nbsp;    }
-<i>90</i>&nbsp;
-<i>91</i>&nbsp;    private void addFirestations(Map map, TiledMap tilemap)
-<i>92</i>&nbsp;    {
-<b class="nc"><i>93</i>&nbsp;        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tilemap.getLayers().get(&quot;FireStation&quot;);</b>
-<i>94</i>&nbsp;
-<b class="nc"><i>95</i>&nbsp;        for (int x = 0; x &lt; tileLayer.getWidth(); x++)</b>
-<i>96</i>&nbsp;        {
-<b class="nc"><i>97</i>&nbsp;            for (int y = 0; y &lt; tileLayer.getHeight(); y++)</b>
-<i>98</i>&nbsp;            {
-<b class="nc"><i>99</i>&nbsp;                TiledMapTileLayer.Cell cell =  tileLayer.getCell(x, y);</b>
-<b class="nc"><i>100</i>&nbsp;                if (cell != null)</b>
-<i>101</i>&nbsp;                {
-<b class="nc"><i>102</i>&nbsp;                    map.spawnFirestation(x, tileLayer.getHeight()-y-1);</b>
-<i>103</i>&nbsp;                }
-<i>104</i>&nbsp;            }
-<i>105</i>&nbsp;        }
-<i>106</i>&nbsp;    }
-<i>107</i>&nbsp;
-<i>108</i>&nbsp;    public static TiledMapTileLayer.Cell getCorruption(TiledMap tilemap)
-<i>109</i>&nbsp;    {
-<b class="nc"><i>110</i>&nbsp;        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tilemap.getLayers().get(&quot;FireStation&quot;);</b>
-<b class="nc"><i>111</i>&nbsp;        for (int x = 0; x &lt; tileLayer.getWidth(); x++)</b>
-<i>112</i>&nbsp;        {
-<b class="nc"><i>113</i>&nbsp;            for (int y = 0; y &lt; tileLayer.getHeight(); y++)</b>
-<i>114</i>&nbsp;            {
-<b class="nc"><i>115</i>&nbsp;                TiledMapTileLayer.Cell cell =  tileLayer.getCell(x, y);</b>
-<b class="nc"><i>116</i>&nbsp;                if (cell != null)</b>
-<i>117</i>&nbsp;                {
-<b class="nc"><i>118</i>&nbsp;                    return cell;</b>
-<i>119</i>&nbsp;                }
-<i>120</i>&nbsp;            }
-<i>121</i>&nbsp;        }
-<b class="nc"><i>122</i>&nbsp;        return null;</b>
-<i>123</i>&nbsp;    }
-<i>124</i>&nbsp;}
+<b class="nc"><i>50</i>&nbsp;                            break;</b>
+<i>51</i>&nbsp;                        case 1:
+<b class="nc"><i>52</i>&nbsp;                            map.spawnFiretruck(x,tileLayer.getHeight()-y-1, truckTwoTexture, 10, 3, 1, 5, 2);</b>
+<b class="nc"><i>53</i>&nbsp;                            firetrucksAdded++;</b>
+<b class="nc"><i>54</i>&nbsp;                            break;</b>
+<i>55</i>&nbsp;                        default:
+<b class="nc"><i>56</i>&nbsp;                            map.spawnFiretruck(x,tileLayer.getHeight()-y-1);</b>
+<b class="nc"><i>57</i>&nbsp;                            firetrucksAdded++;</b>
+<i>58</i>&nbsp;                            break;
+<i>59</i>&nbsp;                    }
+<i>60</i>&nbsp;                }
+<i>61</i>&nbsp;            }
+<i>62</i>&nbsp;        }
+<i>63</i>&nbsp;    }
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    private void addObstacles(Map map, TiledMap tilemap)
+<i>66</i>&nbsp;    {
+<b class="nc"><i>67</i>&nbsp;        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tilemap.getLayers().get(&quot;Obstacles&quot;);</b>
+<i>68</i>&nbsp;
+<b class="nc"><i>69</i>&nbsp;        for (int x = 0; x &lt; tileLayer.getWidth(); x++)</b>
+<i>70</i>&nbsp;        {
+<b class="nc"><i>71</i>&nbsp;            for (int y = 0; y &lt; tileLayer.getHeight(); y++)</b>
+<i>72</i>&nbsp;            {
+<b class="nc"><i>73</i>&nbsp;                TiledMapTileLayer.Cell cell =  tileLayer.getCell(x, y);</b>
+<b class="nc"><i>74</i>&nbsp;                if (cell != null)</b>
+<i>75</i>&nbsp;                {
+<b class="nc"><i>76</i>&nbsp;                    map.spawnObstacle(x, tileLayer.getHeight()-y-1);</b>
+<i>77</i>&nbsp;                }
+<i>78</i>&nbsp;            }
+<i>79</i>&nbsp;        }
+<i>80</i>&nbsp;    }
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    private void addFortresses(Map map, TiledMap tilemap)
+<i>83</i>&nbsp;    {
+<b class="nc"><i>84</i>&nbsp;        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tilemap.getLayers().get(&quot;Fortress&quot;);</b>
+<i>85</i>&nbsp;
+<b class="nc"><i>86</i>&nbsp;        for (int x = 0; x &lt; tileLayer.getWidth(); x++)</b>
+<i>87</i>&nbsp;        {
+<b class="nc"><i>88</i>&nbsp;            for (int y = 0; y &lt; tileLayer.getHeight(); y++)</b>
+<i>89</i>&nbsp;            {
+<b class="nc"><i>90</i>&nbsp;                TiledMapTileLayer.Cell cell =  tileLayer.getCell(x, y);</b>
+<b class="nc"><i>91</i>&nbsp;                if (cell != null)</b>
+<i>92</i>&nbsp;                {
+<b class="nc"><i>93</i>&nbsp;                    map.spawnFortress(x, tileLayer.getHeight()-y-1);</b>
+<i>94</i>&nbsp;                }
+<i>95</i>&nbsp;            }
+<i>96</i>&nbsp;        }
+<i>97</i>&nbsp;    }
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    private void addFirestations(Map map, TiledMap tilemap)
+<i>100</i>&nbsp;    {
+<b class="nc"><i>101</i>&nbsp;        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tilemap.getLayers().get(&quot;FireStation&quot;);</b>
+<i>102</i>&nbsp;
+<b class="nc"><i>103</i>&nbsp;        for (int x = 0; x &lt; tileLayer.getWidth(); x++)</b>
+<i>104</i>&nbsp;        {
+<b class="nc"><i>105</i>&nbsp;            for (int y = 0; y &lt; tileLayer.getHeight(); y++)</b>
+<i>106</i>&nbsp;            {
+<b class="nc"><i>107</i>&nbsp;                TiledMapTileLayer.Cell cell =  tileLayer.getCell(x, y);</b>
+<b class="nc"><i>108</i>&nbsp;                if (cell != null)</b>
+<i>109</i>&nbsp;                {
+<b class="nc"><i>110</i>&nbsp;                    map.spawnFirestation(x, tileLayer.getHeight()-y-1);</b>
+<i>111</i>&nbsp;                }
+<i>112</i>&nbsp;            }
+<i>113</i>&nbsp;        }
+<i>114</i>&nbsp;    }
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;    public static TiledMapTileLayer.Cell getCorruption(TiledMap tilemap)
+<i>117</i>&nbsp;    {
+<b class="nc"><i>118</i>&nbsp;        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tilemap.getLayers().get(&quot;FireStation&quot;);</b>
+<b class="nc"><i>119</i>&nbsp;        for (int x = 0; x &lt; tileLayer.getWidth(); x++)</b>
+<i>120</i>&nbsp;        {
+<b class="nc"><i>121</i>&nbsp;            for (int y = 0; y &lt; tileLayer.getHeight(); y++)</b>
+<i>122</i>&nbsp;            {
+<b class="nc"><i>123</i>&nbsp;                TiledMapTileLayer.Cell cell =  tileLayer.getCell(x, y);</b>
+<b class="nc"><i>124</i>&nbsp;                if (cell != null)</b>
+<i>125</i>&nbsp;                {
+<b class="nc"><i>126</i>&nbsp;                    return cell;</b>
+<i>127</i>&nbsp;                }
+<i>128</i>&nbsp;            }
+<i>129</i>&nbsp;        }
+<b class="nc"><i>130</i>&nbsp;        return null;</b>
+<i>131</i>&nbsp;    }
+<i>132</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-01-18 16:19</div>
+    <div style="float:right;">generated on 2020-01-19 13:52</div>
 </div>
 </body>
 </html>

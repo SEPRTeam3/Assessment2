@@ -1,5 +1,7 @@
 package main.java;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import com.kroy.game.entities.Firetruck;
@@ -7,6 +9,16 @@ import static org.junit.Assert.*;
 
 @RunWith(GdxTestRunner.class)
 public class FiretruckTest {
+
+    @Test
+    public void testFiretuck(){
+        Firetruck testDefaultFiretruck = new Firetruck();
+        assertTrue(testDefaultFiretruck instanceof Firetruck);
+
+        Texture testTexture = new Texture(Gdx.files.internal("firetruck3.png"));
+        Firetruck testCustomFiretruck = new Firetruck(testTexture,2,5,2,3,1);
+        assertTrue(testCustomFiretruck instanceof Firetruck);
+    }
 
     @Test
     public void testSetHealth(){
@@ -43,6 +55,11 @@ public class FiretruckTest {
         assertEquals(5,testtruck.getHealth());
     }
 
+    @Test
+    public void getAttackDistance(){
+        Firetruck testtruck = new Firetruck();
+        assertEquals(5,testtruck.getAttackDistance());
+    }
 
 
 
@@ -142,14 +159,14 @@ public class FiretruckTest {
          */
         assertTrue(testtruck.isAttackPossible(5, 10, 5, 10));
         assertTrue(testtruck.isAttackPossible(10, 5, 10, 5));
-        assertTrue(testtruck.isAttackPossible(10, 3, 10, 10));
-        assertTrue(testtruck.isAttackPossible(4, 3, 10, 3));
+        assertFalse(testtruck.isAttackPossible(10, 3, 10, 10));
+        assertFalse(testtruck.isAttackPossible(4, 3, 10, 3));
         /*
         Method should return True if negative values are placed
          */
         assertTrue(testtruck.isAttackPossible(-4,3,-4,3));
         assertTrue(testtruck.isAttackPossible(-4,-3,-4,-3));
-        assertTrue(testtruck.isAttackPossible(-4,-3,-10,-3));
+        assertFalse(testtruck.isAttackPossible(-4,-3,-10,-3));
         /*
         Method should return True on values of 0
          */

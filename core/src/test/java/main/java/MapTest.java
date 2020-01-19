@@ -1,5 +1,7 @@
 package main.java;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.kroy.game.blocks.*;
 import com.kroy.game.entities.*;
@@ -11,6 +13,7 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
+
 
 
 @RunWith(GdxTestRunner.class)
@@ -133,6 +136,7 @@ public class MapTest {
     public void damageLocation() {
         Map testmap = new Map();
 
+        //test valid attacks
         Firetruck testtruck=testmap.spawnFiretruck(0,0);
         testmap.damageLocation(2,0,0);
 
@@ -140,6 +144,7 @@ public class MapTest {
 
         testmap.damageLocation(3,0,0);
         assertEquals(testtruck.getHealth(),0);
+
     }
 
     @Test
@@ -159,8 +164,13 @@ public class MapTest {
     @Test
     public void spawnFiretruck() {
         Map testmap = new Map();
-        testmap.spawnFiretruck(0,0);
-        assertTrue(testmap.getEntity(0,0) instanceof Firetruck );
+        Firetruck defaultTruck=testmap.spawnFiretruck(0,0);
+        assertTrue(defaultTruck instanceof Firetruck );
+
+        Texture testTexture= new Texture(Gdx.files.internal("firetruck3.png"));
+        Firetruck customFiretruck=testmap.spawnFiretruck(1,1,testTexture,2,5,5,5,5);
+        assertTrue(customFiretruck instanceof Firetruck );
+
     }
 
     @Test

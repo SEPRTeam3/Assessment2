@@ -1,5 +1,8 @@
 package main.java;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.kroy.game.entities.Firetruck;
 import main.java.GdxTestRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,6 +11,15 @@ import com.kroy.game.score.Score;
 
 @RunWith(GdxTestRunner.class)
 public class ScoreTest {
+    @Test
+    public void testScore() {
+        Score testDefaultScore = new Score();
+        assertTrue(testDefaultScore instanceof Score);
+
+        Score testCustomScore = new Score("testName",10,1);
+        assertTrue(testCustomScore instanceof Score);
+    }
+
     @Test
     public void getName() {
         Score testScore = new Score("TestName", 10, 1);

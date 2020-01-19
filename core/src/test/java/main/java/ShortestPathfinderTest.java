@@ -15,9 +15,13 @@ public class ShortestPathfinderTest {
     @Test
     public void getDistanceMatrix() {
         Map testmap=new Map();
-        boolean[][] occlusionMap = new boolean[testmap.WIDTH][testmap.HEIGHT];
 
         int[][] distancematrixtest=testmap.pathfinder.getDistanceMatrix(0,0);
+
+
+        //empty map with no obstructions should have format distancematrix[i][j]=n distancematrix[i+1][j]=n+1 and
+        // distancematrix[i][j+1]=n+1
+
         //horizontally
         //basecase
         assertEquals(distancematrixtest[0][0],0);
@@ -33,6 +37,37 @@ public class ShortestPathfinderTest {
         //inductive step
         assertEquals(distancematrixtest[4][6],10);
         assertEquals(distancematrixtest[5][6],11);
+
+
+        //Distance matrix with obstructions should show -1 where there are obstructions
+        testmap.spawnObstacle(2,2);
+        int[][] distancematrixtest1=testmap.pathfinder.getDistanceMatrix(0,0);
+        assertEquals(distancematrixtest1[2][2],-1);
+    }
+
+    @Test
+    public void straightPath() {
+        Map testmap=new Map();
+        //There is a "straight path" from a block to itself, method returns true
+        assertTrue(testmap.pathfinder.straightPath(2,2,2,2));
+
+        //there is a straight path from a block on the same y axis as another block - no obstructions
+        assertTrue(testmap.pathfinder.straightPath(3,4,3,3));
+        assertTrue(testmap.pathfinder.straightPath(3,3,3,4));
+
+        //there is a no straight path from a block on the same y axis as another block with obstructions
+        testmap.spawnObstacle(5,6);
+        assertFalse(testmap.pathfinder.straightPath(5,7,5,5));
+        assertFalse(testmap.pathfinder.straightPath(5,5,5,7));
+
+        //there is a straight path from a block on the same x axis as another block - no obstructions
+        assertTrue(testmap.pathfinder.straightPath(4,3,3,3));
+        assertTrue(testmap.pathfinder.straightPath(3,3,4,3));
+
+        //there is a no straight path from a block on the same x axis as another block with obstructions
+        testmap.spawnObstacle(6,5);
+        assertFalse(testmap.pathfinder.straightPath(7,5,5,5));
+        assertFalse(testmap.pathfinder.straightPath(5,5,7,5));
 
     }
 }

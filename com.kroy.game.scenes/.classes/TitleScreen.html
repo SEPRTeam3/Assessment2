@@ -85,76 +85,79 @@
 <i>11</i>&nbsp;
 <i>12</i>&nbsp;public class TitleScreen implements Screen
 <i>13</i>&nbsp;{
-<i>14</i>&nbsp;	final MyGdxGame game;
-<i>15</i>&nbsp;	private Texture titleImage;
-<i>16</i>&nbsp;	public TitleScreen(final MyGdxGame game)
-<b class="nc"><i>17</i>&nbsp;	{</b>
-<b class="nc"><i>18</i>&nbsp;		this.game = game;</b>
-<b class="nc"><i>19</i>&nbsp;		titleImage = new Texture(Gdx.files.internal(&quot;mainmenu.jpg&quot;)); </b>
-<i>20</i>&nbsp;	}
-<i>21</i>&nbsp;
-<i>22</i>&nbsp;	@Override
-<i>23</i>&nbsp;	public void show() {
-<i>24</i>&nbsp;		// TODO Auto-generated method stub
-<i>25</i>&nbsp;		
-<i>26</i>&nbsp;	}
-<i>27</i>&nbsp;
-<i>28</i>&nbsp;	@Override
-<i>29</i>&nbsp;	public void render(float delta) 
-<i>30</i>&nbsp;	{
-<i>31</i>&nbsp;		
-<i>32</i>&nbsp;		// Do inputs
-<i>33</i>&nbsp;		
-<b class="nc"><i>34</i>&nbsp;		if (Gdx.input.isKeyPressed(Input.Keys.SPACE))</b>
-<i>35</i>&nbsp;		{
-<b class="nc"><i>36</i>&nbsp;			System.out.println(&quot;Going to game screen&quot;);</b>
-<b class="nc"><i>37</i>&nbsp;			game.setScreen(new GameScreen(game));</b>
-<i>38</i>&nbsp;		}
-<i>39</i>&nbsp;		
-<i>40</i>&nbsp;		// Do rendering
-<b class="nc"><i>41</i>&nbsp;		game.batch.begin();</b>
-<b class="nc"><i>42</i>&nbsp;		game.batch.draw(titleImage, 0, 0, 512, 512);</b>
-<i>43</i>&nbsp;
-<b class="nc"><i>44</i>&nbsp;		game.font.draw(game.batch, &quot;TEST GAME PLEASE IGNORE \n Press SPACE to start&quot;, 128, 256);</b>
-<b class="nc"><i>45</i>&nbsp;		game.batch.end();</b>
-<i>46</i>&nbsp;	}
-<i>47</i>&nbsp;
-<i>48</i>&nbsp;	@Override
-<i>49</i>&nbsp;	public void resize(int width, int height) {
-<i>50</i>&nbsp;		// TODO Auto-generated method stub
-<i>51</i>&nbsp;		
-<i>52</i>&nbsp;	}
-<i>53</i>&nbsp;
-<i>54</i>&nbsp;	@Override
-<i>55</i>&nbsp;	public void pause() {
-<i>56</i>&nbsp;		// TODO Auto-generated method stub
-<i>57</i>&nbsp;		
-<i>58</i>&nbsp;	}
-<i>59</i>&nbsp;
-<i>60</i>&nbsp;	@Override
-<i>61</i>&nbsp;	public void resume() {
-<i>62</i>&nbsp;		// TODO Auto-generated method stub
-<i>63</i>&nbsp;		
-<i>64</i>&nbsp;	}
-<i>65</i>&nbsp;
-<i>66</i>&nbsp;	@Override
-<i>67</i>&nbsp;	public void hide() {
-<i>68</i>&nbsp;		// TODO Auto-generated method stub
-<i>69</i>&nbsp;		
-<i>70</i>&nbsp;	}
-<i>71</i>&nbsp;
-<i>72</i>&nbsp;	@Override
-<i>73</i>&nbsp;	public void dispose() {
-<i>74</i>&nbsp;		// TODO Auto-generated method stub
-<i>75</i>&nbsp;		
-<i>76</i>&nbsp;	}
-<i>77</i>&nbsp;}
+<i>14</i>&nbsp;	/**
+<i>15</i>&nbsp;	 * Title screen
+<i>16</i>&nbsp;	 */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;	final MyGdxGame game;
+<i>19</i>&nbsp;	private Texture titleImage;
+<i>20</i>&nbsp;	public TitleScreen(final MyGdxGame game)
+<b class="nc"><i>21</i>&nbsp;	{</b>
+<b class="nc"><i>22</i>&nbsp;		this.game = game;</b>
+<b class="nc"><i>23</i>&nbsp;		titleImage = new Texture(Gdx.files.internal(&quot;mainmenu.jpg&quot;)); </b>
+<i>24</i>&nbsp;	}
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;	@Override
+<i>27</i>&nbsp;	public void show() {
+<i>28</i>&nbsp;		// TODO Auto-generated method stub
+<i>29</i>&nbsp;		
+<i>30</i>&nbsp;	}
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;	@Override
+<i>33</i>&nbsp;	public void render(float delta) 
+<i>34</i>&nbsp;	{
+<i>35</i>&nbsp;		
+<i>36</i>&nbsp;		// Do inputs
+<b class="nc"><i>37</i>&nbsp;		if (Gdx.input.isKeyPressed(Input.Keys.SPACE))</b>
+<i>38</i>&nbsp;		{
+<b class="nc"><i>39</i>&nbsp;			System.out.println(&quot;Going to game screen&quot;);</b>
+<b class="nc"><i>40</i>&nbsp;			game.setScreen(new GameScreen(game));</b>
+<i>41</i>&nbsp;		}
+<i>42</i>&nbsp;		
+<i>43</i>&nbsp;		// Do rendering
+<b class="nc"><i>44</i>&nbsp;		game.batch.begin();</b>
+<b class="nc"><i>45</i>&nbsp;		game.batch.draw(titleImage, 0, 0, 512, 512);</b>
+<i>46</i>&nbsp;
+<b class="nc"><i>47</i>&nbsp;		game.font.draw(game.batch, &quot;TEST GAME PLEASE IGNORE \n Press SPACE to start&quot;, 128, 256);</b>
+<b class="nc"><i>48</i>&nbsp;		game.batch.end();</b>
+<i>49</i>&nbsp;	}
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;	@Override
+<i>52</i>&nbsp;	public void resize(int width, int height) {
+<i>53</i>&nbsp;		// TODO Auto-generated method stub
+<i>54</i>&nbsp;		
+<i>55</i>&nbsp;	}
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;	@Override
+<i>58</i>&nbsp;	public void pause() {
+<i>59</i>&nbsp;		// TODO Auto-generated method stub
+<i>60</i>&nbsp;		
+<i>61</i>&nbsp;	}
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;	@Override
+<i>64</i>&nbsp;	public void resume() {
+<i>65</i>&nbsp;		// TODO Auto-generated method stub
+<i>66</i>&nbsp;		
+<i>67</i>&nbsp;	}
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;	@Override
+<i>70</i>&nbsp;	public void hide() {
+<i>71</i>&nbsp;		// TODO Auto-generated method stub
+<i>72</i>&nbsp;		
+<i>73</i>&nbsp;	}
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;	@Override
+<i>76</i>&nbsp;	public void dispose() {
+<i>77</i>&nbsp;		// TODO Auto-generated method stub
+<i>78</i>&nbsp;		
+<i>79</i>&nbsp;	}
+<i>80</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-01-18 16:19</div>
+    <div style="float:right;">generated on 2020-01-19 13:52</div>
 </div>
 </body>
 </html>

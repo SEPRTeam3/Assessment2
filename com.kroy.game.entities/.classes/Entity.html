@@ -50,18 +50,18 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    50%
+    100%
   </span>
   <span class="absValue">
-    (1/ 2)
+    (2/ 2)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    50%
+    100%
   </span>
   <span class="absValue">
-    (1/ 2)
+    (2/ 2)
   </span>
 </td>
 </tr>
@@ -78,21 +78,29 @@
 <i>4</i>&nbsp;
 <i>5</i>&nbsp;public abstract class Entity
 <i>6</i>&nbsp;{
-<i>7</i>&nbsp;	protected Texture texture;
-<i>8</i>&nbsp;
-<b class="fc"><i>9</i>&nbsp;	public Entity() {}</b>
-<i>10</i>&nbsp;	
-<i>11</i>&nbsp;	public Texture getTexture()
-<i>12</i>&nbsp;	{
-<b class="nc"><i>13</i>&nbsp;		return this.texture;</b>
-<i>14</i>&nbsp;	}
-<i>15</i>&nbsp;}
+<i>7</i>&nbsp;	/**
+<i>8</i>&nbsp;	 * Entity is an abstract class that represents something on that map that is capable of taking actions
+<i>9</i>&nbsp;	 * It has a texture that is rendered to represent the entity in the map
+<i>10</i>&nbsp;	 */
+<i>11</i>&nbsp;	protected Texture texture;
+<i>12</i>&nbsp;
+<b class="fc"><i>13</i>&nbsp;	public Entity() {}</b>
+<i>14</i>&nbsp;	
+<i>15</i>&nbsp;	public Texture getTexture()
+<i>16</i>&nbsp;	{
+<i>17</i>&nbsp;		/**
+<i>18</i>&nbsp;		 * Getter for entity textures
+<i>19</i>&nbsp;		 * @return the texture of the entity
+<i>20</i>&nbsp;		 */
+<b class="fc"><i>21</i>&nbsp;		return this.texture;</b>
+<i>22</i>&nbsp;	}
+<i>23</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-01-18 16:19</div>
+    <div style="float:right;">generated on 2020-01-19 13:52</div>
 </div>
 </body>
 </html>
