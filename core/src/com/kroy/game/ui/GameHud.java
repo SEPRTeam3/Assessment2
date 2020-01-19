@@ -44,7 +44,7 @@ public class GameHud {
     private Image[] fireTruckImg = new Image[2], etFortressImg = new Image[3];
 
     private Label healthLabel, waterLevelLabel, attackStrengthLabel, movementRangeLabel, attackRangeLabel, hasMovedLabel, hasAttackedLabel;
-    private Image fireTruckImgSingle, etFortressImgSingle;
+    private Image fireTruckImgSingleNormal, fireTruckImgSingleBlue, etFortressImgSingle;
 
 
     private Image player;
@@ -76,7 +76,9 @@ public class GameHud {
         fireTruckIconTexture = new Texture(Gdx.files.internal("fire engine 64 by 64-1.png.png"));
         etFortressIconTexture = new Texture(Gdx.files.internal("etFortress.png"));
 
-        fireTruckImgSingle = new Image(fireTruckIconTexture);
+        fireTruckImgSingleNormal = new Image(fireTruckIconTexture);
+        fireTruckImgSingleBlue = new Image(fireTruckIconTexture);
+
         etFortressImgSingle = new Image(etFortressIconTexture);
 
         numFiretrucks = numEtFortresses = 0;
@@ -297,7 +299,7 @@ public class GameHud {
         Vector2 position = stage.screenToStageCoordinates( new Vector2(Gdx.input.getX(), Gdx.input.getY()) );
 
         if(position.x>= table.getX() && position.x<= (table.getX()+table.getWidth()) && position.y>= table.getY() && position.y<= (table.getY()+table.getHeight())) {
-            System.out.print("true bitches");
+
             return true;
         } else {
             return false;
@@ -389,9 +391,68 @@ public class GameHud {
 
 
     }
-    public void getEntityStats(Firetruck f, Skin skin) {
-        boolean movedThisTurn = f.hasAttackedThisTurn();
-        boolean attackedThisTurn = f.hasAttackedThisTurn();
+    public void setLabel(Label label, float positionX, float positionY, float height, float width, float scale, Color color) {
+        label.setPosition(positionX, positionY);
+        label.setSize(width, height);
+        label.setScale(scale);
+        label.setColor(color);
+    }
+    public void getEntityStats(Skin skin) {
+        iniPosY = Gdx.graphics.getHeight() - 40;
+        iniPosX = Gdx.graphics.getWidth() - 240;
+
+
+        fireTruckImgSingleNormal.setPosition(iniPosX, iniPosY);
+        fireTruckImgSingleNormal.setScale(0.5f);
+        fireTruckImgSingleBlue.setPosition(iniPosX, iniPosY);
+        fireTruckImgSingleBlue.setScale(0.5f);
+
+
+        iniPosY -= 20;
+        iniPosX += 20;
+        healthLabel = new Label("", skin);
+        setLabel(healthLabel, iniPosX, iniPosY, 20, 20, 0.8f, Color.BLACK);
+        container2.addActor(healthLabel);
+
+        iniPosY -= 15;
+        iniPosX += 15;
+
+        waterLevelLabel = new Label("", skin);
+        setLabel(waterLevelLabel, iniPosX, iniPosY, 20, 20, 0.8f, Color.BLACK);
+        container2.addActor(waterLevelLabel);
+
+        iniPosY -= 15;
+        iniPosX += 15;
+
+        attackStrengthLabel = new Label("", skin);
+        setLabel(attackStrengthLabel, iniPosX, iniPosY, 20, 20, 0.8f, Color.BLACK);
+        container2.addActor(attackStrengthLabel);
+
+        iniPosY -= 15;
+        iniPosX += 15;
+
+        attackRangeLabel = new Label("", skin);
+        setLabel(attackRangeLabel, iniPosX, iniPosY, 20, 20, 0.8f, Color.BLACK);
+        container2.addActor(attackRangeLabel);
+
+        iniPosY -= 15;
+        iniPosX += 15;
+
+        movementRangeLabel = new Label("", skin);
+        setLabel(movementRangeLabel, iniPosX, iniPosY, 20, 20, 0.8f, Color.BLACK);
+        container2.addActor(movementRangeLabel);
+
+        iniPosY -= 15;
+        iniPosX += 15;
+
+
+
+
+        stage.addActor(container2);
+
+
+    }
+    public void updateEntityStats(Firetruck f) {
 
         int movementDistance = f.getMovementDistance();
         int attackDistance = f.getAttackDistance();
@@ -403,35 +464,31 @@ public class GameHud {
         int maxWater = f.getMaxWater();
         int water = f.getWater();
 
-        iniPosY = Gdx.graphics.getHeight() - 40;
-        iniPosX = Gdx.graphics.getWidth() - 240;
-
-
-        fireTruckImgSingle.setPosition(iniPosX, iniPosY);
-        fireTruckImgSingle.setScale(0.3f);
-        container2.addActor(fireTruckImgSingle);
-
-        iniPosY -= 15;
-        iniPosX += 20;
-        String stats = String.format("Health: %s/%s", health, maxHealth);
-        healthLabel = new Label(stats, skin);
-        healthLabel.setPosition(iniPosX, iniPosY);
-        healthLabel.setSize(20, 20);
-        healthLabel.setFontScale(0.8f);
-        healthLabel.setColor(Color.BLACK);
-        container2.addActor(healthLabel);
-
-
-
-
-
         if(f.getTexture().toString() == "SpecialFiretrucks1.png") {
-            fireTruckImgSingle.setColor(Color.CYAN);
+          fireTruckImgSingleBlue.setColor(Color.CYAN);
+          container2.addActor(fireTruckImgSingleBlue);
+          container2.removeActor(fireTruckImgSingleNormal);
+        } else {
+            container2.removeActor(fireTruckImgSingleBlue);
+            container2.addActor(fireTruckImgSingleNormal);
         }
+
+        String statH = String.format("Health: %s/%s", health, maxHealth);
+        String statW = String.format("Water level: %s/%s", water, maxWater);
+        String statAS = String.format("Attack strength: %s", attackStrength);
+        String statAD = String.format("Attack range: %s", attackDistance);
+        String statMD = String.format("Movement range: %s", movementDistance);
+
+
+        healthLabel.setText(statH);
+        waterLevelLabel.setText(statW);
+        attackStrengthLabel.setText(statAS);
+        attackRangeLabel.setText(statAD);
+        movementRangeLabel.setText(statMD);
+
     }
-
     public void getEntityStats(Fortress f, Skin skin) {
-
+        //null
     }
 
     public void updateStatsUI(Map map) {

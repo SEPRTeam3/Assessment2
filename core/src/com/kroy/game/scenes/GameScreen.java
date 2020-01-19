@@ -72,7 +72,8 @@ public class GameScreen implements Screen
 		// Initialise HUD
 		hud = new GameHud(game.batch, game.skin);
 		hud.createFireTruckUI(map, game.skin);
-
+		hud.getEntityStats(game.skin);
+		hud.setVisibilityOfTable(hud.container2, false);
 		//Initialise enemyAI
 		enemyAI = new ETMastermind(this.map, this.mapDrawer);
 	}
@@ -121,7 +122,9 @@ public class GameScreen implements Screen
 						// Player clicked firetruck with nothing selected, select firetruck
 						selected = new Vector2(tileX, tileY);
 						hud.createGameTable();
-						hud.getEntityStats((Firetruck) map.getEntity(tileX, tileY), game.skin);
+
+
+						hud.updateEntityStats((Firetruck) map.getEntity(tileX, tileY));
 						hud.setVisibilityOfTable(hud.container1, false);
 						hud.setVisibilityOfTable(hud.container2, true);
 
