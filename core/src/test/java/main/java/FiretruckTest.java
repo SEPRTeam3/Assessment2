@@ -59,7 +59,13 @@ public class FiretruckTest {
     public void getAttackDistance(){
         Firetruck testtruck = new Firetruck();
         assertEquals(5,testtruck.getAttackDistance());
+
+        Texture testTexture = new Texture(Gdx.files.internal("firetruck3.png"));
+        Firetruck testCustomFiretruck = new Firetruck(testTexture,2,5,2,3,1);
+        assertEquals(3,testCustomFiretruck.getAttackDistance());
+
     }
+
 
 
 
@@ -83,6 +89,7 @@ public class FiretruckTest {
         after setting the turn to True using setMovedThisTurn
          */
         Firetruck testtruck = new Firetruck();
+        assertFalse(testtruck.hasMovedThisTurn());
         testtruck.setMovedThisTurn();
         assertTrue(testtruck.hasMovedThisTurn());
     }
@@ -124,6 +131,13 @@ public class FiretruckTest {
         assertFalse(testtruck.hasMovedThisTurn());
         assertFalse(testtruck.hasAttackedThisTurn());
 
+        Firetruck testtruck1 = new Firetruck();
+        testtruck1.setAttackedThisTurn();
+        testtruck1.setMovedThisTurn();
+        testtruck1.resetTurn();
+        assertFalse(testtruck1.hasMovedThisTurn());
+        assertFalse(testtruck1.hasAttackedThisTurn());
+
     }
 
     @Test
@@ -138,6 +152,11 @@ public class FiretruckTest {
         assertNotEquals(4,testtruck.getMovementDistance());
         assertNotEquals(true, testtruck.getMovementDistance());
 
+        Texture testtexture=new Texture(Gdx.files.internal("firetruck3.png"));
+        Firetruck testtruck1 = new Firetruck(testtexture,3,5,1,2,3);
+        assertEquals(3,testtruck1.getMovementDistance());
+        assertNotEquals(4,testtruck1.getMovementDistance());
+        assertNotEquals(true, testtruck1.getMovementDistance());
 
     }
 
@@ -197,13 +216,11 @@ public class FiretruckTest {
         testtruck.setHealth(4);
 
           /*
-        Method should return False on any value below 5
+        Method should return False on any value below 1
          */
         assertFalse(testtruck.takeDamage(0));
         testtruck.setHealth(4);
         assertFalse(testtruck.takeDamage(-2));
-        testtruck.setHealth(4);
-        assertFalse(testtruck.takeDamage(3));
 
 
 
