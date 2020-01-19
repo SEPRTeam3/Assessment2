@@ -1,6 +1,7 @@
 //save the score directly to file when the game ends
 package com.kroy.game.scenes;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -14,6 +15,9 @@ import com.badlogic.gdx.Gdx;
 
 public class ScoreScreen implements Screen
 {
+	/**
+	 * Screen for scores
+	 */
 	final MyGdxGame game;
 	private SpriteBatch batch;
 	private BitmapFont font;
@@ -31,6 +35,11 @@ public class ScoreScreen implements Screen
 		this.outputString = getString();
 	}
 	public ScoreScreen(final MyGdxGame game, Score playerScore) {
+		/**
+		 * Screen for scores
+		 * @param
+		 * @param
+		 */
 		this.game = game;
 		this.batch = new SpriteBatch();
 		this.font = new BitmapFont();
@@ -41,6 +50,9 @@ public class ScoreScreen implements Screen
 	}
 
 	private String getString(){
+		/**
+		 * Screen for scores
+		 */
 		outputString = "Scores:\n";
 		for (int i = 0; i < 10; i++){
 			outputString += nameList[i] + ": "
@@ -50,6 +62,10 @@ public class ScoreScreen implements Screen
 	}
 
 	private void getOutputs(String scoreTypes){
+		/**
+		 * Screen for scores
+		 * @param
+		 */
 		ArrayList<Score> outputScores = this.ScoreRanking.SelectScores(scoreTypes);
 		this.nameList = new String[10];
 		this.valueList = new String[10];
@@ -67,6 +83,10 @@ public class ScoreScreen implements Screen
 
 	@Override
 	public void render(float delta) {
+		/**
+		 * Screen for scores
+		 * @param
+		 */
 		Gdx.gl.glClearColor(0, 0, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -78,10 +98,17 @@ public class ScoreScreen implements Screen
 		float fontX = Gdx.graphics.getWidth()/2 - layout.width/2;
 		float fontY = Gdx.graphics.getHeight()/2 + layout.height/2;
 
+		if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
+		{
+			System.out.println("Going to Home");
+			game.setScreen(new TitleScreen(game));
+		}
+
 		game.batch.begin();
 		game.font.draw(game.batch, outputString,
 		fontX,
 		fontY);
+		game.font.draw(game.batch, "You WIN\n   High score for you \n \n Space to restart", 128, 50);
 		game.batch.end();
 		// TODO Auto-generated method stub
 		

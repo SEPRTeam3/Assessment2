@@ -30,6 +30,7 @@ public class Firetruck extends Entity implements DamageableEntity
 		 * @return firetruck with default stats and texture
 		 */
 		this.texture = new Texture(Gdx.files.internal("firetruck3.png"));
+
 		this.movedThisTurn = false;
 		this.attackedThisTurn = false;
 	}
@@ -120,6 +121,9 @@ public class Firetruck extends Entity implements DamageableEntity
 	public int getWater() { return(this.water); }
 
 	public void setWater(int water){this.water=water;}
+
+	public int getMaxWater(){return(this.maxWater);}
+	public int getMaxHealth(){return(this.maxHealth);}
 
 
 	public void restock()
