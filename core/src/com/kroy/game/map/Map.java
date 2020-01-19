@@ -282,7 +282,7 @@ public class Map
 			{
 				if (entityLayer[i][j] != null && entityLayer[i][j] instanceof Firestation)
 				{
-					return new Vector2(j, i);
+					return new Vector2(i, j);
 				}
 			}
 		}
