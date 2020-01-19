@@ -29,7 +29,6 @@ public class GameScreen implements Screen
 	 * 	<li>{@link #ET}<li>
 	 * 	<li>{@link #POST_ET}</li>
 	 */
-	// Who's turn it is
 	public enum turnStates
 	{
 		/**
@@ -50,11 +49,25 @@ public class GameScreen implements Screen
 		POST_ET
 	}
 
-	// The action selected by the player
+	/**
+	 *  Player actions
+	 *  <li>{@link #NONE}</li>
+	 * 	<li>{@link #MOVE}<li>
+	 * 	<li>{@link #ATTACK}</li>
+	 */
 	public enum selectedMode
 	{
+		/**
+		 * No action
+		 */
 		NONE,
+		/**
+		 * Move action
+		 */
 		MOVE,
+		/**
+		 * Attack action
+		 */
 		ATTACK
 	}
 	
@@ -115,9 +128,9 @@ public class GameScreen implements Screen
 		 * Depending on the turn, gets player input and carries out an action, updating the UI and map
 		 * Sets graphics for actions and sets win condition
 		 * On ET turn, runs ET actions and updates the UI and map
-		 * Sets graphics for actions and sets lose and difficulty increase condition
-		 *
+		 * Sets graphics for actions and sets loss and difficulty increase conditions
 		 * @param delta This represents the time between the last frame and this frame, given in seconds
+		 * @see MapDrawer#render()
 		 */
 		// Render map
 		mapDrawer.viewport.apply();
@@ -156,7 +169,7 @@ public class GameScreen implements Screen
 						selected = new Vector2(tileX, tileY);
 						hud.createGameTable();
 
-
+						//Update stats and switch view to single table of entity
 						hud.updateEntityStats((Firetruck) map.getEntity(tileX, tileY));
 						hud.setVisibilityOfTable(hud.containerMultiple, false);
 						hud.setVisibilityOfTable(hud.containerSingle, true);
@@ -168,10 +181,10 @@ public class GameScreen implements Screen
 					else if (map.getEntity(tileX, tileY) == null && selected != null && selectAction == selectedMode.MOVE)
 					{
 						// Player clicked an empty space with move selected, so move to that area
-
 						map.moveEntity((int)selected.x, (int)selected.y, tileX, tileY);
 						selectAction = selectedMode.NONE;
 						selected = null;
+						//deselected so switch view
 						hud.setVisibilityOfTable(hud.containerMultiple, true);
 						hud.setVisibilityOfTable(hud.containerSingle, false);
 					}
@@ -181,13 +194,13 @@ public class GameScreen implements Screen
 						map.attackEntity((int)selected.x, (int)selected.y, tileX, tileY);
 						selectAction = selectedMode.NONE;
 						selected = null;
+						//deselected so switch view
 						hud.setVisibilityOfTable(hud.containerMultiple, true);
 						hud.setVisibilityOfTable(hud.containerSingle, false);
 					}
 					else
 					{
-						// Player clicked on nothing
-
+						// Player clicked on nothing and not in table
 						if (!hud.clickInTable(hud.inGameTable)) {
 							selectAction = selectedMode.NONE;
 							selected = null;
@@ -201,13 +214,14 @@ public class GameScreen implements Screen
 				}
 				else
 				{
+					//deselected so switch table view
 					hud.setVisibilityOfTable(hud.containerSingle, false);
 					hud.setVisibilityOfTable(hud.containerMultiple, true);
-					// Clicked outside of map
 
+					// Clicked outside of map and not in a table
 					if(!hud.clickInTable(hud.inGameTable)) {
 						hud.clickOffTable(hud.inGameTable);
-						System.out.print("UI??");
+
 						selected = null;
 					}
 
@@ -266,14 +280,15 @@ public class GameScreen implements Screen
 				{
 					Firetruck f = (Firetruck) map.getEntity((int) selected.x, (int) selected.y);
 					Vector2 firestationLocation = map.getFirestationLocation();
+
 					if (firestationLocation.sub(selected).len() <= Firestation.restockingRadius)
 					{
 						f.restock();
-						System.out.println("The firetruck has been restocked");
+						hud.setDialog("Player", "\nRestocked!", 0.0f);
 					}
 					else
 					{
-						System.out.println("The firetruck wasn't close enough to the station to restock");
+						hud.setDialog("Narrator:", "\nNot close enough \n to restock", 0.0f);
 					}
 				}
 			}
@@ -313,6 +328,7 @@ public class GameScreen implements Screen
 			// Space key handling
 			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || hud.endTurnClicked)
 			{
+				//Turned ended so get rid of in game table
 				hud.clickOffTable(hud.inGameTable);
 				hud.endTurnClicked = false;
 				this.turnState = turnStates.POST_PLAYER;

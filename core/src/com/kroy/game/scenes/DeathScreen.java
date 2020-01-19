@@ -18,6 +18,10 @@ public class DeathScreen implements Screen
 
     public DeathScreen(final MyGdxGame game)
     {
+        /**
+         * Sets the game to the death screen of a specific size
+         * @param game Instance of the game
+         */
         this.game = game;
         viewport = new FitViewport(10, 10);
         Gdx.graphics.setWindowedMode(512, 512);
@@ -31,6 +35,11 @@ public class DeathScreen implements Screen
     @Override
     public void render(float delta)
     {
+        /**
+         * Renders death screen
+         * Clears screen then draws message and sets the game to the title screen on an input
+         * @param delta This represents the time between the last frame and this frame, given in seconds
+         */
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.begin();
