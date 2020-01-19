@@ -1,19 +1,15 @@
 package com.kroy.game.scenes;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.kroy.game.ETMastermind;
 import com.kroy.game.MyGdxGame;
 import com.kroy.game.entities.Firestation;
 import com.kroy.game.entities.Firetruck;
-import com.kroy.game.entities.Fortress;
 import com.kroy.game.map.HighlightColours;
 import com.kroy.game.map.Map;
 import com.kroy.game.map.MapDrawer;
@@ -97,6 +93,7 @@ public class GameScreen implements Screen
 		hud.stage.getViewport().apply();
 		game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 		hud.stage.draw();
+		hud.updateStatsUI(map);
 
 		// Get player input
 		switch(turnState)
@@ -111,7 +108,6 @@ public class GameScreen implements Screen
 			// Left click handling
 			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
 			{
-
 				Vector2 tileClicked = mapDrawer.toMapSpace(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
 				if (tileClicked != null)
@@ -125,6 +121,10 @@ public class GameScreen implements Screen
 						// Player clicked firetruck with nothing selected, select firetruck
 						selected = new Vector2(tileX, tileY);
 						hud.createGameTable();
+						hud.getEntityStats((Firetruck) map.getEntity(tileX, tileY), game.skin);
+						hud.setVisibilityOfTable(hud.container1, false);
+						hud.setVisibilityOfTable(hud.container2, true);
+
 						if(!hud.moveClicked || !hud.attackClicked){
 							selectAction = selectedMode.NONE;
 						}
@@ -136,6 +136,8 @@ public class GameScreen implements Screen
 						map.moveEntity((int)selected.x, (int)selected.y, tileX, tileY);
 						selectAction = selectedMode.NONE;
 						selected = null;
+						hud.setVisibilityOfTable(hud.container1, true);
+						hud.setVisibilityOfTable(hud.container2, false);
 					}
 					else if (selected != null && selectAction == selectedMode.ATTACK)
 					{
@@ -143,21 +145,31 @@ public class GameScreen implements Screen
 						map.attackEntity((int)selected.x, (int)selected.y, tileX, tileY);
 						selectAction = selectedMode.NONE;
 						selected = null;
+						hud.setVisibilityOfTable(hud.container1, true);
+						hud.setVisibilityOfTable(hud.container2, false);
 					}
 					else
 					{
 						// Player clicked on nothing
-						if(!hud.menuOpen) {
+
+						if (!hud.clickInTable(hud.inGameTable)) {
 							selectAction = selectedMode.NONE;
 							selected = null;
+							hud.setVisibilityOfTable(hud.container2, false);
+							hud.setVisibilityOfTable(hud.container1, true);
+							hud.clickOffTable(hud.inGameTable);
 						}
+
+
 					}
 				}
 				else
 				{
+					hud.setVisibilityOfTable(hud.container2, false);
+					hud.setVisibilityOfTable(hud.container1, true);
 					// Clicked outside of map
-					if(!hud.clickInTable()) {
-						hud.clickOffInGameTable();
+					if(!hud.clickInTable(hud.inGameTable)) {
+						hud.clickOffTable(hud.inGameTable);
 						System.out.print("UI??");
 						selected = null;
 					}
@@ -168,6 +180,7 @@ public class GameScreen implements Screen
 			// Player triggers movement
 			if (Gdx.input.isKeyJustPressed(Input.Keys.M) || hud.moveClicked)
 			{
+
 				hud.moveClicked = false;
 				if
 				(
@@ -185,6 +198,7 @@ public class GameScreen implements Screen
 			// Player triggers attack
 			if (Gdx.input.isKeyJustPressed(Input.Keys.N) || hud.attackClicked)
 			{
+
 				hud.attackClicked = false;
 				if
 				(
@@ -202,6 +216,7 @@ public class GameScreen implements Screen
 			// Player triggers restock
 			if (Gdx.input.isKeyJustPressed(Input.Keys.B) || hud.refillClicked)
 			{
+
 				hud.refillClicked = false;
 				if
 				(
@@ -259,8 +274,9 @@ public class GameScreen implements Screen
 			}
 
 			// Space key handling
-			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
-			{	
+			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || hud.endTurnClicked)
+			{
+				hud.clickOffTable(hud.inGameTable);
 				hud.endTurnClicked = false;
 				this.turnState = turnStates.POST_PLAYER;
 			}
