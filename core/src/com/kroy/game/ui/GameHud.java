@@ -42,15 +42,17 @@ public class GameHud {
     private TextButton attack, move, refill, wait, endTurn;
     public boolean attackClicked, moveClicked, refillClicked, waitClicked, endTurnClicked, menuOpen;
 
+    //Labels for other UI elements
     private Label turnState, dialog, difficultyLabel;
 
     //Images and labels for showing stats in multi view
-    private Label[] fireTruckStats = new Label[2], etFortressStats = new Label[3];
+    private Label[] fireTruckStats = new Label[2], etFortressStats = new Label[3], buildingNameLabelArray = new Label[3];
     private Image[] fireTruckImg = new Image[2], etFortressImg = new Image[3];
 
+
     //Images and labels for showing stats in singe view
-    private Label healthLabel, waterLevelLabel, attackStrengthLabel, movementRangeLabel, attackRangeLabel, hasMovedLabel, hasAttackedLabel;
-    private Image fireTruckImgSingleNormal, fireTruckImgSingleBlue, etFortressImgSingle;
+    private Label healthLabel, waterLevelLabel, attackStrengthLabel, movementRangeLabel, attackRangeLabel;
+    private Image fireTruckImgSingleNormal, fireTruckImgSingleBlue;
 
 
     private Image player;
@@ -65,7 +67,7 @@ public class GameHud {
     //Relative positions for positioning of stats UI
     public int ftPosY, ftPosX, etPosY, etPosX, iniPosY, iniPosX;
 
-    //Total entities
+    //Total number of entities
     private int numFireTruck, numFortress;
 
 
@@ -105,8 +107,12 @@ public class GameHud {
         fireTruckImgSingleNormal = new Image(fireTruckIconTexture);
         fireTruckImgSingleBlue = new Image(fireTruckIconTexture);
 
-        etFortressImgSingle = new Image(etFortressIconTexture);
+        //set building names
+        buildingNameLabelArray[0] = new Label("University of York", skin);
+        buildingNameLabelArray[1] = new Label("Clifford's Tower", skin);
+        buildingNameLabelArray[2] = new Label("York Minster", skin);
 
+        //Initialize on click booleans to false
         attackClicked = moveClicked = refillClicked = waitClicked = false;
         menuOpen = false;
 
@@ -306,8 +312,6 @@ public class GameHud {
          *@param voice The String representing a character talking
          *@param statement The String message to be displayed below voice
          *@param delayTime Displays the dialog label for a time before it changes in case of the method being called in succession
-         *@return true if a click is in the table
-         *@return false if a click is not in the table
          */
         float waitTime = 0;
 
@@ -392,7 +396,7 @@ public class GameHud {
         int maxWaterLevel;
         int maxFireTruckHealth;
 
-        int labelOffset = 30;
+        int labelOffsetX = 30;
 
         //Initial positions
         ftPosY = Gdx.graphics.getHeight() - 40;
@@ -430,11 +434,7 @@ public class GameHud {
                         fireTruckImg[x].setColor(Color.CYAN);
                     }
                     fireTruckStats[x] = new Label(stats, skin);
-
-                    fireTruckStats[x].setPosition(ftPosX + labelOffset, ftPosY);
-                    fireTruckStats[x].setSize(20, 20);
-                    fireTruckStats[x].setFontScale(0.8f);
-                    fireTruckStats[x].setColor(Color.BLACK);
+                    setLabel(fireTruckStats[x], ftPosX + labelOffsetX, ftPosY, 20, 20, 0.8f, Color.BLACK);
 
                     containerMultiple.addActor(fireTruckImg[x]);
                     containerMultiple.addActor(fireTruckStats[x]);
@@ -457,18 +457,16 @@ public class GameHud {
                         etFortressImg[y].setPosition(etPosX, etPosY);
 
                         etFortressStats[y] = new Label(stats, skin);
-
-                        etFortressStats[y].setPosition(etPosX + labelOffset, etPosY);
-                        etFortressStats[y].setSize(20, 20);
-                        etFortressStats[y].setFontScale(0.8f);
-                        etFortressStats[y].setColor(Color.BLACK);
+                        setLabel(etFortressStats[y], etPosX + labelOffsetX, etPosY, 20, 20, 0.8f, Color.BLACK);
+                        setLabel(buildingNameLabelArray[y], etPosX + 12, etPosY-8, 20, 20, 0.7f, Color.BLACK);
 
                         containerMultiple.addActor(etFortressImg[y]);
                         containerMultiple.addActor(etFortressStats[y]);
+                        containerMultiple.addActor(buildingNameLabelArray[y]);
 
                         //offset for next position
-                        etPosX += 30;
-                        etPosY -= 30;
+                        etPosX += 34;
+                        etPosY -= 34;
                         y++;
                     }
                 }
@@ -489,7 +487,7 @@ public class GameHud {
          */
         label.setPosition(positionX, positionY);
         label.setSize(width, height);
-        label.setScale(scale);
+        label.setFontScale(scale);
         label.setColor(color);
     }
     public void getFiretruckEntityStats(Skin skin) {
@@ -510,35 +508,35 @@ public class GameHud {
         iniPosY -= 20;
         iniPosX += 20;
         healthLabel = new Label("", skin);
-        setLabel(healthLabel, iniPosX, iniPosY, 20, 20, 0.8f, Color.BLACK);
+        setLabel(healthLabel, iniPosX, iniPosY, 20, 20, 1.0f, Color.BLACK);
         containerSingle.addActor(healthLabel);
 
         iniPosY -= 15;
         iniPosX += 15;
 
         waterLevelLabel = new Label("", skin);
-        setLabel(waterLevelLabel, iniPosX, iniPosY, 20, 20, 0.8f, Color.BLACK);
+        setLabel(waterLevelLabel, iniPosX, iniPosY, 20, 20, 1.0f, Color.BLACK);
         containerSingle.addActor(waterLevelLabel);
 
         iniPosY -= 15;
         iniPosX += 15;
 
         attackStrengthLabel = new Label("", skin);
-        setLabel(attackStrengthLabel, iniPosX, iniPosY, 20, 20, 0.8f, Color.BLACK);
+        setLabel(attackStrengthLabel, iniPosX, iniPosY, 20, 20, 1.0f, Color.BLACK);
         containerSingle.addActor(attackStrengthLabel);
 
         iniPosY -= 15;
         iniPosX += 15;
 
         attackRangeLabel = new Label("", skin);
-        setLabel(attackRangeLabel, iniPosX, iniPosY, 20, 20, 0.8f, Color.BLACK);
+        setLabel(attackRangeLabel, iniPosX, iniPosY, 20, 20, 1.0f, Color.BLACK);
         containerSingle.addActor(attackRangeLabel);
 
         iniPosY -= 15;
         iniPosX += 15;
 
         movementRangeLabel = new Label("", skin);
-        setLabel(movementRangeLabel, iniPosX, iniPosY, 20, 20, 0.8f, Color.BLACK);
+        setLabel(movementRangeLabel, iniPosX, iniPosY, 20, 20, 1.0f, Color.BLACK);
         containerSingle.addActor(movementRangeLabel);
 
         iniPosY -= 15;
@@ -567,7 +565,7 @@ public class GameHud {
         int maxWater = f.getMaxWater();
         int water = f.getWater();
 
-        if(f.getTexture().toString() == "SpecialFiretrucks2.png") {
+        if(f.getTexture().toString() == "SpecialFiretrucks1.png") {
           fireTruckImgSingleBlue.setColor(Color.CYAN);
           containerSingle.addActor(fireTruckImgSingleBlue);
           containerSingle.removeActor(fireTruckImgSingleNormal);
@@ -608,7 +606,7 @@ public class GameHud {
 
         numFireTruck = numFortress = 0;
 
-
+        //Finds the entities and updates the UI
         for (int i = 0; i < map.HEIGHT; i++)
         {
             for (int j = 0; j < map.WIDTH; j++)
@@ -639,16 +637,13 @@ public class GameHud {
 
                         etFortressStats[y].setText(stats);
 
-                        if(fortressHealth <= 0) {
-                            etFortressImg[x].setDrawable(new SpriteDrawable(new Sprite(destroyedTexture)));
-                            containerMultiple.removeActor(etFortressStats[x]);
-                        }
                         y++;
                     }
                 }
 
             }
         }
+        //Gets last instance of an entity when a death for either a firetruck or et fortress is detected and deletes the UI
         for (int i = 0; i < map.HEIGHT; i++) {
             for (int j = 0; j < map.WIDTH; j++) {
                 if (map.getEntity(i, j) != null && map.getEntity(i, j) instanceof DestroyedEntity) {
@@ -662,9 +657,11 @@ public class GameHud {
                     if (numFortress < 3) {
                         etFortressImg[y].setDrawable(new SpriteDrawable(new Sprite(destroyedTexture)));
                         containerMultiple.removeActor(etFortressStats[y]);
+                        containerMultiple.removeActor(buildingNameLabelArray[y]);
                         if (numFortress < 2) {
-                            etFortressImg[x].setDrawable(new SpriteDrawable(new Sprite(destroyedTexture)));
+                            etFortressImg[y].setDrawable(new SpriteDrawable(new Sprite(destroyedTexture)));
                             containerMultiple.removeActor(etFortressStats[y]);
+                            containerMultiple.removeActor(buildingNameLabelArray[y]);
                         }
                     }
                 }
@@ -672,7 +669,6 @@ public class GameHud {
         }
 
     }
-
     public void resize(int width, int height){
         stage.getViewport().update(width, height, true);
         stage.getViewport().apply();

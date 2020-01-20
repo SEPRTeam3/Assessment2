@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kroy.game.MyGdxGame;
 import com.kroy.game.score.ScoreRanks;
 import com.kroy.game.score.Score;
@@ -25,7 +27,7 @@ public class ScoreScreen implements Screen
 	private String[] nameList, valueList;
 	private String outputString;
 	private ScoreRanks ScoreRanking;
-	
+	private Viewport viewport;
 	public ScoreScreen(final MyGdxGame game) {
 		/**
 		 * Generates a score screen with the top 10 scores
@@ -36,6 +38,9 @@ public class ScoreScreen implements Screen
 		this.ScoreRanking = new ScoreRanks();
 		getOutputs("TopTen");
 		this.outputString = getString();
+
+		viewport = new FitViewport(10, 10);
+		Gdx.graphics.setWindowedMode(512, 512);
 	}
 	public ScoreScreen(final MyGdxGame game, Score playerScore) {
 		/**
