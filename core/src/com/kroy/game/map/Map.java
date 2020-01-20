@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.kroy.game.blocks.Obstacle;
 import com.kroy.game.entities.*;
+import com.kroy.game.scenes.GameScreen;
 
 import java.util.*;
 
@@ -16,7 +17,8 @@ public class Map
 	private Block blockLayer[][] = new Block[WIDTH][HEIGHT];
 
 	public ShortestPathfinder pathfinder = new ShortestPathfinder(this);
-	
+
+
 	public Map()
 	{
 		/**
@@ -160,8 +162,11 @@ public class Map
 			{
 				DamageableEntity d = (DamageableEntity) entityLayer[x][y];
 				boolean destroyed = d.takeDamage(amount);
+
+
 				if (destroyed)
 				{
+
 					entityLayer[x][y] = new DestroyedEntity();
 					System.out.println("Entity was destroyed");
 				}
@@ -282,7 +287,7 @@ public class Map
 			{
 				if (entityLayer[i][j] != null && entityLayer[i][j] instanceof Firestation)
 				{
-					return new Vector2(i, j);
+					return new Vector2(j, i);
 				}
 			}
 		}
